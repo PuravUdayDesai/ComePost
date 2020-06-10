@@ -30,6 +30,7 @@ import com.hack.comp.model.supplier.SupplierModelDailyWasteNew;
 import com.hack.comp.model.supplier.SupplierModelFullSelect;
 import com.hack.comp.model.supplier.SupplierModelInsert;
 import com.hack.comp.model.supplier.SupplierModelSelect;
+import com.hack.comp.model.supplier.SupplierWasteImagesSelect;
 
 @Service
 public class SupplierBusinessLogic 
@@ -399,5 +400,27 @@ public class SupplierBusinessLogic
 			catch(IOException e) {
 				
 			}
+		}
+		
+		public ResponseEntity<List<SupplierWasteImagesSelect>> selectSupplierWasteImages(Long supplierId, Date dateForSearch)
+		{
+			List<SupplierWasteImagesSelect> ll=new ArrayList<SupplierWasteImagesSelect>();
+			if(supplierId==null||dateForSearch==null)
+			{
+				return new ResponseEntity<List<SupplierWasteImagesSelect>>(ll,HttpStatus.BAD_REQUEST);
+			}
+			try {
+				ll=sd.selectSupplierWasteImages(supplierId, dateForSearch);
+			} catch (ClassNotFoundException e) {
+				return new ResponseEntity<List<SupplierWasteImagesSelect>>(ll,HttpStatus.NOT_FOUND);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new ResponseEntity<List<SupplierWasteImagesSelect>>(ll,HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			if(ll.isEmpty())
+			{
+				return new ResponseEntity<List<SupplierWasteImagesSelect>>(ll,HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<List<SupplierWasteImagesSelect>>(ll,HttpStatus.OK);
 		}
 }
