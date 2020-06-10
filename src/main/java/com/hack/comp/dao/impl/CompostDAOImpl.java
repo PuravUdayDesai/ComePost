@@ -40,7 +40,7 @@ public class CompostDAOImpl implements CompostDAO
         		"		composter.composter_loc.state,\r\n" + 
         		"		composter.composter_loc.city,\r\n" + 
         		"		composter.composter_loc.area,\r\n" + 
-        		"		composter.composter_loc.state\r\n" + 
+        		"		composter.composter_loc.street\r\n" + 
         		"FROM composter.composter_info\r\n" + 
         		"JOIN composter.composter_loc\r\n" + 
         		"ON composter.composter_loc.id=composter.composter_info.id\r\n" + 

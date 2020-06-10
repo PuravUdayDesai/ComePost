@@ -54,6 +54,13 @@ public class FarmerDAOImpl implements FarmerDAO
 	            flm.setCity(rs.getString("city"));
 	            flm.setArea(rs.getString("area"));
 	            flm.setStreet(rs.getString("street"));
+	            flm.setLatitude(rs.getString("latitude"));
+	            flm.setLongitude(rs.getString("longitude"));
+	            flm.setCheck(true);
+	        }
+	        else
+	        {
+	        	 flm.setCheck(false);
 	        }
 	     rs.close();
 	     stmt.close();

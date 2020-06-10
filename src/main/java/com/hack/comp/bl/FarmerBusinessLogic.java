@@ -31,7 +31,7 @@ public class FarmerBusinessLogic
 		} catch (SQLException e) {
 			return new ResponseEntity<FarmerLoginModel>(rsMain,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if(rsMain==null)
+		if(!rsMain.getCheck())
 		{
 			return new ResponseEntity<FarmerLoginModel>(rsMain,HttpStatus.BAD_REQUEST);
 		}
