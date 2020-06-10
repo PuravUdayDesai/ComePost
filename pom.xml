@@ -44,6 +44,16 @@
             <artifactId>client</artifactId>
             <version>5.2.1</version>
         </dependency>
+        <dependency>
+			<groupId>net.postgis</groupId>
+			<artifactId>postgis-jdbc</artifactId>
+			<version>2.1.7.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.0</version>
+		</dependency>
     </dependencies>
 
     <build>

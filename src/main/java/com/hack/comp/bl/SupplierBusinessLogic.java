@@ -156,6 +156,12 @@ public class SupplierBusinessLogic
 		} catch (SQLException e) {
 			return new ResponseEntity<SupplierModelSelect>(sms,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		if(sms==null)
+		{
+			SupplierModelSelect smsInvalid=new SupplierModelSelect();
+			smsInvalid.setValid(false);
+			return new ResponseEntity<SupplierModelSelect>(smsInvalid,HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<SupplierModelSelect>(sms,HttpStatus.OK);
 	}
 	

@@ -15,7 +15,7 @@ public class Connections
         try
         {
             Class.forName( "org.postgresql.Driver" );
-            c = DriverManager.getConnection( "jdbc:postgresql://localhost:5432/compost", "postgres", "purav" );
+            c = DriverManager.getConnection( "jdbc:postgresql://localhost:5432/compost", "postgres", "postgres" );
             c.setAutoCommit( false );
         }
         catch (ClassNotFoundException | SQLException e)
