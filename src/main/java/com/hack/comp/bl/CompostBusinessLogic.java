@@ -41,8 +41,13 @@ public class CompostBusinessLogic
 		} catch (ClassNotFoundException e) {
 			return new ResponseEntity<LoginModel>(lm,HttpStatus.NOT_FOUND);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return new ResponseEntity<LoginModel>(lm,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if(lm==null)
+		{
+			LoginModel lm2=new LoginModel();
+			lm2.setCheck(false);
+			return new ResponseEntity<LoginModel>(lm2,HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<LoginModel>(lm,HttpStatus.OK);
 	}

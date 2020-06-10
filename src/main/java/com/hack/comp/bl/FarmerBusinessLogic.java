@@ -18,6 +18,7 @@ public class FarmerBusinessLogic
 	
 	public ResponseEntity<Integer> validateFarmer(String username,String password)
 	{
+		System.out.println("Username: "+username+" Passoword:"+password);
 		Integer rsMain=null;
 		if(username==null||password==null)
 		{
@@ -30,9 +31,10 @@ public class FarmerBusinessLogic
 		} catch (SQLException e) {
 			return new ResponseEntity<Integer>(rsMain,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		System.out.println("FARMER: "+rsMain);
 		if(rsMain==null)
 		{
-			return new ResponseEntity<Integer>(rsMain,HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Integer>(-1,HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Integer>(rsMain,HttpStatus.OK);
 	}
