@@ -1,16 +1,28 @@
 package com.hack.comp.bl;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hack.comp.dao.schema.SupplierDAO;
 import com.hack.comp.model.supplier.SupplierModelDailyWaste;
@@ -27,6 +39,25 @@ public class SupplierBusinessLogic
 	
 	@Autowired
 	SupplierBusinessLogic sbl;
+	
+	private static final String EXTERNAL_FILE_PATH = "E:\\";
+	
+	public static String replaceColonToPeriod(Timestamp t)
+	{
+		String str=t.toString();
+		String newStr=str.replace(':', '.');
+		return newStr;
+	}
+	
+	private static String urlCreator(String filePath,String fileName) {
+		//http://localhost:8080/fileDownload/view?filePath=member/documents/1/9&fileName=JSP complete reference.pdf
+		String protocol="http://";
+		String host="localhost";
+		String portNumber="8080";
+		String basePath="/supplier/fileView";
+		String url=protocol+host+":"+portNumber+basePath+"?filePath="+filePath.replace("\\", "/")+"&fileName="+fileName;
+		return url;
+	}
 	
 	public ResponseEntity<Void> addSupplier(SupplierModelInsert smi)
 	{
@@ -275,4 +306,98 @@ public class SupplierBusinessLogic
 		 }
 		 return new ResponseEntity<Void>( HttpStatus.OK );
 	 }
+	 
+	 public ResponseEntity<Void> addSupplierWasteImage(MultipartFile[] file,Long supplierWasteId,Timestamp timeOfEntry)
+	 {
+		 String[] qualifiedPaths=null;
+		 if(file.length==0||supplierWasteId==null||timeOfEntry==null)
+		 {
+			 return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
+		 }
+		 try {
+			qualifiedPaths=sd.storeFile(file, supplierWasteId, timeOfEntry);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new ResponseEntity<Void>( HttpStatus.INTERNAL_SERVER_ERROR );
+		}
+		if(qualifiedPaths.length==0||qualifiedPaths.length!=file.length)
+		{
+			return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
+		}
+		 for(int i=0;i<qualifiedPaths.length;i++)
+		 {
+			 try {
+				Integer rs=sd.addSupplierWasteImage(supplierWasteId, timeOfEntry,SupplierBusinessLogic.urlCreator("supplierWasteImages/"+supplierWasteId+"/"+SupplierBusinessLogic.replaceColonToPeriod(timeOfEntry),StringUtils.cleanPath(file[i].getOriginalFilename()) ));
+				if(rs==0)
+				{
+					return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
+				}
+			} catch (ClassNotFoundException e) {
+				return new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new ResponseEntity<Void>( HttpStatus.INTERNAL_SERVER_ERROR );
+			}
+		 }
+		 return new ResponseEntity<Void>( HttpStatus.CREATED );
+	 }
+	 
+		public void viewFile(HttpServletRequest request, 
+				HttpServletResponse response,
+				String filePath, 
+				String fileName){
+				File file = new File(EXTERNAL_FILE_PATH + filePath + "\\" + fileName);
+				
+				if (file.exists()) {
+					try {
+					String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+					if (mimeType == null) {
+						mimeType = "application/octet-stream";
+					}
+					
+					response.setContentType(mimeType);
+
+					response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
+
+					response.setContentLength((int) file.length());
+
+					InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+					
+						FileCopyUtils.copy(inputStream, response.getOutputStream());
+					} catch (IOException e) {
+						
+					}
+				}
+		}
+		
+		public void downloadFile(HttpServletRequest request, 
+				HttpServletResponse response,
+				String filePath, 
+				String fileName){
+			try {
+				System.out.println(EXTERNAL_FILE_PATH + filePath + "\\" + fileName);
+				File file = new File(EXTERNAL_FILE_PATH + filePath + "\\" + fileName);
+				if (file.exists()) {
+					String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+					if (mimeType == null) {
+						mimeType = "application/octet-stream";
+					}
+
+					response.setContentType(mimeType);
+
+					response.setHeader("Content-Disposition", String.format("attachment;filename=\"" + file.getName() + "\""));
+
+					response.setContentLength((int) file.length());
+
+					InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				}
+				
+			}
+			catch(IOException e) {
+				
+			}
+		}
 }

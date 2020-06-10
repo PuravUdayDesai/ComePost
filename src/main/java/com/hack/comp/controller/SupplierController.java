@@ -1,8 +1,11 @@
 package com.hack.comp.controller;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -18,7 +21,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hack.comp.bl.SupplierBusinessLogic;
 import com.hack.comp.model.supplier.SupplierModelDailyWaste;
@@ -127,4 +132,28 @@ public class SupplierController
     	return sbl.updateDescriptionInWaste(supplierWasteId, dateToSearch, description);
 	 }
 
+    
+    @PostMapping("/uploadImage/{supplierWasteId}")
+    public ResponseEntity<Void> uploadFile(@RequestPart("file") MultipartFile[] file,@PathVariable @NotNull Long supplierWasteId,@RequestParam(name = "timestamp") @NotNull  Timestamp timeOfEntry)
+    {
+    	return sbl.addSupplierWasteImage(file, supplierWasteId, timeOfEntry);
+    }
+    
+	@RequestMapping("/fileView")
+	public void viewFile(HttpServletRequest request, 
+									HttpServletResponse response,
+									@RequestParam("filePath") String filePath, 
+									@RequestParam("fileName") String fileName) {
+		
+		 sbl.viewFile(request, response, filePath, fileName);
+	}
+	
+	@RequestMapping("/fileDownload")
+	public void downloadFile(HttpServletRequest request, 
+									HttpServletResponse response,
+									@RequestParam("filePath") String filePath, 
+									@RequestParam("fileName") String fileName) {
+		
+		 sbl.downloadFile(request, response, filePath, fileName);
+	}
 }
