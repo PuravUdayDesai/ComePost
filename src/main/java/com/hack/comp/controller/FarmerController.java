@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hack.comp.bl.FarmerBusinessLogic;
 import com.hack.comp.model.farmer.FarmerInsert;
+import com.hack.comp.model.farmer.FarmerLoginModel;
 
 
 @RestController
@@ -26,7 +27,7 @@ public class FarmerController
 	FarmerBusinessLogic fbl;
 	
     @GetMapping
-    public ResponseEntity<Integer> validateFarmer(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password) 
+    public ResponseEntity<FarmerLoginModel> validateFarmer(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password) 
     {
     	return fbl.validateFarmer(username, password);
     }

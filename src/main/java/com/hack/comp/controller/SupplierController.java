@@ -104,7 +104,7 @@ public class SupplierController
 
     
     /*
-     * This method is used to getS
+     * This method is used to get
      * filtered suppliers based on 
      * criteria and date of search
      */

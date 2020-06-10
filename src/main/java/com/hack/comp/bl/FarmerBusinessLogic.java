@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.hack.comp.dao.schema.FarmerDAO;
 import com.hack.comp.model.farmer.FarmerInsert;
+import com.hack.comp.model.farmer.FarmerLoginModel;
 
 @Service
 public class FarmerBusinessLogic
@@ -16,25 +17,25 @@ public class FarmerBusinessLogic
 	@Autowired
 	FarmerDAO fd;
 	
-	public ResponseEntity<Integer> validateFarmer(String username,String password)
+	public ResponseEntity<FarmerLoginModel> validateFarmer(String username,String password)
 	{
-		Integer rsMain=null;
+		FarmerLoginModel rsMain=new FarmerLoginModel();
 		if(username==null||password==null)
 		{
-			return new ResponseEntity<Integer>(rsMain,HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<FarmerLoginModel>(rsMain,HttpStatus.BAD_REQUEST);
 		}
 		try {
 			rsMain=fd.validateFarmer(username, password);
 		} catch (ClassNotFoundException e) {
-			return new ResponseEntity<Integer>(rsMain,HttpStatus.NO_CONTENT);
+			return new ResponseEntity<FarmerLoginModel>(rsMain,HttpStatus.NO_CONTENT);
 		} catch (SQLException e) {
-			return new ResponseEntity<Integer>(rsMain,HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<FarmerLoginModel>(rsMain,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(rsMain==null)
 		{
-			return new ResponseEntity<Integer>(rsMain,HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<FarmerLoginModel>(rsMain,HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<Integer>(rsMain,HttpStatus.OK);
+		return new ResponseEntity<FarmerLoginModel>(rsMain,HttpStatus.OK);
 	}
 	
 	 public ResponseEntity<Void> addFarmer(FarmerInsert fi)

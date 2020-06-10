@@ -21,12 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hack.comp.bl.CompostBusinessLogic;
-import com.hack.comp.model.LoginModel;
 import com.hack.comp.model.compost.CompostAndSupplierModel;
 import com.hack.comp.model.compost.CompostModelInsert;
 import com.hack.comp.model.compost.ComposterDailyModelCompost;
 import com.hack.comp.model.compost.ComposterDailyModelCompostNew;
 import com.hack.comp.model.compost.ComposterFullSelect;
+import com.hack.comp.model.compost.ComposterLoginModel;
 
 @RestController
 @RequestMapping("/compost")
@@ -42,7 +42,7 @@ public class CompostController
      * For Composter
      */
     @GetMapping()
-    public ResponseEntity<LoginModel> validateComposter(@RequestParam(name = "username") @NotNull String username, @RequestParam(name = "password") @NotNull String password)
+    public ResponseEntity<ComposterLoginModel> validateComposter(@RequestParam(name = "username") @NotNull String username, @RequestParam(name = "password") @NotNull String password)
     {
         return cbl.validateComposter(username, password);
     }

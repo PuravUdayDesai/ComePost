@@ -6,25 +6,25 @@ public class FarmerInsert
 {
 
     @NotNull(message = "farmerName cannot be NULL")
-    String farmerName;
+    private String farmerName;
     @NotNull(message = "farmerContact cannot be NULL")
-    String farmerContact;
+    private String farmerContact;
     @NotNull(message = "surveyId cannot be NULL")
-    Integer surveyId;
+    private Integer surveyId;
     @NotNull(message = "password cannot be NULL")
-    String password;
+    private String password;
     @NotNull(message = "latitude cannot be NULL")
-    String latitude;
+    private String latitude;
     @NotNull(message = "longitude cannot be NULL")
-    String longitude;
+    private String longitude;
     @NotNull(message = "street cannot be NULL")
-    String street;
+    private String street;
     @NotNull(message = "area cannot be NULL")
-    String area;
+    private String area;
     @NotNull(message = "city cannot be NULL")
-    String city;
+    private String city;
     @NotNull(message = "state cannot be NULL")
-    String state;
+    private String state;
 
     FarmerInsert()
     {

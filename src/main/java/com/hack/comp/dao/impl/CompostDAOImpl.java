@@ -14,32 +14,65 @@ import org.springframework.stereotype.Service;
 
 import com.hack.comp.connection.Connections;
 import com.hack.comp.dao.schema.CompostDAO;
-import com.hack.comp.model.LoginModel;
 import com.hack.comp.model.compost.CompostAndSupplierModel;
 import com.hack.comp.model.compost.CompostModelInsert;
 import com.hack.comp.model.compost.ComposterDailyModelCompost;
 import com.hack.comp.model.compost.ComposterDailyModelCompostNew;
 import com.hack.comp.model.compost.ComposterFullSelect;
+import com.hack.comp.model.compost.ComposterLoginModel;
 
 @Service
 public class CompostDAOImpl implements CompostDAO
 {
 
 	@Override
-	public LoginModel validateComposter(String username, String password) throws SQLException, ClassNotFoundException 
+	public ComposterLoginModel validateComposter(String username, String password) throws SQLException, ClassNotFoundException 
 	{
 		Connection c = Connections.setConnection();
-        String sql = "SELECT id FROM composter.composter_login WHERE username=? AND password=?;";
+        String sql = "SELECT \r\n" + 
+        		"		composter.composter_info.id,\r\n" + 
+        		"		composter.composter_info.name,\r\n" + 
+        		"		composter.composter_info.contact,\r\n" + 
+        		"		composter.composter_info.email,\r\n" + 
+        		"		composter.composter_info.reg_no,\r\n" + 
+        		"		composter.composter_loc.latitude,\r\n" + 
+        		"		composter.composter_loc.longitude,\r\n" + 
+        		"		composter.composter_loc.state,\r\n" + 
+        		"		composter.composter_loc.city,\r\n" + 
+        		"		composter.composter_loc.area,\r\n" + 
+        		"		composter.composter_loc.state\r\n" + 
+        		"FROM composter.composter_info\r\n" + 
+        		"JOIN composter.composter_loc\r\n" + 
+        		"ON composter.composter_loc.id=composter.composter_info.id\r\n" + 
+        		"JOIN composter.composter_login\r\n" + 
+        		"ON composter.composter_login.id=composter.composter_info.id\r\n" + 
+        		"WHERE composter.composter_login.username=?\r\n" + 
+        		"AND composter.composter_login.password=?\r\n" + 
+        		"AND composter.composter_login.delete_index=FALSE";
         PreparedStatement stmt = c.prepareStatement(sql);
         stmt.setString(1, username);
         stmt.setString(2, password);
         ResultSet rs = stmt.executeQuery( );
-        LoginModel l = new LoginModel();
+        ComposterLoginModel l = new ComposterLoginModel();
      
             if (rs.next())
             {
-                l.setCheck( true );
-                l.setComposter_id( rs.getLong( "id" ) );
+            	l.setId(rs.getLong("id"));
+                l.setName(rs.getString("name"));
+                l.setContact(rs.getString("contact"));
+                l.setEmail(rs.getString("email"));
+                l.setReg_no(rs.getString("reg_no"));
+                l.setState(rs.getString("state"));
+                l.setCity(rs.getString("city"));
+                l.setArea(rs.getString("area"));
+                l.setStreet(rs.getString("street"));
+                l.setLatitude(rs.getString("latitude"));
+                l.setLongitude(rs.getString("longitude"));
+                l.setCheck(true);
+            }
+            else
+            {
+            	l.setCheck(false);
             }
         
         rs.close();

@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.hack.comp.controller.GovernmentController;
 import com.hack.comp.dao.schema.CompostDAO;
-import com.hack.comp.model.LoginModel;
 import com.hack.comp.model.compost.CompostAndSupplierModel;
 import com.hack.comp.model.compost.CompostModelInsert;
 import com.hack.comp.model.compost.ComposterDailyModelCompost;
 import com.hack.comp.model.compost.ComposterDailyModelCompostNew;
 import com.hack.comp.model.compost.ComposterFullSelect;
+import com.hack.comp.model.compost.ComposterLoginModel;
 
 
 @Service
@@ -29,22 +29,26 @@ public class CompostBusinessLogic
 	@Autowired
 	CompostBusinessLogic cbl;
 	
-	public ResponseEntity<LoginModel> validateComposter(String username,String password)
+	public ResponseEntity<ComposterLoginModel> validateComposter(String username,String password)
 	{
-		LoginModel lm=new LoginModel();
+		ComposterLoginModel lm=new ComposterLoginModel();
 		if(username==null||password==null)
 		{
-			return new ResponseEntity<LoginModel>(lm,HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ComposterLoginModel>(lm,HttpStatus.BAD_REQUEST);
 		}
 		try {
 			lm=cdi.validateComposter(username, password);
 		} catch (ClassNotFoundException e) {
-			return new ResponseEntity<LoginModel>(lm,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<ComposterLoginModel>(lm,HttpStatus.NOT_FOUND);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return new ResponseEntity<LoginModel>(lm,HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<ComposterLoginModel>(lm,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<LoginModel>(lm,HttpStatus.OK);
+		if(!lm.getCheck())
+		{
+			return new ResponseEntity<ComposterLoginModel>(lm,HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<ComposterLoginModel>(lm,HttpStatus.OK);
 	}
 	
 	public ResponseEntity<Void> addCompost(CompostModelInsert cmi)
