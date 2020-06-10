@@ -40,7 +40,7 @@ public class SupplierBusinessLogic
 	@Autowired
 	SupplierBusinessLogic sbl;
 	
-	private static final String EXTERNAL_FILE_PATH = "E:\\";
+	private static final String EXTERNAL_FILE_PATH = "C:\\";
 	
 	public static String replaceColonToPeriod(Timestamp t)
 	{
@@ -52,7 +52,7 @@ public class SupplierBusinessLogic
 	private static String urlCreator(String filePath,String fileName) {
 		//http://localhost:8080/fileDownload/view?filePath=member/documents/1/9&fileName=JSP complete reference.pdf
 		String protocol="http://";
-		String host="localhost";
+		String host="52.188.114.136";
 		String portNumber="8080";
 		String basePath="/supplier/fileView";
 		String url=protocol+host+":"+portNumber+basePath+"?filePath="+filePath.replace("\\", "/")+"&fileName="+fileName;
