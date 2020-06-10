@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,8 +75,10 @@ public class SupplierController
      * the suppliers which have added
      * a product
      */
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, path = "{id}")
-    public ResponseEntity<List<SupplierModelDailyWasteNew>> displaySuppliers(@PathVariable @NotNull Integer id)
+    //HOME Page
+    @GetMapping(path = "{id}",
+    		produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<SupplierModelDailyWasteNew>> displaySuppliers(@PathVariable @NotNull Long id)
     {
     	return sbl.displaySuppliers(id);
     }
@@ -85,33 +88,43 @@ public class SupplierController
      * This method is used to validate
      * supplier for login in application
      */
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, path = "/unp")
-    public ResponseEntity<SupplierModelSelect> getSupplier(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password)
+    @GetMapping(path = "/login",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<SupplierModelSelect> getSupplier(@RequestParam(name = "username") @NotNull String username, @RequestParam(name = "password") @NotNull String password)
     {
     	return sbl.getSupplier(username, password);
     }
-
     
-    /*
-     * This method is used to get 
-     * supplier by filter on Date
-     */
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, path = "/display")
-    public ResponseEntity<List<SupplierModelFullSelect>> getSupplierByDate(@RequestParam(name = "date") Date date_t)
-    {
-    	return sbl.getSupplierByDate(date_t);
-    }
-
     
     /*
      * This method is used to get
-     * filtered suppliers based on 
-     * criteria and date of search
+     * suppliers based on date
      */
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, path = "/unique/display")
-    public ResponseEntity<List<SupplierModelFullSelect>> getUniqueSupplierByDate(@RequestParam(name = "date") Date date_t)
+    @GetMapping(path = "/display",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<SupplierModelFullSelect>> getUniqueSupplierByDate(@RequestParam(name = "date") @NotNull Date date_t)
     {
     	return sbl.getUniqueSupplierByDate(date_t);
     }
+    
+    
+    /*
+     * This method is used to delete
+     * an added waste entry
+     */
+    @DeleteMapping(path="/waste/{supplierWasteId}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Void> deleteSupplierWaste(@PathVariable @NotNull Long supplierWasteId,@RequestParam(name = "date") @NotNull Date dateToSearch)
+	 {
+    	return sbl.deleteSupplierWaste(supplierWasteId,dateToSearch);
+	 }
+    
+    
+    /*
+     * This method is used to update
+     * the description of the waste
+     */
+    @PutMapping(path = "/description/{supplierWasteId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Void> updateDescriptionInWaste(@PathVariable @NotNull Long supplierWasteId,@RequestParam(name = "date") @NotNull  Date dateToSearch,@RequestParam(name = "description") @NotNull String description)
+	 {
+    	return sbl.updateDescriptionInWaste(supplierWasteId, dateToSearch, description);
+	 }
 
 }

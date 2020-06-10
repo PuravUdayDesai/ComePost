@@ -158,7 +158,6 @@ public class CompostBusinessLogic
 		} catch (ClassNotFoundException e) {
 			return new ResponseEntity<Double>( 0.0, HttpStatus.NOT_FOUND );
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return new ResponseEntity<Double>( 0.0, HttpStatus.INTERNAL_SERVER_ERROR );
 		}
 		

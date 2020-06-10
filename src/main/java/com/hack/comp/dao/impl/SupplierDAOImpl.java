@@ -61,7 +61,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public SupplierModelDailyWaste refreshSupplierAddProduct(SupplierModelDailyWaste data)throws SQLException, ClassNotFoundException 
 	{
-		String query = "SELECT * FROM supplier.supplier_waste_new1 WHERE id=? AND date(date_time)=?  ORDER BY date_time DESC LIMIT 1";
+		String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND date(date_time)=?  AND \"deleteIndex\"=false ORDER BY date_time DESC LIMIT 1";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setInt( 1, data.getId() );
@@ -88,13 +88,14 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public Integer addSupplierProduct(SupplierModelDailyWaste data) throws SQLException, ClassNotFoundException 
 	{
-		String query = "INSERT INTO supplier.supplier_waste_new1 (id,date_time,dry_waste,wet_waste) VALUES (?,?,?,?)";
+		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,description) VALUES (?,?,?,?,?)";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setInt( 1, data.getId() );
         stmt.setTimestamp( 2, data.getDate() );
         stmt.setDouble( 3, data.getDryWaste() );
         stmt.setDouble( 4, data.getWetWaste() );
+        stmt.setString(5, data.getDescription());
         Integer result = stmt.executeUpdate();
         c.commit();
         stmt.close();
@@ -105,7 +106,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public SupplierModelDailyWaste refreshSupplierSubProduct(SupplierModelDailyWaste data)throws SQLException, ClassNotFoundException 
 	{
-        String query = "SELECT * FROM supplier.supplier_waste_new1 WHERE id=? AND date(date_time)=?  ORDER BY date_time DESC LIMIT 1";
+        String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND date(date_time)=? AND \"deleteIndex\"=false ORDER BY date_time DESC LIMIT 1";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setInt( 1, data.getId() );
@@ -134,7 +135,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public Integer subSupplierProduct(SupplierModelDailyWaste data) throws SQLException, ClassNotFoundException 
 	{
-		String query = "INSERT INTO supplier.supplier_waste_new1 (id,date_time,dry_waste,wet_waste) VALUES (?,?,?,?)";
+		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste) VALUES (?,?,?,?)";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setInt( 1, data.getId() );
@@ -149,13 +150,13 @@ public class SupplierDAOImpl implements SupplierDAO
 	}
 
 	@Override
-	public List<SupplierModelDailyWasteNew> displaySuppliers(Integer id) throws SQLException, ClassNotFoundException
+	public List<SupplierModelDailyWasteNew> displaySuppliers(Long id) throws SQLException, ClassNotFoundException
 	{
 		List<SupplierModelDailyWasteNew> sms = new ArrayList<SupplierModelDailyWasteNew>();
-		String query = "SELECT * FROM supplier.supplier_waste_new1 WHERE id=?;";
+		String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND \"deleteIndex\"=false ORDER BY date_time DESC;";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
-        stmt.setInt( 1, id );
+        stmt.setLong( 1, id );
         ResultSet rs = stmt.executeQuery();
         Double prevDW = 0.0;
         Double prevWW = 0.0;
@@ -179,8 +180,15 @@ public class SupplierDAOImpl implements SupplierDAO
                 }
             }
             System.out.println( aos );
-            sms.add( new SupplierModelDailyWasteNew( rs.getInt( "id" ), rs.getTimestamp( "date_time" ), rs.getDouble( "dry_waste" ), rs
-                    .getDouble( "wet_waste" ), aos ) );
+            sms.add(
+            		new SupplierModelDailyWasteNew( 
+            				rs.getLong("init_id"),
+            				rs.getLong( "id" ), 
+            				rs.getTimestamp( "date_time" ), 
+            				rs.getDouble( "dry_waste" ),
+            				rs.getDouble( "wet_waste" ), aos,
+            				rs.getString( "description" )
+            				) );
             prevDW = rs.getDouble( "dry_waste" );
             prevWW = rs.getDouble( "wet_waste" );
             i++;
@@ -195,7 +203,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	public SupplierModelSelect getSupplier(String username, String password)throws SQLException, ClassNotFoundException 
 	{
         Connection c = Connections.setConnection();
-        String query = "SELECT * FROM supplier.supplier_info WHERE id IN(SELECT id FROM supplier.supplier_login WHERE username=? AND password=?)";
+        String query = "SELECT * FROM supplier.supplier_info WHERE id IN(SELECT id FROM supplier.supplier_login WHERE username=? AND password=? AND \"deleteIndex\"=false) AND \"deleteIndex\"=false";
         PreparedStatement stmt = c.prepareStatement( query );
         stmt.setString( 1, username );
         stmt.setString( 2, password );
@@ -204,7 +212,7 @@ public class SupplierDAOImpl implements SupplierDAO
         if (rs.next())
         {
             sms = new SupplierModelSelect( 
-            								rs.getInt( "id" ), 
+            								rs.getLong( "id" ), 
             								rs.getString( "supplier_name" ),
             								rs.getString( "contact" ), 
             								rs.getString( "email" ), 
@@ -218,36 +226,14 @@ public class SupplierDAOImpl implements SupplierDAO
 	}
 
 	@Override
-	public List<SupplierModelFullSelect> getSupplierByDate(Date date_t) throws SQLException, ClassNotFoundException 
-	{
-		Connection c = Connections.setConnection();
-        String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?);";
-        PreparedStatement stmt = c.prepareStatement( query );
-        stmt.setDate( 1, date_t );
-        ResultSet rs = stmt.executeQuery();
-        List<SupplierModelFullSelect> sms = new ArrayList<SupplierModelFullSelect>();
-        while (rs.next())
-        {
-            sms.add( new SupplierModelFullSelect( rs.getInt( "id" ), rs.getString( "supplier_name" ), rs.getString( "contact" ), rs
-                    .getString( "email" ), rs.getString( "reg_no" ), rs.getString( "latitude" ), rs.getString( "longitude" ), rs
-                    .getString( "state" ), rs.getString( "city" ), rs.getString( "area" ), rs.getString( "street" ), rs.getDouble( "dry_waste" ), rs
-                    .getDouble( "wet_waste" ), rs.getTimestamp( "date_time" ) ) );
-        }
-        rs.close();
-        stmt.close();
-        c.close();
-		return sms;
-	}
-
-	@Override
 	public List<SupplierModelFullSelect> getUniqueSupplierByDate(Date date_t)throws SQLException, ClassNotFoundException
 	{
         List<Integer> l = new ArrayList<Integer>();
         Connection c = Connections.setConnection();
         String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) ORDER BY date_time DESC;";
-        PreparedStatement st = c.prepareStatement( query );
-        st.setDate( 1, date_t );
-        ResultSet rs = st.executeQuery();
+        PreparedStatement stmt = c.prepareStatement( query );
+        stmt.setDate( 1, date_t );
+        ResultSet rs = stmt.executeQuery();
         List<SupplierModelFullSelect> sms = new ArrayList<SupplierModelFullSelect>();
         while (rs.next())
         {
@@ -264,13 +250,58 @@ public class SupplierDAOImpl implements SupplierDAO
             }
             if (!b)
             {
-                sms.add( new SupplierModelFullSelect( rs.getInt( "id" ), rs.getString( "supplier_name" ), rs.getString( "contact" ), rs
-                        .getString( "email" ), rs.getString( "reg_no" ), rs.getString( "latitude" ), rs.getString( "longitude" ), rs
-                        .getString( "state" ), rs.getString( "city" ), rs.getString( "area" ), rs.getString( "street" ), rs
-                        .getDouble( "dry_waste" ), rs.getDouble( "wet_waste" ), rs.getTimestamp( "date_time" ) ) );
+                sms.add( 
+                		new SupplierModelFullSelect( 
+                				rs.getInt( "id" ), 
+                				rs.getString( "supplier_name" ), 
+                				rs.getString( "contact" ), 
+                				rs.getString( "email" ),
+                				rs.getString( "reg_no" ), 
+                				rs.getString( "latitude" ), 
+                				rs.getString( "longitude" ), 
+                				rs.getString( "state" ),
+                				rs.getString( "city" ), 
+                				rs.getString( "area" ), 
+                				rs.getString( "street" ),
+                				rs.getDouble( "dry_waste" ), 
+                				rs.getDouble( "wet_waste" ), 
+                				rs.getTimestamp( "date_time" ),
+                				rs.getString( "description" )==null?"":rs.getString("description") ) );
                 l.add( rs.getInt( "id" ) );
             }
         }
+        rs.close();
+        stmt.close();
+        c.close();
         return sms;
+	}
+
+	@Override
+	public Integer deleteSupplierWaste(Long supplierWasteId,Date dateToSearch) throws SQLException, ClassNotFoundException 
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement("UPDATE supplier.supplier_waste SET \"deleteIndex\"=true WHERE supplier.supplier_waste.id=? AND DATE(date_time)=?;");
+		stmt.setLong(1, supplierWasteId);
+		stmt.setDate(2, dateToSearch);
+		Integer rs=stmt.executeUpdate();
+		c.commit();
+		stmt.close();
+		c.close();
+		return rs;
+	}
+
+	@Override
+	public Integer updateDescriptionInWaste(Long supplierWasteId, Date dateToSearch,String description)throws SQLException, ClassNotFoundException
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement("UPDATE supplier.supplier_waste SET description=? WHERE supplier.supplier_waste.id=? AND DATE(date_time)=?;");
+		stmt.setString(1, description);
+		stmt.setLong(2, supplierWasteId);
+		stmt.setDate(3, dateToSearch);
+		Integer rs=stmt.executeUpdate();
+		c.commit();
+		stmt.close();
+		c.close();
+		return rs;
 	}
 }

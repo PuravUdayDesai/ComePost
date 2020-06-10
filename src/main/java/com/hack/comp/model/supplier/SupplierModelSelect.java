@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 public class SupplierModelSelect
 {
     @NotNull(message = "Id cannot be NULL")
-    private Integer id;
+    private Long id;
     @NotNull(message = "Name cannot be NULL")
     private String name;
     @NotNull(message = "Contact Number cannot be NULL")
@@ -23,7 +23,13 @@ public class SupplierModelSelect
     {
     	
     }
-    public SupplierModelSelect(@NotNull(message = "Id cannot be NULL") Integer id, @NotNull(message = "Name cannot be NULL") String name, @NotNull(message = "Contact Number cannot be NULL") String contactNumber, @NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId, @NotNull(message = "Registration Number cannot be NULL") String registrationNumber, @NotNull(message = "No Validation") Boolean valid)
+    public SupplierModelSelect(
+    		@NotNull(message = "Id cannot be NULL") Long id,
+    		@NotNull(message = "Name cannot be NULL") String name,
+    		@NotNull(message = "Contact Number cannot be NULL") String contactNumber, 
+    		@NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId,
+    		@NotNull(message = "Registration Number cannot be NULL") String registrationNumber, 
+    		@NotNull(message = "No Validation") Boolean valid)
     {
         super();
         this.id = id;
@@ -34,12 +40,12 @@ public class SupplierModelSelect
         this.valid = valid;
     }
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

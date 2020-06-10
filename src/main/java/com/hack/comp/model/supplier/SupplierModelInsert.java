@@ -34,7 +34,18 @@ public class SupplierModelInsert
     {
     }
     
-    public SupplierModelInsert(@NotNull(message = "Name cannot be NULL") String name, @NotNull(message = "Contact Number cannot be NULL") String contactNumber, @NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId, @NotNull(message = "Registration Number cannot be NULL") String registrationNumber, @NotNull(message = "Latitude cannot be NULL") String latitude, @NotNull(message = "Longitude cannot be NULL") String longitude, @NotNull(message = "State cannot be NULL") String state, @NotNull(message = "City cannot be NULL") String city, @NotNull(message = "Area cannot be NULL") String area, @NotNull(message = "Street cannot be NULL") String street, @NotNull(message = "Password cannot be NULL") String password)
+    public SupplierModelInsert(
+    		@NotNull(message = "Name cannot be NULL") String name, 
+    		@NotNull(message = "Contact Number cannot be NULL") String contactNumber, 
+    		@NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId, 
+    		@NotNull(message = "Registration Number cannot be NULL") String registrationNumber,
+    		@NotNull(message = "Latitude cannot be NULL") String latitude,
+    		@NotNull(message = "Longitude cannot be NULL") String longitude,
+    		@NotNull(message = "State cannot be NULL") String state,
+    		@NotNull(message = "City cannot be NULL") String city, 
+    		@NotNull(message = "Area cannot be NULL") String area, 
+    		@NotNull(message = "Street cannot be NULL") String street,
+    		@NotNull(message = "Password cannot be NULL") String password)
     {
         super();
         this.name = name;

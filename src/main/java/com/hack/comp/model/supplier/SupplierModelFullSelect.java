@@ -3,6 +3,7 @@ package com.hack.comp.model.supplier;
 import java.sql.Timestamp;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -33,33 +34,49 @@ public class SupplierModelFullSelect
     @NotNull(message = "Longitude cannot be NULL")
     private String longitude;
     @NotNull(message = "Dry Waste cannot be NULL")
+    @Max(value=25)
     private Double dryWaste;
     @NotNull(message = "Wet Waste cannot be NULL")
+    @Max(value=25)
     private Double wetWaste;
     @NotNull(message = "Date And Time cannot be NULL")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "IST")
     private Timestamp date_time;
+    private String description;
 
-    public SupplierModelFullSelect(@NotNull(message = "Id cannot be NULL") Integer id, @NotNull(message = "Name cannot be NULL") String name, @NotNull(message = "Contact Number cannot be NULL") String contactNumber, @NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId, @NotNull(message = "Registration Number cannot be NULL") String registrationNumber, @NotNull(message = "Latitude cannot be NULL") String latitude, @NotNull(message = "Longitude cannot be NULL") String longitude, @NotNull(message = "State cannot be NULL") String state, @NotNull(message = "City cannot be NULL") String city, @NotNull(message = "Area cannot be NULL") String area, @NotNull(message = "Street cannot be NULL") String street, @NotNull(message = "Dry Waste cannot be NULL") Double dryWaste, @NotNull(message = "Wet Waste cannot be NULL") Double wetWaste, @NotNull(message = "Date And Time cannot be NULL") Timestamp date_time)
-    {
-        super();
-        this.id = id;
-        this.name = name;
-        this.contactNumber = contactNumber;
-        this.emailId = emailId;
-        this.registrationNumber = registrationNumber;
-        this.state = state;
-        this.city = city;
-        this.area = area;
-        this.street = street;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.dryWaste = dryWaste;
-        this.wetWaste = wetWaste;
-        this.date_time = date_time;
-    }
+    public SupplierModelFullSelect(@NotNull(message = "Id cannot be NULL") Integer id,
+			@NotNull(message = "Name cannot be NULL") String name,
+			@NotNull(message = "Contact Number cannot be NULL") String contactNumber,
+			@NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId,
+			@NotNull(message = "Registration Number cannot be NULL") String registrationNumber,
+			@NotNull(message = "State cannot be NULL") String state,
+			@NotNull(message = "City cannot be NULL") String city,
+			@NotNull(message = "Area cannot be NULL") String area,
+			@NotNull(message = "Street cannot be NULL") String street,
+			@NotNull(message = "Latitude cannot be NULL") String latitude,
+			@NotNull(message = "Longitude cannot be NULL") String longitude,
+			@NotNull(message = "Dry Waste cannot be NULL") @Max(25) Double dryWaste,
+			@NotNull(message = "Wet Waste cannot be NULL") @Max(25) Double wetWaste,
+			@NotNull(message = "Date And Time cannot be NULL") Timestamp date_time, String description) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.contactNumber = contactNumber;
+		this.emailId = emailId;
+		this.registrationNumber = registrationNumber;
+		this.state = state;
+		this.city = city;
+		this.area = area;
+		this.street = street;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.dryWaste = dryWaste;
+		this.wetWaste = wetWaste;
+		this.date_time = date_time;
+		this.description = description;
+	}
 
-    public Integer getId()
+	public Integer getId()
     {
         return id;
     }
@@ -198,5 +215,13 @@ public class SupplierModelFullSelect
     {
         this.date_time = date_time;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 }
