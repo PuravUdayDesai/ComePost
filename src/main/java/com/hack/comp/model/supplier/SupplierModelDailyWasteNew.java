@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class SupplierModelDailyWasteNew
 {
 
-	 @NotNull(message = "InitId cannot be NULL")
+	@NotNull(message = "InitId cannot be NULL")
 	private Long initId;
     @NotNull(message = "Id cannot be NULL")
     private Long id;

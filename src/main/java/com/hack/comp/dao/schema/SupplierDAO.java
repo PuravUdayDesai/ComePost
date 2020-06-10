@@ -13,6 +13,7 @@ import com.hack.comp.model.supplier.SupplierModelDailyWasteNew;
 import com.hack.comp.model.supplier.SupplierModelFullSelect;
 import com.hack.comp.model.supplier.SupplierModelInsert;
 import com.hack.comp.model.supplier.SupplierModelSelect;
+import com.hack.comp.model.supplier.SupplierWasteImagesSelect;
 
 public interface SupplierDAO
 {
@@ -28,4 +29,5 @@ public interface SupplierDAO
 	public Integer							updateDescriptionInWaste(Long supplierWasteId,Date dateToSearch,String description)	throws SQLException,ClassNotFoundException;
 	public String[]							storeFile(MultipartFile[] file,Long supplierId,Timestamp timeOfEntry)				throws IOException;
 	public Integer							addSupplierWasteImage(Long supplierId,Timestamp timeOfEntry,String imageURL)		throws SQLException,ClassNotFoundException;
+	public List<SupplierWasteImagesSelect>	selectSupplierWasteImages(Long supplierId,Date dateForSearch)						throws SQLException,ClassNotFoundException;
 }

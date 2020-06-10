@@ -30,6 +30,7 @@ import com.hack.comp.model.supplier.SupplierModelDailyWasteNew;
 import com.hack.comp.model.supplier.SupplierModelFullSelect;
 import com.hack.comp.model.supplier.SupplierModelInsert;
 import com.hack.comp.model.supplier.SupplierModelSelect;
+import com.hack.comp.model.supplier.SupplierWasteImagesSelect;
 
 @Service
 public class SupplierDAOImpl implements SupplierDAO
@@ -358,6 +359,37 @@ public class SupplierDAOImpl implements SupplierDAO
 		stmt.close();
 		c.close();
 		return rs;
+	}
+
+	@Override
+	public List<SupplierWasteImagesSelect> selectSupplierWasteImages(Long supplierId, Date dateForSearch)throws SQLException, ClassNotFoundException
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement("SELECT \r\n" + 
+				"		supplier.supplier_waste_images.supplier_id,\r\n" + 
+				"		supplier.supplier_waste_images.supplier_waste_image_id,\r\n" + 
+				"		supplier.supplier_waste_images.date_time,\r\n" + 
+				"		supplier.supplier_waste_images.image_url\r\n" + 
+				"FROM supplier.supplier_waste_images\r\n" + 
+				"WHERE supplier.supplier_waste_images.supplier_id=?\r\n" + 
+				"AND DATE(supplier.supplier_waste_images.date_time)=?\r\n" + 
+				"AND supplier.supplier_waste_images.delete_index=FALSE");
+		stmt.setLong(1, supplierId);
+		stmt.setDate(2, dateForSearch);
+		List<SupplierWasteImagesSelect> ll=new ArrayList<SupplierWasteImagesSelect>();
+		ResultSet rs=stmt.executeQuery();
+		while(rs.next())
+		{
+			ll.add(new SupplierWasteImagesSelect(
+					rs.getLong("supplier_id"),
+					rs.getLong("supplier_waste_image_id"),
+					rs.getTimestamp("date_time"),
+					rs.getString("image_url")) );
+		}
+		rs.close();
+		stmt.close();
+		c.close();
+		return ll;
 	}
 
 

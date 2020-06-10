@@ -31,6 +31,7 @@ import com.hack.comp.model.supplier.SupplierModelDailyWasteNew;
 import com.hack.comp.model.supplier.SupplierModelFullSelect;
 import com.hack.comp.model.supplier.SupplierModelInsert;
 import com.hack.comp.model.supplier.SupplierModelSelect;
+import com.hack.comp.model.supplier.SupplierWasteImagesSelect;
 
 @RestController
 @RequestMapping("/supplier")
@@ -155,5 +156,11 @@ public class SupplierController
 									@RequestParam("fileName") String fileName) {
 		
 		 sbl.downloadFile(request, response, filePath, fileName);
+	}
+	
+	@GetMapping(path = "/display/supplierWasteImages/{supplierId}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<SupplierWasteImagesSelect>> selectSupplierWasteImages(@PathVariable @NotNull Long supplierId,@RequestParam(name = "date") @NotNull  Date dateForSearch)
+	{
+		return sbl.selectSupplierWasteImages(supplierId, dateForSearch);
 	}
 }
