@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.hack.comp.controller.GovernmentController;
 import com.hack.comp.dao.schema.CompostDAO;
-import com.hack.comp.model.compost.CompostAndSupplierModel;
 import com.hack.comp.model.compost.CompostModelInsert;
 import com.hack.comp.model.compost.ComposterDailyModelCompost;
 import com.hack.comp.model.compost.ComposterDailyModelCompostNew;
@@ -72,27 +71,6 @@ public class CompostBusinessLogic
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
-	 public ResponseEntity<Void> compAndSuppTran(Long composter_id, CompostAndSupplierModel casm)
-	 {
-		 Integer rs=null;
-		 if(composter_id==null||casm==null)
-		 {
-			 return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-		 }
-		 
-		 try {
-			rs=cdi.compAndSuppTran(composter_id, casm);
-		} catch (ClassNotFoundException e) {
-			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
-		} catch (SQLException e) {
-			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	      if (rs == 0)
-	      {
-	    	  return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-	      }
-	      return new ResponseEntity<Void>(HttpStatus.CREATED);
-	 }
 	 
 	 public ResponseEntity<Void> addCompostProduct(ComposterDailyModelCompost data)
 	 {
@@ -115,7 +93,32 @@ public class CompostBusinessLogic
 	      return new ResponseEntity<Void>(HttpStatus.CREATED);
 	 }
 	 
-	    private ComposterDailyModelCompost refreshCompostSubProduct(ComposterDailyModelCompost data, Long init_id) throws ClassNotFoundException, SQLException
+	   
+	 
+	 public ResponseEntity<List<ComposterDailyModelCompostNew>> displayComposters(Long id)
+	 {
+		 List<ComposterDailyModelCompostNew> sms = new ArrayList<ComposterDailyModelCompostNew>();
+		 if(id==null)
+		 {
+			 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.BAD_REQUEST );
+		 }
+		 
+		 try {
+			sms=cdi.displayComposters(id);
+		} catch (ClassNotFoundException e) {
+			 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.NOT_FOUND );
+		} catch (SQLException e) {
+			 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.INTERNAL_SERVER_ERROR );
+		}
+		 
+		 if(sms.isEmpty())
+		 {
+			 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.NO_CONTENT );
+		 }
+		 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.OK );
+	 }
+	 
+     private ComposterDailyModelCompost refreshCompostSubProduct(ComposterDailyModelCompost data, Long init_id) throws ClassNotFoundException, SQLException
 	    {
 	    	Double compostWeight=null;
 				compostWeight=cdi.refreshCompostSubProduct(data, init_id);
@@ -135,6 +138,11 @@ public class CompostBusinessLogic
 	    }
 		Double prevCompostWeight=data.getCompostWeight();
 		try {
+		data.setCompostWeight(prevCompostWeight-data.getCompostWeight());
+		if(data.getCompostWeight()<0)
+		{
+			  return new ResponseEntity<Double>( 0.0, HttpStatus.BAD_REQUEST );
+		}
 		data = cbl.refreshCompostSubProduct( data, init_id );
 
 	    if (data.getCompostWeight() < 0)
@@ -158,36 +166,14 @@ public class CompostBusinessLogic
 		} catch (ClassNotFoundException e) {
 			return new ResponseEntity<Double>( 0.0, HttpStatus.NOT_FOUND );
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return new ResponseEntity<Double>( 0.0, HttpStatus.INTERNAL_SERVER_ERROR );
 		}
 		
 		 return new ResponseEntity<Double>( (data.getPrice() * prevCompostWeight), HttpStatus.OK );
 	 }
-	 
-	 public ResponseEntity<List<ComposterDailyModelCompostNew>> displaySuppliers(Long id)
-	 {
-		 List<ComposterDailyModelCompostNew> sms = new ArrayList<ComposterDailyModelCompostNew>();
-		 if(id==null)
-		 {
-			 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.BAD_REQUEST );
-		 }
-		 
-		 try {
-			sms=cdi.displaySuppliers(id);
-		} catch (ClassNotFoundException e) {
-			 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.NOT_FOUND );
-		} catch (SQLException e) {
-			 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.INTERNAL_SERVER_ERROR );
-		}
-		 
-		 if(sms.isEmpty())
-		 {
-			 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.NO_CONTENT );
-		 }
-		 return new ResponseEntity<List<ComposterDailyModelCompostNew>>( sms, HttpStatus.OK );
-	 }
-	 
-	 public ResponseEntity<List<ComposterFullSelect>> getSupplierByDate(Date date)
+     	 
+	 public ResponseEntity<List<ComposterFullSelect>> getComposterByDate(Date date)
 	 {
 		List<ComposterFullSelect> lc=new ArrayList<ComposterFullSelect>();
 		if(date==null)
@@ -195,7 +181,7 @@ public class CompostBusinessLogic
 			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.BAD_REQUEST );
 		}
 		try {
-			lc=cdi.getSupplierByDate(date);
+			lc=cdi.getComposterByDate(date);
 		} catch (ClassNotFoundException e) {
 			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.NOT_FOUND );
 		} catch (SQLException e) {
@@ -207,4 +193,5 @@ public class CompostBusinessLogic
 		}
 		return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.OK );
 	 }
+
 }
