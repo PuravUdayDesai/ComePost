@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.hack.comp.connection.Connections;
 import com.hack.comp.dao.schema.CompostDAO;
-import com.hack.comp.model.compost.CompostAndSupplierModel;
 import com.hack.comp.model.compost.CompostModelInsert;
 import com.hack.comp.model.compost.ComposterDailyModelCompost;
 import com.hack.comp.model.compost.ComposterDailyModelCompostNew;
@@ -113,27 +112,18 @@ public class CompostDAOImpl implements CompostDAO
 	}
 
 	@Override
-	public Integer compAndSuppTran(Long composter_id, CompostAndSupplierModel casm)throws SQLException, ClassNotFoundException 
-	{
-		Connection c = Connections.setConnection();
-        String sql = "INSERT INTO public.comp_supp_transaction(supplier_id, composter_id, date, wet_waste, dry_waste) VALUES (?, ?, ?, ?, ?);";
-        PreparedStatement stmt = c.prepareStatement( sql );
-        stmt.setLong( 1, casm.getSupplier_id() );
-        stmt.setLong( 2, casm.getComposter_id() );
-        stmt.setDate( 3, casm.getDate() );
-        stmt.setDouble( 4, casm.getWet_waste() );
-        stmt.setDouble( 5, casm.getDry_waste() );
-        int result = stmt.executeUpdate();
-        c.commit();
-        stmt.close();
-        c.close();
-		return result;
-	}
-
-	@Override
 	public Integer addCompostProduct(ComposterDailyModelCompost data) throws SQLException, ClassNotFoundException 
 	{
-		String query = "INSERT INTO composter.composter_compost(id, date_time, compost_weight, price, add_or_sub) VALUES (?,?,?,?,?)";
+		String query = "INSERT INTO composter.composter_compost(\r\n" + 
+				"	id,\r\n" + 
+				"	date_time,\r\n" + 
+				"	compost_weight,\r\n" + 
+				"	price, \r\n" + 
+				"	add_or_sub,\r\n" + 
+				"	category,\r\n" + 
+				"	grade,\r\n" + 
+				"	description) \r\n" + 
+				"VALUES (?,?,?,?,?,?,?,?)";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, data.getId() );
@@ -141,6 +131,9 @@ public class CompostDAOImpl implements CompostDAO
         stmt.setDouble( 3, data.getCompostWeight() );
         stmt.setDouble( 4, data.getPrice() );
         stmt.setBoolean( 5, true );
+        stmt.setString(6, data.getCategory());
+        stmt.setString(7, data.getGrade());
+        stmt.setString(8, data.getDescription()==null?"":data.getDescription());
         Integer result = stmt.executeUpdate();
         c.commit();
         stmt.close();
@@ -148,47 +141,13 @@ public class CompostDAOImpl implements CompostDAO
         return result;
 	}
 	
-	@Override
-	public Double refreshCompostSubProduct(ComposterDailyModelCompost data, Long init_id)throws SQLException, ClassNotFoundException 
-	{
-		String query = "SELECT compost_weight FROM composter.composter_compost WHERE id=? AND date(date_time)=? AND init_id=?  ORDER BY date_time DESC LIMIT 1";
-        Connection c = Connections.setConnection();
-        CallableStatement stmt = c.prepareCall( query );
-        stmt.setLong( 1, data.getId() );
-        stmt.setTimestamp( 2, data.getDateAndTime() );
-        stmt.setLong( 3, init_id );
-        Double compostWeight = 0.0;
-        ResultSet rs = stmt.executeQuery();
-        if(rs.next())
-        {
-        	compostWeight = rs.getDouble( "compost_weight" );
-        }
-		return compostWeight;
-	}
+	
 
 	@Override
-	public Integer subCompostProduct(ComposterDailyModelCompost data, Long init_id)throws SQLException, ClassNotFoundException 
-	{
-		 String query = "INSERT INTO composter.composter_compost(id, date_time, compost_weight, price, add_or_sub) VALUES (?,?,?,?,?)";
-	     Connection c = Connections.setConnection();
-	     CallableStatement stmt = c.prepareCall( query );
-	     stmt.setInt( 1, data.getId() );
-	     stmt.setTimestamp( 2, data.getDateAndTime() );
-	     stmt.setDouble( 3, data.getCompostWeight() );
-	     stmt.setDouble( 4, data.getPrice() );
-	     stmt.setBoolean( 5, false );
-	     Integer result = stmt.executeUpdate();
-	     c.commit();
-	     stmt.close();
-	     c.close();
-		return result;
-	}
-
-	@Override
-	public List<ComposterDailyModelCompostNew> displaySuppliers(Long id)throws SQLException, ClassNotFoundException
+	public List<ComposterDailyModelCompostNew> displayComposters(Long id)throws SQLException, ClassNotFoundException
 	{
 		List<ComposterDailyModelCompostNew> sms = new ArrayList<ComposterDailyModelCompostNew>();
-        String query = "SELECT * FROM composter.composter_compost WHERE id=?;";
+        String query = "SELECT * FROM composter.composter_compost WHERE id=? ORDER BY date_time DESC;";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, id );
@@ -211,7 +170,58 @@ public class CompostDAOImpl implements CompostDAO
 	}
 
 	@Override
-	public List<ComposterFullSelect> getSupplierByDate(Date date) throws SQLException, ClassNotFoundException 
+	public Double refreshCompostSubProduct(ComposterDailyModelCompost data, Long init_id)throws SQLException, ClassNotFoundException 
+	{
+		String query = "SELECT compost_weight FROM composter.composter_compost WHERE id=? AND date(date_time)=? AND init_id=?  ORDER BY date_time DESC LIMIT 1";
+        Connection c = Connections.setConnection();
+        CallableStatement stmt = c.prepareCall( query );
+        stmt.setLong( 1, data.getId() );
+        stmt.setTimestamp( 2, data.getDateAndTime() );
+        stmt.setLong( 3, init_id );
+        Double compostWeight = 0.0;
+        ResultSet rs = stmt.executeQuery();
+        if(rs.next())
+        {
+        	compostWeight = rs.getDouble( "compost_weight" );
+        }
+		return compostWeight;
+	}
+
+	@Override
+	public Integer subCompostProduct(ComposterDailyModelCompost data, Long init_id)throws SQLException, ClassNotFoundException 
+	{
+		String query = "INSERT INTO composter.composter_compost(\r\n" + 
+				"	init_id,\r\n"+
+				"	id,\r\n" + 
+				"	date_time,\r\n" + 
+				"	compost_weight,\r\n" + 
+				"	price, \r\n" + 
+				"	add_or_sub,\r\n" + 
+				"	category,\r\n" + 
+				"	grade,\r\n" + 
+				"	description) \r\n" + 
+				"VALUES (?,?,?,?,?,?,?,?,?)";
+        Connection c = Connections.setConnection();
+        CallableStatement stmt = c.prepareCall( query );
+        stmt.setLong(1, init_id);
+        stmt.setLong( 2, data.getId() );
+        stmt.setTimestamp( 3, data.getDateAndTime() );
+        stmt.setDouble( 4, data.getCompostWeight() );
+        stmt.setDouble( 5, data.getPrice() );
+        stmt.setBoolean( 6, true );
+        stmt.setString(7, data.getCategory());
+        stmt.setString(8, data.getGrade());
+        stmt.setString(9, data.getDescription()==null?"":data.getDescription());
+        System.out.println(stmt);
+        Integer result = stmt.executeUpdate();
+        c.commit();
+        stmt.close();
+        c.close();
+        return result;
+	}
+
+@Override
+	public List<ComposterFullSelect> getComposterByDate(Date date) throws SQLException, ClassNotFoundException 
 	{
 		Connection c = Connections.setConnection();
         PreparedStatement stmt = c.prepareStatement( "SELECT composter.composter_info.name,\n" + 
@@ -286,5 +296,6 @@ public class CompostDAOImpl implements CompostDAO
         c.close();
         return lc;
 	}
+	
 
 }
