@@ -449,6 +449,7 @@ public class SupplierBusinessLogic
 			} catch (ClassNotFoundException e) {
 				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.NOT_FOUND);
 			} catch (SQLException e) {
+				e.printStackTrace();
 				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			if(sms.isEmpty())
@@ -483,6 +484,7 @@ public class SupplierBusinessLogic
 			} catch (ClassNotFoundException e) {
 				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.NOT_FOUND);
 			} catch (SQLException e) {
+				e.printStackTrace();
 				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			if(sms.isEmpty())
@@ -491,4 +493,25 @@ public class SupplierBusinessLogic
 			}
 			return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.OK);
 		 }
+		
+		public ResponseEntity<Void> deleteSupplierWasteImage(Long wasteImageId)
+		{
+			if(wasteImageId==null)
+			{
+				return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
+			}
+			Integer rsMain=null;
+			try {
+				rsMain=sd.deleteSupplierWasteImage(wasteImageId);
+			} catch (ClassNotFoundException e) {
+				return new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
+			} catch (SQLException e) {
+				return new ResponseEntity<Void>( HttpStatus.INTERNAL_SERVER_ERROR );
+			}
+			if(rsMain==0)
+			{
+				return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
+			}
+			return new ResponseEntity<Void>( HttpStatus.OK );
+		}
 }

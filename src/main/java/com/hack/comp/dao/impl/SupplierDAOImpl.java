@@ -399,8 +399,8 @@ public class SupplierDAOImpl implements SupplierDAO
         Connection c = Connections.setConnection();
         String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) WHERE LOWER(state)=LOWER(?) ORDER BY date_time DESC;";
         PreparedStatement stmt = c.prepareStatement( query );
-        stmt.setString(1, state);
         stmt.setDate( 1, date_t );
+        stmt.setString(2, state);
         ResultSet rs = stmt.executeQuery();
         List<SupplierModelFullSelect> sms = new ArrayList<SupplierModelFullSelect>();
         while (rs.next())
@@ -451,8 +451,8 @@ public class SupplierDAOImpl implements SupplierDAO
         Connection c = Connections.setConnection();
         String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) WHERE LOWER(city)=LOWER(?) ORDER BY date_time DESC;";
         PreparedStatement stmt = c.prepareStatement( query );
-        stmt.setString(1, city);
         stmt.setDate( 1, date_t );
+        stmt.setString(2, city);
         ResultSet rs = stmt.executeQuery();
         List<SupplierModelFullSelect> sms = new ArrayList<SupplierModelFullSelect>();
         while (rs.next())
@@ -494,6 +494,19 @@ public class SupplierDAOImpl implements SupplierDAO
         stmt.close();
         c.close();
         return sms;
+	}
+
+	@Override
+	public Integer deleteSupplierWasteImage(Long wasteImageId) throws SQLException, ClassNotFoundException 
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement("UPDATE supplier.supplier_waste_images SET delete_index=true WHERE supplier_waste_image_id=?;");
+		stmt.setLong(1, wasteImageId);
+		Integer rs=stmt.executeUpdate();
+		c.commit();
+		stmt.close();
+		c.close();
+		return rs;
 	}
 
 

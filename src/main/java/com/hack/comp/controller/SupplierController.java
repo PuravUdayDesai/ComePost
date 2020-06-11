@@ -210,4 +210,16 @@ public class SupplierController
 	{
 		return sbl.selectSupplierWasteImages(supplierId, dateForSearch);
 	}
+	
+	
+	/*
+	 * This method is used to delete
+	 * a waste image uploaded by the 
+	 * supplier
+	 */
+	@DeleteMapping(path="/waste/image/{wasteImageId}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<Void> deleteSupplierWasteImage(@PathVariable @NotNull Long wasteImageId)
+	{
+		return sbl.deleteSupplierWasteImage(wasteImageId);
+	}
 }
