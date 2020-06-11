@@ -392,5 +392,122 @@ public class SupplierDAOImpl implements SupplierDAO
 		return ll;
 	}
 
+	@Override
+	public List<SupplierModelFullSelect> getUniqueSupplierByDateAndState(Date date_t, String state)throws SQLException, ClassNotFoundException 
+	{
+		List<Integer> l = new ArrayList<Integer>();
+        Connection c = Connections.setConnection();
+        String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) WHERE LOWER(state)=LOWER(?) ORDER BY date_time DESC;";
+        PreparedStatement stmt = c.prepareStatement( query );
+        stmt.setDate( 1, date_t );
+        stmt.setString(2, state);
+        ResultSet rs = stmt.executeQuery();
+        List<SupplierModelFullSelect> sms = new ArrayList<SupplierModelFullSelect>();
+        while (rs.next())
+        {
+            Boolean b = false;
+            @SuppressWarnings("rawtypes")
+			Iterator iterator = l.iterator();
+            while (iterator.hasNext())
+            {
+                if (rs.getInt( "id" ) == (Integer) iterator.next())
+                {
+                    b = true;
+                    break;
+                }
+            }
+            if (!b)
+            {
+                sms.add( 
+                		new SupplierModelFullSelect( 
+                				rs.getInt( "id" ), 
+                				rs.getString( "supplier_name" ), 
+                				rs.getString( "contact" ), 
+                				rs.getString( "email" ),
+                				rs.getString( "reg_no" ), 
+                				rs.getString( "latitude" ), 
+                				rs.getString( "longitude" ), 
+                				rs.getString( "state" ),
+                				rs.getString( "city" ), 
+                				rs.getString( "area" ), 
+                				rs.getString( "street" ),
+                				rs.getDouble( "dry_waste" ), 
+                				rs.getDouble( "wet_waste" ), 
+                				rs.getTimestamp( "date_time" ),
+                				rs.getString( "description" )==null?"":rs.getString("description") ) );
+                l.add( rs.getInt( "id" ) );
+            }
+        }
+        rs.close();
+        stmt.close();
+        c.close();
+        return sms;
+	}
+
+	@Override
+	public List<SupplierModelFullSelect> getUniqueSupplierByDateAndCity(Date date_t, String city)throws SQLException, ClassNotFoundException
+	{
+		List<Integer> l = new ArrayList<Integer>();
+        Connection c = Connections.setConnection();
+        String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) WHERE LOWER(city)=LOWER(?) ORDER BY date_time DESC;";
+        PreparedStatement stmt = c.prepareStatement( query );
+        stmt.setDate( 1, date_t );
+        stmt.setString(2, city);
+        ResultSet rs = stmt.executeQuery();
+        List<SupplierModelFullSelect> sms = new ArrayList<SupplierModelFullSelect>();
+        while (rs.next())
+        {
+            Boolean b = false;
+            @SuppressWarnings("rawtypes")
+			Iterator iterator = l.iterator();
+            while (iterator.hasNext())
+            {
+                if (rs.getInt( "id" ) == (Integer) iterator.next())
+                {
+                    b = true;
+                    break;
+                }
+            }
+            if (!b)
+            {
+                sms.add( 
+                		new SupplierModelFullSelect( 
+                				rs.getInt( "id" ), 
+                				rs.getString( "supplier_name" ), 
+                				rs.getString( "contact" ), 
+                				rs.getString( "email" ),
+                				rs.getString( "reg_no" ), 
+                				rs.getString( "latitude" ), 
+                				rs.getString( "longitude" ), 
+                				rs.getString( "state" ),
+                				rs.getString( "city" ), 
+                				rs.getString( "area" ), 
+                				rs.getString( "street" ),
+                				rs.getDouble( "dry_waste" ), 
+                				rs.getDouble( "wet_waste" ), 
+                				rs.getTimestamp( "date_time" ),
+                				rs.getString( "description" )==null?"":rs.getString("description") ) );
+                l.add( rs.getInt( "id" ) );
+            }
+        }
+        rs.close();
+        stmt.close();
+        c.close();
+        return sms;
+	}
+
+	@Override
+	public Integer deleteSupplierWasteImage(Long wasteImageId) throws SQLException, ClassNotFoundException 
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement("UPDATE supplier.supplier_waste_images SET delete_index=true WHERE supplier_waste_image_id=?;");
+		stmt.setLong(1, wasteImageId);
+		Integer rs=stmt.executeUpdate();
+		c.commit();
+		stmt.close();
+		c.close();
+		return rs;
+	}
+
 
 }

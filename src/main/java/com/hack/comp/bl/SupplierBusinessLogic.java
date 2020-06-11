@@ -266,7 +266,7 @@ public class SupplierBusinessLogic
 		return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.OK);
 	 }
 	
-	 public ResponseEntity<Void> deleteSupplierWaste(Long supplierWasteId,Date dateToSearch)
+	 	public ResponseEntity<Void> deleteSupplierWaste(Long supplierWasteId,Date dateToSearch)
 	 {
 		 Integer rsMain=null;
 		 if(supplierWasteId==null)
@@ -287,7 +287,7 @@ public class SupplierBusinessLogic
 		 return new ResponseEntity<Void>( HttpStatus.OK );
 	 }
 	 
-	 public ResponseEntity<Void> updateDescriptionInWaste(Long supplierWasteId, Date dateToSearch,String description)
+	 	public ResponseEntity<Void> updateDescriptionInWaste(Long supplierWasteId, Date dateToSearch,String description)
 	 {
 		 Integer rsMain=null;
 		 if(supplierWasteId==null)
@@ -308,7 +308,7 @@ public class SupplierBusinessLogic
 		 return new ResponseEntity<Void>( HttpStatus.OK );
 	 }
 	 
-	 public ResponseEntity<Void> addSupplierWasteImage(MultipartFile[] file,Long supplierWasteId,Timestamp timeOfEntry)
+	 	public ResponseEntity<Void> addSupplierWasteImage(MultipartFile[] file,Long supplierWasteId,Timestamp timeOfEntry)
 	 {
 		 String[] qualifiedPaths=null;
 		 if(file.length==0||supplierWasteId==null||timeOfEntry==null)
@@ -422,5 +422,96 @@ public class SupplierBusinessLogic
 				return new ResponseEntity<List<SupplierWasteImagesSelect>>(ll,HttpStatus.NO_CONTENT);
 			}
 			return new ResponseEntity<List<SupplierWasteImagesSelect>>(ll,HttpStatus.OK);
+		}
+		
+		public ResponseEntity<List<SupplierModelFullSelect>> getUniqueSupplierByDateAndState(Date date_t, String state)
+		 {
+			List<SupplierModelFullSelect> sms = new ArrayList<SupplierModelFullSelect>();
+			if(date_t==null)
+			{
+				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.BAD_REQUEST);
+			}
+	    	DateTime currentDate=new DateTime(System.currentTimeMillis());
+			DateTime responseDate=new DateTime(date_t.getTime());
+			 if(currentDate.getYear()!=responseDate.getYear()&&currentDate.getMonthOfYear()!=responseDate.getMonthOfYear())
+			 {
+				 return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.BAD_REQUEST);
+			 }
+			 else
+			 {
+				 if(currentDate.getDayOfMonth()-5>responseDate.getDayOfMonth())
+				 {
+					 return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.BAD_REQUEST);
+				 }
+			 }
+			try {
+				sms=sd.getUniqueSupplierByDateAndState(date_t, state);
+			} catch (ClassNotFoundException e) {
+				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.NOT_FOUND);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			if(sms.isEmpty())
+			{
+				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.OK);
+		 }
+		
+		public ResponseEntity<List<SupplierModelFullSelect>> getUniqueSupplierByDateAndCity(Date date_t, String city)
+		 {
+			List<SupplierModelFullSelect> sms = new ArrayList<SupplierModelFullSelect>();
+			if(date_t==null)
+			{
+				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.BAD_REQUEST);
+			}
+	    	DateTime currentDate=new DateTime(System.currentTimeMillis());
+			DateTime responseDate=new DateTime(date_t.getTime());
+			 if(currentDate.getYear()!=responseDate.getYear()&&currentDate.getMonthOfYear()!=responseDate.getMonthOfYear())
+			 {
+				 return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.BAD_REQUEST);
+			 }
+			 else
+			 {
+				 if(currentDate.getDayOfMonth()-5>responseDate.getDayOfMonth())
+				 {
+					 return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.BAD_REQUEST);
+				 }
+			 }
+			try {
+				sms=sd.getUniqueSupplierByDateAndCity(date_t, city);
+			} catch (ClassNotFoundException e) {
+				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.NOT_FOUND);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			if(sms.isEmpty())
+			{
+				return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.OK);
+		 }
+		
+		public ResponseEntity<Void> deleteSupplierWasteImage(Long wasteImageId)
+		{
+			if(wasteImageId==null)
+			{
+				return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
+			}
+			Integer rsMain=null;
+			try {
+				rsMain=sd.deleteSupplierWasteImage(wasteImageId);
+			} catch (ClassNotFoundException e) {
+				return new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
+			} catch (SQLException e) {
+				return new ResponseEntity<Void>( HttpStatus.INTERNAL_SERVER_ERROR );
+			}
+			if(rsMain==0)
+			{
+				return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
+			}
+			return new ResponseEntity<Void>( HttpStatus.OK );
 		}
 }

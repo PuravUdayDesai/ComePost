@@ -113,6 +113,30 @@ public class SupplierController
     
     
     /*
+     * This method is used to get
+     * suppliers based on date and
+     * state
+     */
+    @GetMapping(path = "/display/state",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<SupplierModelFullSelect>> getUniqueSupplierByDateAndState(@RequestParam(name = "date") @NotNull Date date_t,@RequestParam(name = "state") @NotNull String state)
+    {
+    	return sbl.getUniqueSupplierByDateAndState(date_t, state);
+    }
+    
+    
+    /*
+     * This method is used to get
+     * suppliers based on date and
+     * city
+     */
+    @GetMapping(path = "/display/city",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<SupplierModelFullSelect>> getUniqueSupplierByDateAndCity(@RequestParam(name = "date") @NotNull Date date_t,@RequestParam(name = "city") @NotNull String city)
+    {
+    	return sbl.getUniqueSupplierByDateAndCity(date_t, city);
+    }
+    
+    
+    /*
      * This method is used to delete
      * an added waste entry
      */
@@ -134,12 +158,23 @@ public class SupplierController
 	 }
 
     
+    /*
+     * This method is used to add
+     * and upload waste image file
+     * to server
+     */
     @PostMapping("/uploadImage/{supplierWasteId}")
-    public ResponseEntity<Void> uploadFile(@RequestPart("file") MultipartFile[] file,@PathVariable @NotNull Long supplierWasteId,@RequestParam(name = "timestamp") @NotNull  Timestamp timeOfEntry)
+    public ResponseEntity<Void> addSupplierWasteImage(@RequestPart("file") MultipartFile[] file,@PathVariable @NotNull Long supplierWasteId,@RequestParam(name = "timestamp") @NotNull  Timestamp timeOfEntry)
     {
     	return sbl.addSupplierWasteImage(file, supplierWasteId, timeOfEntry);
     }
     
+    
+    /*
+     * This method is used to
+     * retrieve/fetch the images
+     * from the server
+     */
 	@RequestMapping("/fileView")
 	public void viewFile(HttpServletRequest request, 
 									HttpServletResponse response,
@@ -149,6 +184,12 @@ public class SupplierController
 		 sbl.viewFile(request, response, filePath, fileName);
 	}
 	
+	
+	/*
+	 * This method is used to
+	 * download image from the
+	 * server
+	 */
 	@RequestMapping("/fileDownload")
 	public void downloadFile(HttpServletRequest request, 
 									HttpServletResponse response,
@@ -158,9 +199,27 @@ public class SupplierController
 		 sbl.downloadFile(request, response, filePath, fileName);
 	}
 	
+	
+	/*
+	 * This method is used to
+	 * select the added records
+	 * for waste images
+	 */
 	@GetMapping(path = "/display/supplierWasteImages/{supplierId}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<SupplierWasteImagesSelect>> selectSupplierWasteImages(@PathVariable @NotNull Long supplierId,@RequestParam(name = "date") @NotNull  Date dateForSearch)
 	{
 		return sbl.selectSupplierWasteImages(supplierId, dateForSearch);
+	}
+	
+	
+	/*
+	 * This method is used to delete
+	 * a waste image uploaded by the 
+	 * supplier
+	 */
+	@DeleteMapping(path="/waste/image/{wasteImageId}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<Void> deleteSupplierWasteImage(@PathVariable @NotNull Long wasteImageId)
+	{
+		return sbl.deleteSupplierWasteImage(wasteImageId);
 	}
 }

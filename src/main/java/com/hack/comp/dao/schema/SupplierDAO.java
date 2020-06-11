@@ -30,4 +30,7 @@ public interface SupplierDAO
 	public String[]							storeFile(MultipartFile[] file,Long supplierId,Timestamp timeOfEntry)				throws IOException;
 	public Integer							addSupplierWasteImage(Long supplierId,Timestamp timeOfEntry,String imageURL)		throws SQLException,ClassNotFoundException;
 	public List<SupplierWasteImagesSelect>	selectSupplierWasteImages(Long supplierId,Date dateForSearch)						throws SQLException,ClassNotFoundException;
+	public List<SupplierModelFullSelect>	getUniqueSupplierByDateAndState(Date date_t,String state)							throws SQLException,ClassNotFoundException;
+	public List<SupplierModelFullSelect>	getUniqueSupplierByDateAndCity(Date date_t,String city)								throws SQLException,ClassNotFoundException;
+	public Integer							deleteSupplierWasteImage(Long wasteImageId)											throws SQLException,ClassNotFoundException;
 }
