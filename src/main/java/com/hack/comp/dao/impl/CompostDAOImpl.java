@@ -1,24 +1,36 @@
 package com.hack.comp.dao.impl;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.hack.comp.bl.CompostBusinessLogic;
 import com.hack.comp.connection.Connections;
 import com.hack.comp.dao.schema.CompostDAO;
 import com.hack.comp.model.compost.CompostModelInsert;
+import com.hack.comp.model.compost.ComposterCompostImageSelect;
 import com.hack.comp.model.compost.ComposterDailyModelCompost;
 import com.hack.comp.model.compost.ComposterDailyModelCompostNew;
 import com.hack.comp.model.compost.ComposterFullSelect;
 import com.hack.comp.model.compost.ComposterLoginModel;
+import com.hack.comp.model.exception.FileStorageException;
 
 @Service
 public class CompostDAOImpl implements CompostDAO
@@ -112,7 +124,7 @@ public class CompostDAOImpl implements CompostDAO
 	}
 
 	@Override
-	public Integer addCompostProduct(ComposterDailyModelCompost data) throws SQLException, ClassNotFoundException 
+	public Long addCompostProduct(ComposterDailyModelCompost data) throws SQLException, ClassNotFoundException 
 	{
 		String query = "INSERT INTO composter.composter_compost(\r\n" + 
 				"	id,\r\n" + 
@@ -123,7 +135,7 @@ public class CompostDAOImpl implements CompostDAO
 				"	category,\r\n" + 
 				"	grade,\r\n" + 
 				"	description) \r\n" + 
-				"VALUES (?,?,?,?,?,?,?,?)";
+				"VALUES (?,?,?,?,?,?,?,?)RETURNING init_id;";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, data.getId() );
@@ -134,11 +146,17 @@ public class CompostDAOImpl implements CompostDAO
         stmt.setString(6, data.getCategory());
         stmt.setString(7, data.getGrade());
         stmt.setString(8, data.getDescription()==null?"":data.getDescription());
-        Integer result = stmt.executeUpdate();
+        ResultSet rs=stmt.executeQuery();
         c.commit();
+        Long init_id=null;
+        if(rs.next())
+        {
+        	init_id=rs.getLong("init_id");
+        }
+        rs.close();
         stmt.close();
         c.close();
-        return result;
+        return init_id;
 	}
 	
 	@Override
@@ -303,6 +321,111 @@ public class CompostDAOImpl implements CompostDAO
         stmt.close();
         c.close();
         return lc;
+	}
+
+	@Override
+	public Integer addComposterCompostImages(Long composterId, Long init_id, Timestamp date_time,String image_url)throws SQLException, ClassNotFoundException
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareCall("INSERT INTO composter.composter_compost_image(\r\n" + 
+				"	composter_id,\r\n" + 
+				"	date_time, \r\n" + 
+				"	image_url,\r\n" + 
+				"	composter_init_id)\r\n" + 
+				"	VALUES (?, ?, ?, ?);");
+		stmt.setLong(1, composterId);
+		stmt.setTimestamp(2, date_time);
+		stmt.setString(3, image_url);
+		stmt.setLong(4, init_id);
+		Integer rs=stmt.executeUpdate();
+		c.commit();
+		stmt.close();
+		c.close();
+		return rs;
+	}
+	
+	@Override
+	public String[] storeFile(MultipartFile[] file,Long composterId,Long initId,Timestamp timeOfEntry) throws IOException 
+	{
+		String[] qualifiedPaths=new String[file.length];
+		for(int i=0;i<file.length;i++)
+		{
+		String fileName = StringUtils.cleanPath(file[i].getOriginalFilename());
+
+        if(fileName.contains("..")) {
+            throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+        }
+        String path="E:/composterCompostImages/"+composterId+"/"+initId+"/"+CompostBusinessLogic.replaceColonToPeriod(timeOfEntry);
+        File f=new File(path);
+        if(!f.exists())
+        {
+        Boolean b=f.mkdirs();
+        if(!b)
+        {
+        	throw new IOException("Cannot Create Director Specified: "+path);
+        }
+        }
+        String qualifiedPath=path+"/"+fileName;
+        Path targetLocation = Paths.get(qualifiedPath);
+        Files.copy(file[i].getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+        qualifiedPaths[i]=qualifiedPath;
+	}
+		return qualifiedPaths;
+	}
+
+	@Override
+	public List<ComposterCompostImageSelect> selectComposterCompostImage(Long composterId, Long initId,Date dateToSearch) throws SQLException, ClassNotFoundException 
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement(
+				"SELECT \r\n" + 
+				"		composter.composter_compost_image.composter_compost_image_id,\r\n" + 
+				"		composter.composter_compost_image.composter_id,\r\n" + 
+				"		composter.composter_compost_image.composter_init_id,\r\n" + 
+				"		composter.composter_compost_image.date_time,\r\n" + 
+				"		composter.composter_compost_image.image_url\r\n" + 
+				"FROM\r\n" + 
+				"	composter.composter_compost_image\r\n" + 
+				"WHERE \r\n" + 
+				"	composter.composter_compost_image.composter_id=?\r\n" + 
+				"AND	\r\n" + 
+				"	composter.composter_compost_image.composter_init_id=?\r\n" + 
+				"AND \r\n" + 
+				"	DATE(composter.composter_compost_image.date_time)=?\r\n" + 
+				"AND\r\n" + 
+				"	delete_index=FALSE;");
+		stmt.setLong(1, composterId);
+		stmt.setLong(2, initId);
+		stmt.setDate(3, dateToSearch);
+		ResultSet rs=stmt.executeQuery();
+		List<ComposterCompostImageSelect> ll=new ArrayList<ComposterCompostImageSelect>();
+		while(rs.next())
+		{
+			ll.add(new  ComposterCompostImageSelect(
+					rs.getLong("composter_compost_image_id"),
+					rs.getLong("composter_init_id"),
+					rs.getLong("composter_id"),
+					rs.getTimestamp("date_time"),
+					rs.getString("image_url")
+					));
+		}
+		rs.close();
+		stmt.close();
+		c.close();
+		return ll;
+	}
+
+	@Override
+	public Integer deleteComposterCompostWasteImage(Long composterCompostWasteImage)throws SQLException, ClassNotFoundException
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement("UPDATE composter.composter_compost_image SET delete_index=TRUE WHERE composter.composter_compost_image.composter_compost_image_id=?");
+		stmt.setLong(1, composterCompostWasteImage);
+		Integer rs=stmt.executeUpdate();
+		c.commit();
+		stmt.close();
+		c.close();
+		return rs;
 	}
 	
 

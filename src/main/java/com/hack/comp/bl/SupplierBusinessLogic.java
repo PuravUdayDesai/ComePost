@@ -308,7 +308,7 @@ public class SupplierBusinessLogic
 		 return new ResponseEntity<Void>( HttpStatus.OK );
 	 }
 	 
-	 	public ResponseEntity<Void> addSupplierWasteImage(MultipartFile[] file,Long supplierWasteId,Timestamp timeOfEntry)
+	 public ResponseEntity<Void> addSupplierWasteImage(MultipartFile[] file,Long supplierWasteId,Timestamp timeOfEntry)
 	 {
 		 String[] qualifiedPaths=null;
 		 if(file.length==0||supplierWasteId==null||timeOfEntry==null)
