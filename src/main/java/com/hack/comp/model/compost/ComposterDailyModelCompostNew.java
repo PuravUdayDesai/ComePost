@@ -10,7 +10,7 @@ public class ComposterDailyModelCompostNew
 {
 
     @NotNull(message = "Id cannot be NULL")
-    private Integer id;
+    private Long id;
     @NotNull(message = "Date cannot be NULL")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "IST")
     private Timestamp date;
@@ -27,7 +27,7 @@ public class ComposterDailyModelCompostNew
     }
 
 
-    public ComposterDailyModelCompostNew(@NotNull(message = "Id cannot be NULL") Integer id, @NotNull(message = "Date cannot be NULL") Timestamp date, @NotNull(message = "Price cannot be NULL") Double price, @NotNull(message = "CompostWeight cannot be NULL") Double compostWeight, @NotNull(message = "AddOrSub cannot be NULL") Boolean addOrSub)
+    public ComposterDailyModelCompostNew(@NotNull(message = "Id cannot be NULL") Long id, @NotNull(message = "Date cannot be NULL") Timestamp date, @NotNull(message = "Price cannot be NULL") Double price, @NotNull(message = "CompostWeight cannot be NULL") Double compostWeight, @NotNull(message = "AddOrSub cannot be NULL") Boolean addOrSub)
     {
         super();
         this.id = id;
@@ -38,12 +38,12 @@ public class ComposterDailyModelCompostNew
     }
 
 
-    public Integer getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

@@ -34,7 +34,7 @@ public class FarmerDAOImpl implements FarmerDAO
 	        		"	farmer.farmer_location.longitude\r\n" + 
 	        		"FROM farmer.farmer_info\r\n" + 
 	        		"JOIN farmer.farmer_location\r\n" + 
-	        		"ON farmer.farmer_location.id=farmer.farmer_info.id\r\n" + 
+	        		"ON farmer.farmer_location.farmer_id=farmer.farmer_info.id\r\n" + 
 	        		"JOIN farmer.farmer_login\r\n" + 
 	        		"ON farmer.farmer_login.id=farmer.farmer_login.id\r\n" + 
 	        		"WHERE farmer.farmer_login.username=?\r\n" + 
