@@ -198,7 +198,7 @@ public class SupplierDAOImpl implements SupplierDAO
             				rs.getLong( "id" ), 
             				rs.getTimestamp( "date_time" ), 
             				rs.getDouble( "dry_waste" ),
-            				rs.getDouble( "wet_waste" ), aos,
+            				rs.getDouble( "wet_waste" ),aos,
             				rs.getString( "description" )
             				) );
             prevDW = rs.getDouble( "dry_waste" );
@@ -273,7 +273,7 @@ public class SupplierDAOImpl implements SupplierDAO
                 				rs.getString( "longitude" ), 
                 				rs.getString( "state" ),
                 				rs.getString( "city" ), 
-                				rs.getString( "area" ), 
+                				rs.getString( "area" ),  
                 				rs.getString( "street" ),
                 				rs.getDouble( "dry_waste" ), 
                 				rs.getDouble( "wet_waste" ), 
