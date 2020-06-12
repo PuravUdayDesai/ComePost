@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,7 @@ public class CompostBusinessLogic
 		return new ResponseEntity<ComposterLoginModel>(lm,HttpStatus.OK);
 	}
 	
+	//Add Composter
 	public ResponseEntity<Void> addCompost(CompostModelInsert cmi)
 	{
 		Boolean rsMain=false;
@@ -71,7 +73,7 @@ public class CompostBusinessLogic
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
-	 
+	 //Add Compost
 	 public ResponseEntity<Void> addCompostProduct(ComposterDailyModelCompost data)
 	 {
 		 Integer rs=null;
@@ -92,8 +94,6 @@ public class CompostBusinessLogic
 	      }
 	      return new ResponseEntity<Void>(HttpStatus.CREATED);
 	 }
-	 
-	   
 	 
 	 public ResponseEntity<List<ComposterDailyModelCompostNew>> displayComposters(Long id)
 	 {
@@ -122,6 +122,8 @@ public class CompostBusinessLogic
 	    {
 	    	Double compostWeight=null;
 				compostWeight=cdi.refreshCompostSubProduct(data, init_id);
+				System.out.println(compostWeight);
+				System.out.println(data.getCompostWeight());
 	    	data.setCompostWeight( compostWeight - data.getCompostWeight() );
 	        if (compostWeight == 0)
 	        {
@@ -138,7 +140,8 @@ public class CompostBusinessLogic
 	    }
 		Double prevCompostWeight=data.getCompostWeight();
 		try {
-		data.setCompostWeight(prevCompostWeight-data.getCompostWeight());
+		System.out.println(prevCompostWeight);
+		System.out.println(data.getCompostWeight());
 		if(data.getCompostWeight()<0)
 		{
 			  return new ResponseEntity<Double>( 0.0, HttpStatus.BAD_REQUEST );
@@ -181,6 +184,13 @@ public class CompostBusinessLogic
 			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.BAD_REQUEST );
 		}
 		try {
+			DateTime currentDate=new DateTime(System.currentTimeMillis());
+   		 	DateTime responseDate=new DateTime(date.getTime());
+   		 if(currentDate.getYear()!=responseDate.getYear()&&currentDate.getMonthOfYear()!=responseDate.getMonthOfYear())
+   		 {
+   			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.BAD_REQUEST );
+   		 }
+
 			lc=cdi.getComposterByDate(date);
 		} catch (ClassNotFoundException e) {
 			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.NOT_FOUND );
@@ -193,5 +203,7 @@ public class CompostBusinessLogic
 		}
 		return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.OK );
 	 }
+	 
+	 
 
 }

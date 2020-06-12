@@ -141,8 +141,6 @@ public class CompostDAOImpl implements CompostDAO
         return result;
 	}
 	
-	
-
 	@Override
 	public List<ComposterDailyModelCompostNew> displayComposters(Long id)throws SQLException, ClassNotFoundException
 	{
@@ -156,7 +154,7 @@ public class CompostDAOImpl implements CompostDAO
         {
             sms.add(
             		new ComposterDailyModelCompostNew( 
-            				rs.getInt( "init_id" ),
+            				rs.getLong( "init_id" ),
             				rs.getTimestamp( "date_time" ),
             				rs.getDouble( "price" ),
             				rs.getDouble( "compost_weight" ), 
@@ -220,7 +218,7 @@ public class CompostDAOImpl implements CompostDAO
         return result;
 	}
 
-@Override
+	@Override
 	public List<ComposterFullSelect> getComposterByDate(Date date) throws SQLException, ClassNotFoundException 
 	{
 		Connection c = Connections.setConnection();
@@ -250,27 +248,38 @@ public class CompostDAOImpl implements CompostDAO
         stmt.setDate( 1, date );
         ResultSet rs = stmt.executeQuery();
         List<ComposterFullSelect> lc = new ArrayList<ComposterFullSelect>();
-
-        List<Double> price = new ArrayList<Double>();
-
+        List<Long> l=new ArrayList<Long>();
+        Integer i=0;
         while (rs.next())
         {
-            ListIterator<Double> iterator = price.listIterator();
-            Boolean isThere = true;
-            while (iterator.hasNext())
-            {
-                if (iterator.next() == rs.getDouble( "price" ))
-                {
-                    isThere = false;
-                    break;
-                }
-            }
-
-            if (isThere)
-            {
+        	ListIterator<Long> li=l.listIterator();
+        	Boolean rsMain=false;
+        	if(i==0)
+        	{
+        		System.out.println(rs.getLong("init_id"));
+        		li.add(rs.getLong("init_id"));
+        		rsMain=false;
+        	}
+        	while(li.hasNext())
+        	{
+        		Long init_id=li.next();
+        		System.out.println("Check: "+(init_id==rs.getLong("init_id")));
+        		if(init_id==rs.getLong("init_id"))
+        		{
+        			rsMain=true;
+        			break;
+        		}
+        		else
+        		{
+        			li.add(rs.getLong("init_id"));
+        			rsMain=false;
+        		}
+        	}
+        	if(!rsMain)
+        	{
                 lc.add(
                 		new ComposterFullSelect(
-                				rs.getInt( "init_id" ), 
+                				rs.getLong( "init_id" ), 
                 				rs.getString( "name" ), 
                 				rs.getString( "contact" ),
                 				rs.getString( "email" ), 
@@ -287,9 +296,8 @@ public class CompostDAOImpl implements CompostDAO
                 				rs.getString( "state" ) 
                 				) 
                 		);
-                price.add( rs.getDouble( "price" ) );
-            }
-
+        	}
+                i++;
         }
         rs.close();
         stmt.close();

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class ComposterFullSelect
 {
     @NotNull(message = "InitId cannot be NULL")
-    Integer initId;
+    Long initId;
     @NotNull(message = "name cannot be NULL")
     String name;
     @NotNull(message = "contact cannot be NULL")
@@ -45,7 +45,7 @@ public class ComposterFullSelect
 
     }
 
-    public ComposterFullSelect(@NotNull(message = "InitId cannot be NULL") Integer initId, @NotNull(message = "name cannot be NULL") String name, @NotNull(message = "contact cannot be NULL") String contact, @NotNull(message = "email cannot be NULL") String email, @NotNull(message = "reg_no cannot be NULL") String reg_no, @NotNull(message = "compost_add_sub cannot be NULL") Boolean compost_add_sub, @NotNull(message = "price cannot be NULL") Double price, @NotNull(message = "weight cannot be NULL") Double weight, @NotNull(message = "date_time cannot be NULL") Timestamp date_time, @NotNull(message = "latitude cannot be NULL") String latitude, @NotNull(message = "longitude cannot be NULL") String longitude, @NotNull(message = "street cannot be NULL") String street, @NotNull(message = "area cannot be NULL") String area, @NotNull(message = "city cannot be NULL") String city, @NotNull(message = "state cannot be NULL") String state)
+    public ComposterFullSelect(@NotNull(message = "InitId cannot be NULL") Long initId, @NotNull(message = "name cannot be NULL") String name, @NotNull(message = "contact cannot be NULL") String contact, @NotNull(message = "email cannot be NULL") String email, @NotNull(message = "reg_no cannot be NULL") String reg_no, @NotNull(message = "compost_add_sub cannot be NULL") Boolean compost_add_sub, @NotNull(message = "price cannot be NULL") Double price, @NotNull(message = "weight cannot be NULL") Double weight, @NotNull(message = "date_time cannot be NULL") Timestamp date_time, @NotNull(message = "latitude cannot be NULL") String latitude, @NotNull(message = "longitude cannot be NULL") String longitude, @NotNull(message = "street cannot be NULL") String street, @NotNull(message = "area cannot be NULL") String area, @NotNull(message = "city cannot be NULL") String city, @NotNull(message = "state cannot be NULL") String state)
     {
         super();
         this.initId = initId;
@@ -66,12 +66,12 @@ public class ComposterFullSelect
     }
 
 
-    public Integer getInitId()
+    public Long getInitId()
     {
         return initId;
     }
 
-    public void setInitId(Integer initId)
+    public void setInitId(Long initId)
     {
         this.initId = initId;
     }

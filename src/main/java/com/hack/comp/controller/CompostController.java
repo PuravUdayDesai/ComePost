@@ -45,6 +45,7 @@ public class CompostController {
 		return cbl.validateComposter(username, password);
 	}
 
+	
 	/*
 	 * This method is used for creating/registering a new composter in the
 	 * application
@@ -54,6 +55,7 @@ public class CompostController {
 		return cbl.addCompost(cmi);
 	}
 
+	
 	/*
 	 * This method is used to add a product by composter
 	 */
@@ -64,6 +66,7 @@ public class CompostController {
 		return cbl.addCompostProduct(data);
 	}
 
+	
 	/*
 	 * This method is used to display all the suppliers
 	 */
@@ -88,7 +91,7 @@ public class CompostController {
 	/*
 	 * This method is used to display filtered suppliers by date
 	 */
-	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, path = "/display")
+	@GetMapping(path = "/display",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<List<ComposterFullSelect>> getComposterByDate(@RequestParam(name = "date") Date date)
 			throws SQLException {
 		return cbl.getComposterByDate(date);

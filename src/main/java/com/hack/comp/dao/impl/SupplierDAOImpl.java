@@ -165,7 +165,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	public List<SupplierModelDailyWasteNew> displaySuppliers(Long id) throws SQLException, ClassNotFoundException
 	{
 		List<SupplierModelDailyWasteNew> sms = new ArrayList<SupplierModelDailyWasteNew>();
-		String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND \"deleteIndex\"=false ORDER BY date_time DESC;";
+		String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND \"deleteIndex\"=false";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, id );
@@ -242,7 +242,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	{
         List<Integer> l = new ArrayList<Integer>();
         Connection c = Connections.setConnection();
-        String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) ORDER BY date_time DESC;";
+        String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?);";
         PreparedStatement stmt = c.prepareStatement( query );
         stmt.setDate( 1, date_t );
         ResultSet rs = stmt.executeQuery();
@@ -269,12 +269,12 @@ public class SupplierDAOImpl implements SupplierDAO
                 				rs.getString( "contact" ), 
                 				rs.getString( "email" ),
                 				rs.getString( "reg_no" ), 
-                				rs.getString( "latitude" ), 
-                				rs.getString( "longitude" ), 
                 				rs.getString( "state" ),
                 				rs.getString( "city" ), 
                 				rs.getString( "area" ), 
                 				rs.getString( "street" ),
+                				rs.getString( "latitude" ), 
+                				rs.getString( "longitude" ), 
                 				rs.getDouble( "dry_waste" ), 
                 				rs.getDouble( "wet_waste" ), 
                 				rs.getTimestamp( "date_time" ),
@@ -397,7 +397,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	{
 		List<Integer> l = new ArrayList<Integer>();
         Connection c = Connections.setConnection();
-        String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) WHERE LOWER(state)=LOWER(?) ORDER BY date_time DESC;";
+        String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) WHERE LOWER(state)=LOWER(?);";
         PreparedStatement stmt = c.prepareStatement( query );
         stmt.setDate( 1, date_t );
         stmt.setString(2, state);
@@ -425,12 +425,12 @@ public class SupplierDAOImpl implements SupplierDAO
                 				rs.getString( "contact" ), 
                 				rs.getString( "email" ),
                 				rs.getString( "reg_no" ), 
-                				rs.getString( "latitude" ), 
-                				rs.getString( "longitude" ), 
                 				rs.getString( "state" ),
                 				rs.getString( "city" ), 
                 				rs.getString( "area" ), 
                 				rs.getString( "street" ),
+                				rs.getString( "latitude" ), 
+                				rs.getString( "longitude" ), 
                 				rs.getDouble( "dry_waste" ), 
                 				rs.getDouble( "wet_waste" ), 
                 				rs.getTimestamp( "date_time" ),
@@ -449,7 +449,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	{
 		List<Integer> l = new ArrayList<Integer>();
         Connection c = Connections.setConnection();
-        String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) WHERE LOWER(city)=LOWER(?) ORDER BY date_time DESC;";
+        String query = "SELECT * FROM supplier.\"fn_selectSuppliers\"(?) WHERE LOWER(city)=LOWER(?);";
         PreparedStatement stmt = c.prepareStatement( query );
         stmt.setDate( 1, date_t );
         stmt.setString(2, city);
@@ -477,12 +477,12 @@ public class SupplierDAOImpl implements SupplierDAO
                 				rs.getString( "contact" ), 
                 				rs.getString( "email" ),
                 				rs.getString( "reg_no" ), 
-                				rs.getString( "latitude" ), 
-                				rs.getString( "longitude" ), 
                 				rs.getString( "state" ),
                 				rs.getString( "city" ), 
                 				rs.getString( "area" ), 
                 				rs.getString( "street" ),
+                				rs.getString( "latitude" ), 
+                				rs.getString( "longitude" ), 
                 				rs.getDouble( "dry_waste" ), 
                 				rs.getDouble( "wet_waste" ), 
                 				rs.getTimestamp( "date_time" ),
