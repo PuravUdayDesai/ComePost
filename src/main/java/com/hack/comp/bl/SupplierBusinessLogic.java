@@ -41,7 +41,7 @@ public class SupplierBusinessLogic
 	@Autowired
 	SupplierBusinessLogic sbl;
 	
-	private static final String EXTERNAL_FILE_PATH = "C:\\";
+	private static final String EXTERNAL_FILE_PATH = "E:\\";
 	
 	public static String replaceColonToPeriod(Timestamp t)
 	{
