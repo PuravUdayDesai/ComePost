@@ -355,7 +355,7 @@ public class CompostDAOImpl implements CompostDAO
         if(fileName.contains("..")) {
             throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
         }
-        String path="E:/composterCompostImages/"+composterId+"/"+initId+"/"+CompostBusinessLogic.replaceColonToPeriod(timeOfEntry);
+        String path="C:/composterCompostImages/"+composterId+"/"+initId+"/"+CompostBusinessLogic.replaceColonToPeriod(timeOfEntry);
         File f=new File(path);
         if(!f.exists())
         {

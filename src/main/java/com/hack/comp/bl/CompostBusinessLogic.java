@@ -43,7 +43,7 @@ public class CompostBusinessLogic
 	@Autowired
 	CompostBusinessLogic cbl;
 	
-	private static final String EXTERNAL_FILE_PATH = "E:\\";
+	private static final String EXTERNAL_FILE_PATH = "C:\\";
 	
 	public static String replaceColonToPeriod(Timestamp t)
 	{
