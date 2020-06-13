@@ -21,7 +21,7 @@ public interface SupplierDAO
 	public SupplierModelDailyWaste 			refreshSupplierAddProduct(SupplierModelDailyWaste data)								throws SQLException,ClassNotFoundException;
 	public Integer 							addSupplierProduct(SupplierModelDailyWaste data)									throws SQLException,ClassNotFoundException;
 	public SupplierModelDailyWaste 			refreshSupplierSubProduct(SupplierModelDailyWaste data)								throws SQLException,ClassNotFoundException;
-	public Integer 							subSupplierProduct(SupplierModelDailyWaste data)									throws SQLException,ClassNotFoundException;
+	public Long 							subSupplierProduct(SupplierModelDailyWaste data)									throws SQLException,ClassNotFoundException;
 	public List<SupplierModelDailyWasteNew>	displaySuppliers(Long id)															throws SQLException,ClassNotFoundException;
 	public SupplierModelSelect 				getSupplier(String username, String password)										throws SQLException,ClassNotFoundException;
 	public List<SupplierModelFullSelect> 	getUniqueSupplierByDate(Date date_t)												throws SQLException,ClassNotFoundException;

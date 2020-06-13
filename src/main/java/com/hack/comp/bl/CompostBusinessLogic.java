@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hack.comp.controller.GovernmentController;
+import com.hack.comp.dao.impl.ComposterFarmerTransactionDAOImpl;
 import com.hack.comp.dao.schema.CompostDAO;
 import com.hack.comp.model.compost.CompostModelInsert;
 import com.hack.comp.model.compost.ComposterCompostImageSelect;
@@ -42,6 +43,9 @@ public class CompostBusinessLogic
 	
 	@Autowired
 	CompostBusinessLogic cbl;
+	
+	@Autowired
+	ComposterFarmerTransactionDAOImpl cftdi;
 	
 	private static final String EXTERNAL_FILE_PATH = "E:\\";
 	
@@ -155,8 +159,8 @@ public class CompostBusinessLogic
 	    {
 	    	Double compostWeight=null;
 				compostWeight=cdi.refreshCompostSubProduct(data, init_id);
-				System.out.println(compostWeight);
-				System.out.println(data.getCompostWeight());
+				System.out.println("Last Compost Weight: "+compostWeight);
+				System.out.println("Entered Compost Weight: "+data.getCompostWeight());
 	    	data.setCompostWeight( compostWeight - data.getCompostWeight() );
 	        if (compostWeight == 0)
 	        {
@@ -165,7 +169,7 @@ public class CompostBusinessLogic
 	        return data;
 	    }
 	    
-	 public ResponseEntity<Double> subCompostProduct(ComposterDailyModelCompost data, Long init_id)
+	 public ResponseEntity<Double> subCompostProduct(ComposterDailyModelCompost data, Long init_id,Long farmerId)
 	 {
 		if (data == null)
 	    {
@@ -173,20 +177,22 @@ public class CompostBusinessLogic
 	    }
 		Double prevCompostWeight=data.getCompostWeight();
 		try {
-		System.out.println(prevCompostWeight);
-		System.out.println(data.getCompostWeight());
 		if(data.getCompostWeight()<0)
 		{
 			  return new ResponseEntity<Double>( 0.0, HttpStatus.BAD_REQUEST );
 		}
 		data = cbl.refreshCompostSubProduct( data, init_id );
-
 	    if (data.getCompostWeight() < 0)
 	    {
 	        return new ResponseEntity<Double>( 0.0, HttpStatus.BAD_REQUEST );
 	    }
 	    
 	    Integer result=cdi.subCompostProduct(data, init_id);
+	    Integer rs=cftdi.addComposterFarmerTransaction(init_id, data.getId(), farmerId, data.getDateAndTime());
+	    if(rs==0)
+	    {
+	    	return new ResponseEntity<Double>( 0.0, HttpStatus.BAD_REQUEST );
+	    }
 	    if (result != 0)
         {
             Boolean resRS = GovernmentController.addFunds( (data.getPrice() * prevCompostWeight) * 0.05, result );
@@ -377,5 +383,61 @@ public class CompostBusinessLogic
 		}
 		return new ResponseEntity<Void>( HttpStatus.OK );
 	}
+	
+	 public ResponseEntity<List<ComposterFullSelect>> getComposterByDateAndState(Date date,String state)
+	 {
+		List<ComposterFullSelect> lc=new ArrayList<ComposterFullSelect>();
+		if(date==null)
+		{
+			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.BAD_REQUEST );
+		}
+		try {
+			DateTime currentDate=new DateTime(System.currentTimeMillis());
+  		 	DateTime responseDate=new DateTime(date.getTime());
+  		 if(currentDate.getYear()!=responseDate.getYear()&&currentDate.getMonthOfYear()!=responseDate.getMonthOfYear())
+  		 {
+  			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.BAD_REQUEST );
+  		 }
+
+			lc=cdi.getComposterByDateByState(date, state);
+		} catch (ClassNotFoundException e) {
+			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.NOT_FOUND );
+		} catch (SQLException e) {
+			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.INTERNAL_SERVER_ERROR );
+		}
+		if(lc.isEmpty())
+		{
+			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.NO_CONTENT );
+		}
+		return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.OK );
+	 }
+	 
+	 public ResponseEntity<List<ComposterFullSelect>> getComposterByDateByCity(Date date,String city)
+	 {
+		List<ComposterFullSelect> lc=new ArrayList<ComposterFullSelect>();
+		if(date==null)
+		{
+			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.BAD_REQUEST );
+		}
+		try {
+			DateTime currentDate=new DateTime(System.currentTimeMillis());
+   		 	DateTime responseDate=new DateTime(date.getTime());
+   		 if(currentDate.getYear()!=responseDate.getYear()&&currentDate.getMonthOfYear()!=responseDate.getMonthOfYear())
+   		 {
+   			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.BAD_REQUEST );
+   		 }
+
+			lc=cdi.getComposterByDateByCity(date, city);
+		} catch (ClassNotFoundException e) {
+			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.NOT_FOUND );
+		} catch (SQLException e) {
+			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.INTERNAL_SERVER_ERROR );
+		}
+		if(lc.isEmpty())
+		{
+			return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.NO_CONTENT );
+		}
+		return new ResponseEntity<List<ComposterFullSelect>>( lc, HttpStatus.OK );
+	 }
 
 }

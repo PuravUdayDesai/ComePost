@@ -28,4 +28,6 @@ public interface CompostDAO
 	 public String[]							storeFile(MultipartFile[] file,Long composterId,Long initId,Timestamp timeOfEntry)				throws IOException;
 	 public List<ComposterCompostImageSelect>	selectComposterCompostImage(Long composterId,Long initId,Date dateToSearch)						throws SQLException,ClassNotFoundException;	
 	 public Integer								deleteComposterCompostWasteImage(Long composterCompostWasteImage)								throws SQLException,ClassNotFoundException;
+	 public List<ComposterFullSelect> 			getComposterByDateByState(Date date,String state) 												throws SQLException,ClassNotFoundException;
+	 public List<ComposterFullSelect> 			getComposterByDateByCity(Date date,String city) 												throws SQLException,ClassNotFoundException;
 }

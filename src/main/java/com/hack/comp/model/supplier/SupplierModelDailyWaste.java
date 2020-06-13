@@ -11,7 +11,7 @@ public class SupplierModelDailyWaste
 {
 
     @NotNull(message = "Id cannot be NULL")
-    private Integer id;
+    private Long id;
     @NotNull(message = "Date cannot be NULL")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "IST")
     private Timestamp date;
@@ -31,7 +31,7 @@ public class SupplierModelDailyWaste
     
 
     public SupplierModelDailyWaste(
-    		@NotNull(message = "Id cannot be NULL") Integer id,
+    		@NotNull(message = "Id cannot be NULL") Long id,
 			@NotNull(message = "Date cannot be NULL") Timestamp date,
 			@NotNull(message = "Dry Waste cannot be NULL") @Max(25) Double dryWaste,
 			@NotNull(message = "Wet Waste cannot be NULL") @Max(25) Double wetWaste, 
@@ -46,12 +46,12 @@ public class SupplierModelDailyWaste
 
 
 
-	public Integer getId()
+	public Long getId()
     {
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Long id)
     {
         this.id = id;
     }

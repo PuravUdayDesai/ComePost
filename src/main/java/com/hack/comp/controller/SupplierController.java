@@ -70,9 +70,9 @@ public class SupplierController
      * composter
      */
     @PutMapping(path = "/product/sub", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Void> subSupplierProduct(@Valid @RequestBody SupplierModelDailyWaste data)
+    public ResponseEntity<Void> subSupplierProduct(@Valid @RequestBody SupplierModelDailyWaste data,@RequestParam(name = "composterId") @NotNull Long composterId)
     {
-       return sbl.subSupplierProduct(data);
+       return sbl.subSupplierProduct(data,composterId);
     }
 
     
@@ -141,9 +141,9 @@ public class SupplierController
      * an added waste entry
      */
     @DeleteMapping(path="/waste/{supplierWasteId}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Void> deleteSupplierWaste(@PathVariable @NotNull Long supplierWasteId,@RequestParam(name = "date") @NotNull Date dateToSearch)
+    public ResponseEntity<Void> deleteSupplierWaste(@PathVariable @NotNull Long supplierWasteId,@RequestParam(name = "date") @NotNull Date dateToSearch,@RequestParam(name = "currentTimestamp") @NotNull Timestamp currentTime)
 	 {
-    	return sbl.deleteSupplierWaste(supplierWasteId,dateToSearch);
+    	return sbl.deleteSupplierWaste(supplierWasteId,dateToSearch,currentTime);
 	 }
     
     

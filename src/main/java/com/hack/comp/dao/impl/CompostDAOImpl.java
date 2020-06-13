@@ -115,7 +115,6 @@ public class CompostDAOImpl implements CompostDAO
 	     if(rs.next())
 	     {
 	    	 rsMain=rs.getBoolean("fn_insertComposter");
-	    	 System.out.println(rsMain);
 	     }
 	     rs.close();
 	     stmt.close();
@@ -224,7 +223,7 @@ public class CompostDAOImpl implements CompostDAO
         stmt.setTimestamp( 3, data.getDateAndTime() );
         stmt.setDouble( 4, data.getCompostWeight() );
         stmt.setDouble( 5, data.getPrice() );
-        stmt.setBoolean( 6, true );
+        stmt.setBoolean( 6, false );
         stmt.setString(7, data.getCategory());
         stmt.setString(8, data.getGrade());
         stmt.setString(9, data.getDescription()==null?"":data.getDescription());
@@ -242,6 +241,7 @@ public class CompostDAOImpl implements CompostDAO
 		Connection c = Connections.setConnection();
         PreparedStatement stmt = c.prepareStatement( "SELECT composter.composter_info.name,\n" + 
         											"composter.composter_compost.init_id,\n" + 
+        											"composter.composter_info.id,\n" + 
         											"composter.composter_info.contact,\n" + 
         											"composter.composter_info.email,\n" + 
         											"composter.composter_info.reg_no,\n" + 
@@ -261,8 +261,7 @@ public class CompostDAOImpl implements CompostDAO
         											"JOIN composter.composter_loc "+
         												"ON composter.composter_info.id=composter_loc.id "+
         											"WHERE composter.composter_compost.compost_weight <> 0 "+
-        											" AND date(composter.composter_compost.date_time)=? "+
-        											"ORDER BY composter.composter_compost.date_time DESC;" );
+        											" AND date(composter.composter_compost.date_time)=? " );
         stmt.setDate( 1, date );
         ResultSet rs = stmt.executeQuery();
         List<ComposterFullSelect> lc = new ArrayList<ComposterFullSelect>();
@@ -297,6 +296,7 @@ public class CompostDAOImpl implements CompostDAO
         	{
                 lc.add(
                 		new ComposterFullSelect(
+                				rs.getLong( "id" ),
                 				rs.getLong( "init_id" ), 
                 				rs.getString( "name" ), 
                 				rs.getString( "contact" ),
@@ -427,6 +427,188 @@ public class CompostDAOImpl implements CompostDAO
 		c.close();
 		return rs;
 	}
+
+	@Override
+	public List<ComposterFullSelect> getComposterByDateByState(Date date, String state)throws SQLException, ClassNotFoundException 
+	{
+		Connection c = Connections.setConnection();
+        PreparedStatement stmt = c.prepareStatement( "SELECT composter.composter_info.name,\n" + 
+        											"composter.composter_compost.init_id,\n" + 
+        											"composter.composter_info.id,\n" + 
+        											"composter.composter_info.contact,\n" + 
+        											"composter.composter_info.email,\n" + 
+        											"composter.composter_info.reg_no,\n" + 
+        											"composter.composter_compost.add_or_sub,\n" +
+        											"composter.composter_compost.price,\n" + 
+        											"composter.composter_compost.compost_weight,\n" +
+        											"composter.composter_compost.date_time,\n" + 
+        											"composter.composter_loc.latitude,\n" + 
+        											"composter.composter_loc.longitude,\n" +
+        											"composter.composter_loc.street,\n" +
+        											"composter.composter_loc.area,\n" + 
+        											"composter.composter_loc.city,\n" + 
+        											"composter.composter_loc.state\n" + 
+        											"FROM composter.composter_info\n" + 
+        											"JOIN composter.composter_compost "+
+        												"ON composter.composter_info.id=composter.composter_compost.id\n" + 
+        											"JOIN composter.composter_loc "+
+        												"ON composter.composter_info.id=composter_loc.id "+
+        											"WHERE composter.composter_compost.compost_weight <> 0 "+
+        											" AND date(composter.composter_compost.date_time)=? "+
+        											" AND LOWER(composter.composter_loc.state)=LOWER(?) " );
+        stmt.setDate( 1, date );
+        stmt.setString(2, state);
+        ResultSet rs = stmt.executeQuery();
+        List<ComposterFullSelect> lc = new ArrayList<ComposterFullSelect>();
+        List<Long> l=new ArrayList<Long>();
+        Integer i=0;
+        while (rs.next())
+        {
+        	ListIterator<Long> li=l.listIterator();
+        	Boolean rsMain=false;
+        	if(i==0)
+        	{
+        		System.out.println(rs.getLong("init_id"));
+        		li.add(rs.getLong("init_id"));
+        		rsMain=false;
+        	}
+        	while(li.hasNext())
+        	{
+        		Long init_id=li.next();
+        		System.out.println("Check: "+(init_id==rs.getLong("init_id")));
+        		if(init_id==rs.getLong("init_id"))
+        		{
+        			rsMain=true;
+        			break;
+        		}
+        		else
+        		{
+        			li.add(rs.getLong("init_id"));
+        			rsMain=false;
+        		}
+        	}
+        	if(!rsMain)
+        	{
+                lc.add(
+                		new ComposterFullSelect(
+                				rs.getLong( "id" ),
+                				rs.getLong( "init_id" ), 
+                				rs.getString( "name" ), 
+                				rs.getString( "contact" ),
+                				rs.getString( "email" ), 
+                				rs.getString( "reg_no" ), 
+                				rs.getBoolean( "add_or_sub" ), 
+                				rs.getDouble( "price" ), 
+                				rs.getDouble( "compost_weight" ),
+                				rs.getTimestamp( "date_time" ),
+                				rs.getString( "latitude" ),
+                				rs.getString( "longitude" ), 
+                				rs.getString( "street" ),
+                				rs.getString( "area" ), 
+                				rs.getString( "city" ),
+                				rs.getString( "state" ) 
+                				) 
+                		);
+        	}
+                i++;
+        }
+        rs.close();
+        stmt.close();
+        c.close();
+        return lc;
+	}
+
+	@Override
+	public List<ComposterFullSelect> getComposterByDateByCity(Date date, String city)throws SQLException, ClassNotFoundException
+	{
+		Connection c = Connections.setConnection();
+        PreparedStatement stmt = c.prepareStatement( "SELECT composter.composter_info.name,\n" + 
+        											"composter.composter_compost.init_id,\n" + 
+        											"composter.composter_info.id,\n" + 
+        											"composter.composter_info.contact,\n" + 
+        											"composter.composter_info.email,\n" + 
+        											"composter.composter_info.reg_no,\n" + 
+        											"composter.composter_compost.add_or_sub,\n" +
+        											"composter.composter_compost.price,\n" + 
+        											"composter.composter_compost.compost_weight,\n" +
+        											"composter.composter_compost.date_time,\n" + 
+        											"composter.composter_loc.latitude,\n" + 
+        											"composter.composter_loc.longitude,\n" +
+        											"composter.composter_loc.street,\n" +
+        											"composter.composter_loc.area,\n" + 
+        											"composter.composter_loc.city,\n" + 
+        											"composter.composter_loc.state\n" + 
+        											"FROM composter.composter_info\n" + 
+        											"JOIN composter.composter_compost "+
+        												"ON composter.composter_info.id=composter.composter_compost.id\n" + 
+        											"JOIN composter.composter_loc "+
+        												"ON composter.composter_info.id=composter_loc.id "+
+        											"WHERE composter.composter_compost.compost_weight <> 0 "+
+        											" AND date(composter.composter_compost.date_time)=? "+
+        											" AND LOWER(composter.composter_loc.city)=LOWER(?) ");
+        stmt.setDate( 1, date );
+        stmt.setString(2, city);
+        ResultSet rs = stmt.executeQuery();
+        List<ComposterFullSelect> lc = new ArrayList<ComposterFullSelect>();
+        List<Long> l=new ArrayList<Long>();
+        Integer i=0;
+        while (rs.next())
+        {
+        	ListIterator<Long> li=l.listIterator();
+        	Boolean rsMain=false;
+        	if(i==0)
+        	{
+        		System.out.println(rs.getLong("init_id"));
+        		li.add(rs.getLong("init_id"));
+        		rsMain=false;
+        	}
+        	while(li.hasNext())
+        	{
+        		Long init_id=li.next();
+        		System.out.println("Check: "+(init_id==rs.getLong("init_id")));
+        		if(init_id==rs.getLong("init_id"))
+        		{
+        			rsMain=true;
+        			break;
+        		}
+        		else
+        		{
+        			li.add(rs.getLong("init_id"));
+        			rsMain=false;
+        		}
+        	}
+        	if(!rsMain)
+        	{
+                lc.add(
+                		new ComposterFullSelect(
+                				rs.getLong( "id" ),
+                				rs.getLong( "init_id" ), 
+                				rs.getString( "name" ), 
+                				rs.getString( "contact" ),
+                				rs.getString( "email" ), 
+                				rs.getString( "reg_no" ), 
+                				rs.getBoolean( "add_or_sub" ), 
+                				rs.getDouble( "price" ), 
+                				rs.getDouble( "compost_weight" ),
+                				rs.getTimestamp( "date_time" ),
+                				rs.getString( "latitude" ),
+                				rs.getString( "longitude" ), 
+                				rs.getString( "street" ),
+                				rs.getString( "area" ), 
+                				rs.getString( "city" ),
+                				rs.getString( "state" ) 
+                				) 
+                		);
+        	}
+                i++;
+        }
+        rs.close();
+        stmt.close();
+        c.close();
+        return lc;
+	}
+
+
 	
 
 }
