@@ -10,8 +10,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class SupplierModelFullSelect
 {
+    @NotNull(message = "Init_id cannot be NULL")
+    private Long init_id;
     @NotNull(message = "Id cannot be NULL")
-    private Integer id;
+    private Long id;
     @NotNull(message = "Name cannot be NULL")
     private String name;
     @NotNull(message = "Contact Number cannot be NULL")
@@ -44,7 +46,13 @@ public class SupplierModelFullSelect
     private Timestamp date_time;
     private String description;
 
-    public SupplierModelFullSelect(@NotNull(message = "Id cannot be NULL") Integer id,
+    public SupplierModelFullSelect()
+    {
+    	
+    }
+
+	public SupplierModelFullSelect(@NotNull(message = "Init_id cannot be NULL") Long init_id,
+			@NotNull(message = "Id cannot be NULL") Long id,
 			@NotNull(message = "Name cannot be NULL") String name,
 			@NotNull(message = "Contact Number cannot be NULL") String contactNumber,
 			@NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId,
@@ -59,6 +67,7 @@ public class SupplierModelFullSelect
 			@NotNull(message = "Wet Waste cannot be NULL") @Max(25) Double wetWaste,
 			@NotNull(message = "Date And Time cannot be NULL") Timestamp date_time, String description) {
 		super();
+		this.init_id = init_id;
 		this.id = id;
 		this.name = name;
 		this.contactNumber = contactNumber;
@@ -76,145 +85,125 @@ public class SupplierModelFullSelect
 		this.description = description;
 	}
 
-	public Integer getId()
-    {
-        return id;
-    }
+	public Long getInit_id() {
+		return init_id;
+	}
 
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
+	public void setInit_id(Long init_id) {
+		this.init_id = init_id;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getContactNumber()
-    {
-        return contactNumber;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setContactNumber(String contactNumber)
-    {
-        this.contactNumber = contactNumber;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getEmailId()
-    {
-        return emailId;
-    }
+	public String getContactNumber() {
+		return contactNumber;
+	}
 
-    public void setEmailId(String emailId)
-    {
-        this.emailId = emailId;
-    }
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
 
-    public String getRegistrationNumber()
-    {
-        return registrationNumber;
-    }
+	public String getEmailId() {
+		return emailId;
+	}
 
-    public void setRegistrationNumber(String registrationNumber)
-    {
-        this.registrationNumber = registrationNumber;
-    }
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
 
-    public String getState()
-    {
-        return state;
-    }
+	public String getRegistrationNumber() {
+		return registrationNumber;
+	}
 
-    public void setState(String state)
-    {
-        this.state = state;
-    }
+	public void setRegistrationNumber(String registrationNumber) {
+		this.registrationNumber = registrationNumber;
+	}
 
-    public String getCity()
-    {
-        return city;
-    }
+	public String getState() {
+		return state;
+	}
 
-    public void setCity(String city)
-    {
-        this.city = city;
-    }
+	public void setState(String state) {
+		this.state = state;
+	}
 
-    public String getArea()
-    {
-        return area;
-    }
+	public String getCity() {
+		return city;
+	}
 
-    public void setArea(String area)
-    {
-        this.area = area;
-    }
+	public void setCity(String city) {
+		this.city = city;
+	}
 
-    public String getStreet()
-    {
-        return street;
-    }
+	public String getArea() {
+		return area;
+	}
 
-    public void setStreet(String street)
-    {
-        this.street = street;
-    }
+	public void setArea(String area) {
+		this.area = area;
+	}
 
-    public String getLatitude()
-    {
-        return latitude;
-    }
+	public String getStreet() {
+		return street;
+	}
 
-    public void setLatitude(String latitude)
-    {
-        this.latitude = latitude;
-    }
+	public void setStreet(String street) {
+		this.street = street;
+	}
 
-    public String getLongitude()
-    {
-        return longitude;
-    }
+	public String getLatitude() {
+		return latitude;
+	}
 
-    public void setLongitude(String longitude)
-    {
-        this.longitude = longitude;
-    }
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
 
-    public Double getDryWaste()
-    {
-        return dryWaste;
-    }
+	public String getLongitude() {
+		return longitude;
+	}
 
-    public void setDryWaste(Double dryWaste)
-    {
-        this.dryWaste = dryWaste;
-    }
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
 
-    public Double getWetWaste()
-    {
-        return wetWaste;
-    }
+	public Double getDryWaste() {
+		return dryWaste;
+	}
 
-    public void setWetWaste(Double wetWaste)
-    {
-        this.wetWaste = wetWaste;
-    }
+	public void setDryWaste(Double dryWaste) {
+		this.dryWaste = dryWaste;
+	}
 
-    public Timestamp getDate_time()
-    {
-        return date_time;
-    }
+	public Double getWetWaste() {
+		return wetWaste;
+	}
 
-    public void setDate_time(Timestamp date_time)
-    {
-        this.date_time = date_time;
-    }
+	public void setWetWaste(Double wetWaste) {
+		this.wetWaste = wetWaste;
+	}
+
+	public Timestamp getDate_time() {
+		return date_time;
+	}
+
+	public void setDate_time(Timestamp date_time) {
+		this.date_time = date_time;
+	}
 
 	public String getDescription() {
 		return description;
@@ -223,5 +212,5 @@ public class SupplierModelFullSelect
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+    
 }

@@ -79,7 +79,7 @@ public class CompostController {
 	 */
 	// HOME Page
 	@GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, path = "{id}")
-	public ResponseEntity<List<ComposterDailyModelCompostNew>> displayComposters(@PathVariable Long id)
+	public ResponseEntity<List<ComposterDailyModelCompostNew>> displayComposters(@PathVariable @NotNull Long id)
 			throws SQLException {
 		return cbl.displayComposters(id);
 	}
@@ -91,15 +91,16 @@ public class CompostController {
 	@PutMapping(path = "/compost/sub/{init_id}", produces = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<Double> subCompostProduct(@Valid @RequestBody ComposterDailyModelCompost data,
-			@PathVariable Long init_id) {
-		return cbl.subCompostProduct(data, init_id);
+			@PathVariable Long init_id,
+			@RequestParam(name = "farmerId") @NotNull Long farmerId) {
+		return cbl.subCompostProduct(data, init_id,farmerId);
 	}
 
 	/*
 	 * This method is used to display filtered suppliers by date
 	 */
 	@GetMapping(path = "/display",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<List<ComposterFullSelect>> getComposterByDate(@RequestParam(name = "date") Date date)
+	public ResponseEntity<List<ComposterFullSelect>> getComposterByDate(@RequestParam(name = "date") @NotNull Date date)
 			throws SQLException {
 		return cbl.getComposterByDate(date);
 	}
@@ -128,8 +129,8 @@ public class CompostController {
 	@RequestMapping("/fileView")
 	public void viewFile(HttpServletRequest request, 
 									HttpServletResponse response,
-									@RequestParam("filePath") String filePath, 
-									@RequestParam("fileName") String fileName) {
+									@RequestParam("filePath") @NotNull String filePath, 
+									@RequestParam("fileName") @NotNull String fileName) {
 		
 		 cbl.viewFile(request, response, filePath, fileName);
 	}
@@ -143,8 +144,8 @@ public class CompostController {
 	@RequestMapping("/fileDownload")
 	public void downloadFile(HttpServletRequest request, 
 									HttpServletResponse response,
-									@RequestParam("filePath") String filePath, 
-									@RequestParam("fileName") String fileName) {
+									@RequestParam("filePath") @NotNull String filePath, 
+									@RequestParam("fileName") @NotNull String fileName) {
 		
 		 cbl.downloadFile(request, response, filePath, fileName);
 	}
@@ -162,5 +163,23 @@ public class CompostController {
 	public ResponseEntity<Void> deleteComposterCompostWasteImage(@PathVariable @NotNull Long composterCompostWasteImage)
 	{
 		return cbl.deleteComposterCompostWasteImage(composterCompostWasteImage);
+	}
+	
+	/*
+	 * This method is used to display filtered suppliers by date
+	 */
+	@GetMapping(path = "/display/state",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<List<ComposterFullSelect>> getComposterByDateAndState(@RequestParam(name = "date") @NotNull Date date,@RequestParam(name = "state") @NotNull String state)
+			throws SQLException {
+		return cbl.getComposterByDate(date);
+	}
+	
+	/*
+	 * This method is used to display filtered suppliers by date
+	 */
+	@GetMapping(path = "/display/city",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<List<ComposterFullSelect>> getComposterByDateAndCity(@RequestParam(name = "date") @NotNull Date date,@RequestParam(name = "city") @NotNull String city)
+			throws SQLException {
+		return cbl.getComposterByDate(date);
 	}
 }

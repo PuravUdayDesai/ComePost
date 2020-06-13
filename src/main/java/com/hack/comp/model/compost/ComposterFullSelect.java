@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ComposterFullSelect
 {
+    @NotNull(message = "Id cannot be NULL")
+    Long id;
     @NotNull(message = "InitId cannot be NULL")
     Long initId;
     @NotNull(message = "name cannot be NULL")
@@ -45,176 +47,167 @@ public class ComposterFullSelect
 
     }
 
-    public ComposterFullSelect(@NotNull(message = "InitId cannot be NULL") Long initId, @NotNull(message = "name cannot be NULL") String name, @NotNull(message = "contact cannot be NULL") String contact, @NotNull(message = "email cannot be NULL") String email, @NotNull(message = "reg_no cannot be NULL") String reg_no, @NotNull(message = "compost_add_sub cannot be NULL") Boolean compost_add_sub, @NotNull(message = "price cannot be NULL") Double price, @NotNull(message = "weight cannot be NULL") Double weight, @NotNull(message = "date_time cannot be NULL") Timestamp date_time, @NotNull(message = "latitude cannot be NULL") String latitude, @NotNull(message = "longitude cannot be NULL") String longitude, @NotNull(message = "street cannot be NULL") String street, @NotNull(message = "area cannot be NULL") String area, @NotNull(message = "city cannot be NULL") String city, @NotNull(message = "state cannot be NULL") String state)
-    {
-        super();
-        this.initId = initId;
-        this.name = name;
-        this.contact = contact;
-        this.email = email;
-        this.reg_no = reg_no;
-        this.compost_add_sub = compost_add_sub;
-        this.price = price;
-        this.weight = weight;
-        this.date_time = date_time;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.street = street;
-        this.area = area;
-        this.city = city;
-        this.state = state;
-    }
+	public ComposterFullSelect(@NotNull(message = "Id cannot be NULL") Long id,
+			@NotNull(message = "InitId cannot be NULL") Long initId,
+			@NotNull(message = "name cannot be NULL") String name,
+			@NotNull(message = "contact cannot be NULL") String contact,
+			@NotNull(message = "email cannot be NULL") String email,
+			@NotNull(message = "reg_no cannot be NULL") String reg_no,
+			@NotNull(message = "compost_add_sub cannot be NULL") Boolean compost_add_sub,
+			@NotNull(message = "price cannot be NULL") Double price,
+			@NotNull(message = "weight cannot be NULL") Double weight,
+			@NotNull(message = "date_time cannot be NULL") Timestamp date_time,
+			@NotNull(message = "latitude cannot be NULL") String latitude,
+			@NotNull(message = "longitude cannot be NULL") String longitude,
+			@NotNull(message = "street cannot be NULL") String street,
+			@NotNull(message = "area cannot be NULL") String area,
+			@NotNull(message = "city cannot be NULL") String city,
+			@NotNull(message = "state cannot be NULL") String state) {
+		super();
+		this.id = id;
+		this.initId = initId;
+		this.name = name;
+		this.contact = contact;
+		this.email = email;
+		this.reg_no = reg_no;
+		this.compost_add_sub = compost_add_sub;
+		this.price = price;
+		this.weight = weight;
+		this.date_time = date_time;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.street = street;
+		this.area = area;
+		this.city = city;
+		this.state = state;
+	}
 
+	public Long getId() {
+		return id;
+	}
 
-    public Long getInitId()
-    {
-        return initId;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setInitId(Long initId)
-    {
-        this.initId = initId;
-    }
+	public Long getInitId() {
+		return initId;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public void setInitId(Long initId) {
+		this.initId = initId;
+	}
 
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getContact()
-    {
-        return contact;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setContact(String contact)
-    {
-        this.contact = contact;
-    }
+	public String getContact() {
+		return contact;
+	}
 
-    public String getEmail()
-    {
-        return email;
-    }
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
 
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getReg_no()
-    {
-        return reg_no;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setReg_no(String reg_no)
-    {
-        this.reg_no = reg_no;
-    }
+	public String getReg_no() {
+		return reg_no;
+	}
 
-    public Boolean getCompost_add_sub()
-    {
-        return compost_add_sub;
-    }
+	public void setReg_no(String reg_no) {
+		this.reg_no = reg_no;
+	}
 
-    public void setCompost_add_sub(Boolean compost_add_sub)
-    {
-        this.compost_add_sub = compost_add_sub;
-    }
+	public Boolean getCompost_add_sub() {
+		return compost_add_sub;
+	}
 
-    public Double getPrice()
-    {
-        return price;
-    }
+	public void setCompost_add_sub(Boolean compost_add_sub) {
+		this.compost_add_sub = compost_add_sub;
+	}
 
-    public void setPrice(Double price)
-    {
-        this.price = price;
-    }
+	public Double getPrice() {
+		return price;
+	}
 
-    public Double getWeight()
-    {
-        return weight;
-    }
+	public void setPrice(Double price) {
+		this.price = price;
+	}
 
-    public void setWeight(Double weight)
-    {
-        this.weight = weight;
-    }
+	public Double getWeight() {
+		return weight;
+	}
 
-    public Timestamp getDate_time()
-    {
-        return date_time;
-    }
+	public void setWeight(Double weight) {
+		this.weight = weight;
+	}
 
-    public void setDate_time(Timestamp date_time)
-    {
-        this.date_time = date_time;
-    }
+	public Timestamp getDate_time() {
+		return date_time;
+	}
 
-    public String getLatitude()
-    {
-        return latitude;
-    }
+	public void setDate_time(Timestamp date_time) {
+		this.date_time = date_time;
+	}
 
-    public void setLatitude(String latitude)
-    {
-        this.latitude = latitude;
-    }
+	public String getLatitude() {
+		return latitude;
+	}
 
-    public String getLongitude()
-    {
-        return longitude;
-    }
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
 
-    public void setLongitude(String longitude)
-    {
-        this.longitude = longitude;
-    }
+	public String getLongitude() {
+		return longitude;
+	}
 
-    public String getStreet()
-    {
-        return street;
-    }
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
 
-    public void setStreet(String street)
-    {
-        this.street = street;
-    }
+	public String getStreet() {
+		return street;
+	}
 
-    public String getArea()
-    {
-        return area;
-    }
+	public void setStreet(String street) {
+		this.street = street;
+	}
 
-    public void setArea(String area)
-    {
-        this.area = area;
-    }
+	public String getArea() {
+		return area;
+	}
 
-    public String getCity()
-    {
-        return city;
-    }
+	public void setArea(String area) {
+		this.area = area;
+	}
 
-    public void setCity(String city)
-    {
-        this.city = city;
-    }
+	public String getCity() {
+		return city;
+	}
 
-    public String getState()
-    {
-        return state;
-    }
+	public void setCity(String city) {
+		this.city = city;
+	}
 
-    public void setState(String state)
-    {
-        this.state = state;
-    }
+	public String getState() {
+		return state;
+	}
 
+	public void setState(String state) {
+		this.state = state;
+	}
 
 }

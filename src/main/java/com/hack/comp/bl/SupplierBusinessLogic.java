@@ -24,6 +24,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hack.comp.dao.impl.SupplierComposterTransactionDAOImpl;
 import com.hack.comp.dao.schema.SupplierDAO;
 import com.hack.comp.model.supplier.SupplierModelDailyWaste;
 import com.hack.comp.model.supplier.SupplierModelDailyWasteNew;
@@ -40,8 +41,12 @@ public class SupplierBusinessLogic
 	
 	@Autowired
 	SupplierBusinessLogic sbl;
+
+	@Autowired
+	SupplierComposterTransactionDAOImpl sctdi;
 	
 	private static final String EXTERNAL_FILE_PATH = "C:\\";
+
 	
 	public static String replaceColonToPeriod(Timestamp t)
 	{
@@ -140,7 +145,7 @@ public class SupplierBusinessLogic
 		return sd.refreshSupplierSubProduct(data);
 	}
 	
-	public ResponseEntity<Void> subSupplierProduct(SupplierModelDailyWaste data)
+	public ResponseEntity<Void> subSupplierProduct(SupplierModelDailyWaste data,Long compsoterId)
 	{
 		 if (data == null)
 	        {
@@ -148,7 +153,7 @@ public class SupplierBusinessLogic
 	        }
 
 	        ResponseEntity<Void> res = null;
-	        Integer result=null;
+	        Long result=null;
 	        try {
 	        	DateTime currentDate=new DateTime(System.currentTimeMillis());
 	   		 	Timestamp time=data.getDate();
@@ -170,7 +175,14 @@ public class SupplierBusinessLogic
 	        	return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	        }
 			result = sd.subSupplierProduct(data);
-			} catch (ClassNotFoundException e) {
+			//HERE
+			Integer rsMain=sctdi.addSupplierComposterTransaction(result, data.getId(), compsoterId, data.getDate());
+			if(rsMain==0)
+			{
+				return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
+			}
+	        
+	        } catch (ClassNotFoundException e) {
 				return new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
 			} catch (SQLException e) {
 				return new ResponseEntity<Void>( HttpStatus.INTERNAL_SERVER_ERROR );
@@ -266,7 +278,7 @@ public class SupplierBusinessLogic
 		return new ResponseEntity<List<SupplierModelFullSelect>>(sms,HttpStatus.OK);
 	 }
 	
-	 	public ResponseEntity<Void> deleteSupplierWaste(Long supplierWasteId,Date dateToSearch)
+	 public ResponseEntity<Void> deleteSupplierWaste(Long supplierWasteId,Date dateToSearch,Timestamp currentTime)
 	 {
 		 Integer rsMain=null;
 		 if(supplierWasteId==null)

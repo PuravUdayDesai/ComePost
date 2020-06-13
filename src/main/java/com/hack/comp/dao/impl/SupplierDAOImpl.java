@@ -38,7 +38,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public Boolean addSupplier(SupplierModelInsert smi) throws SQLException, ClassNotFoundException 
 	{
-		 String query = "SELECT supplier.\"fn_addSupplier\"(\r\n" + "	?, \r\n" + //<name_in text>
+		 String query = "SELECT * FROM supplier.\"fn_addSupplier\"(\r\n" + "	?, \r\n" + //<name_in text>
 	                "	?, \r\n" + //<contact_number_in text>
 	                "	?, \r\n" + //<email_id_in text>
 	                "	?, \r\n" + //<reg_no_in text>
@@ -63,8 +63,14 @@ public class SupplierDAOImpl implements SupplierDAO
 	        stmt.setString( 9, smi.getArea() );
 	        stmt.setString( 10, smi.getStreet() );
 	        stmt.setString( 11, smi.getPassword() );
-	        Boolean result = stmt.execute();
+	        Boolean result =false;
+	        ResultSet rs=stmt.executeQuery();
 	        c.commit();
+	        if(rs.next())
+	        {
+	        	result=rs.getBoolean("fn_addSupplier");
+	        }
+	        rs.close();
 	        stmt.close();
 	        c.close();
 		return result;
@@ -76,7 +82,7 @@ public class SupplierDAOImpl implements SupplierDAO
 		String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND date(date_time)=?  AND \"deleteIndex\"=false ORDER BY date_time DESC LIMIT 1";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
-        stmt.setInt( 1, data.getId() );
+        stmt.setLong( 1, data.getId() );
         stmt.setTimestamp( 2, data.getDate() );
         Double dryWaste = 0.0;
         Double wetWaste = 0.0;
@@ -103,7 +109,7 @@ public class SupplierDAOImpl implements SupplierDAO
 		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,description) VALUES (?,?,?,?,?)";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
-        stmt.setInt( 1, data.getId() );
+        stmt.setLong( 1, data.getId() );
         stmt.setTimestamp( 2, data.getDate() );
         stmt.setDouble( 3, data.getDryWaste() );
         stmt.setDouble( 4, data.getWetWaste() );
@@ -121,7 +127,7 @@ public class SupplierDAOImpl implements SupplierDAO
         String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND date(date_time)=? AND \"deleteIndex\"=false ORDER BY date_time DESC LIMIT 1";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
-        stmt.setInt( 1, data.getId() );
+        stmt.setLong( 1, data.getId() );
         stmt.setTimestamp( 2, data.getDate() );
         Double dryWaste = 0.0;
         Double wetWaste = 0.0;
@@ -145,20 +151,27 @@ public class SupplierDAOImpl implements SupplierDAO
 	}
 
 	@Override
-	public Integer subSupplierProduct(SupplierModelDailyWaste data) throws SQLException, ClassNotFoundException 
+	public Long subSupplierProduct(SupplierModelDailyWaste data) throws SQLException, ClassNotFoundException 
 	{
-		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste) VALUES (?,?,?,?)";
+		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste) VALUES (?,?,?,?)RETURNING init_id;";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
-        stmt.setInt( 1, data.getId() );
+        stmt.setLong( 1, data.getId() );
         stmt.setTimestamp( 2, data.getDate() );
         stmt.setDouble( 3, data.getDryWaste() );
         stmt.setDouble( 4, data.getWetWaste() );
-        Integer result = stmt.executeUpdate();
+        ResultSet rs=stmt.executeQuery();
         c.commit();
+        Long init_id=null;
+        if(rs.next())
+        {
+        	init_id=rs.getLong("init_id");
+        }
+        
+        rs.close();
         stmt.close();
         c.close();
-		return result;
+		return init_id;
 	}
 
 	@Override
@@ -264,7 +277,8 @@ public class SupplierDAOImpl implements SupplierDAO
             {
                 sms.add( 
                 		new SupplierModelFullSelect( 
-                				rs.getInt( "id" ), 
+                				rs.getLong("init_id"),
+                				rs.getLong( "id" ), 
                 				rs.getString( "supplier_name" ), 
                 				rs.getString( "contact" ), 
                 				rs.getString( "email" ),
@@ -420,7 +434,8 @@ public class SupplierDAOImpl implements SupplierDAO
             {
                 sms.add( 
                 		new SupplierModelFullSelect( 
-                				rs.getInt( "id" ), 
+                				rs.getLong("init_id"),
+                				rs.getLong( "id" ), 
                 				rs.getString( "supplier_name" ), 
                 				rs.getString( "contact" ), 
                 				rs.getString( "email" ),
@@ -472,7 +487,8 @@ public class SupplierDAOImpl implements SupplierDAO
             {
                 sms.add( 
                 		new SupplierModelFullSelect( 
-                				rs.getInt( "id" ), 
+                				rs.getLong("init_id"),
+                				rs.getLong( "id" ), 
                 				rs.getString( "supplier_name" ), 
                 				rs.getString( "contact" ), 
                 				rs.getString( "email" ),
