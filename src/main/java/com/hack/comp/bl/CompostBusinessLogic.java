@@ -59,7 +59,7 @@ public class CompostBusinessLogic
 	private static String urlCreator(String filePath,String fileName) {
 		//http://localhost:8080/fileDownload/view?filePath=member/documents/1/9&fileName=JSP complete reference.pdf
 		String protocol="http://";
-		String host="localhost";//"52.188.114.136";
+		String host="13.68.186.134";//"52.188.114.136";
 		String portNumber="8080";
 		String basePath="/compost/fileView";
 		String url=protocol+host+":"+portNumber+basePath+"?filePath="+filePath.replace("\\", "/")+"&fileName="+fileName;

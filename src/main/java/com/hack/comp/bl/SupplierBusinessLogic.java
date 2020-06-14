@@ -58,7 +58,7 @@ public class SupplierBusinessLogic
 	private static String urlCreator(String filePath,String fileName) {
 		//http://localhost:8080/fileDownload/view?filePath=member/documents/1/9&fileName=JSP complete reference.pdf
 		String protocol="http://";
-		String host="52.188.114.136";
+		String host="13.68.186.134";
 		String portNumber="8080";
 		String basePath="/supplier/fileView";
 		String url=protocol+host+":"+portNumber+basePath+"?filePath="+filePath.replace("\\", "/")+"&fileName="+fileName;
@@ -223,6 +223,7 @@ public class SupplierBusinessLogic
 	public ResponseEntity<SupplierModelSelect> getSupplier(String username, String password)
 	{
 		SupplierModelSelect sms=new SupplierModelSelect();
+		System.out.println(username+" "+password);
 		if(username==null||password==null)
 		{
 			return new ResponseEntity<SupplierModelSelect>(sms,HttpStatus.BAD_REQUEST);
@@ -232,6 +233,7 @@ public class SupplierBusinessLogic
 		} catch (ClassNotFoundException e) {
 			return new ResponseEntity<SupplierModelSelect>(sms,HttpStatus.NOT_FOUND);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return new ResponseEntity<SupplierModelSelect>(sms,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(sms==null)
