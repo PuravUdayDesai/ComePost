@@ -24,20 +24,21 @@ public class ComposterDailyModelCompost
     @NotNull(message = "Grade cannot be NULL")
     private String grade;
     private String description;
-    
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
 
     ComposterDailyModelCompost()
     {
 
     }
 
-
 	public ComposterDailyModelCompost(@NotNull(message = "id cannot be NULL") Long id,
 			@NotNull(message = "dateAndTime cannot be NULL") Timestamp dateAndTime,
 			@NotNull(message = "price cannot be NULL") Double price,
 			@NotNull(message = "CompostWeight cannot be NULL") Double compostWeight,
 			@NotNull(message = "Category cannot be NULL") String category,
-			@NotNull(message = "Grade cannot be NULL") String grade, String description) {
+			@NotNull(message = "Grade cannot be NULL") String grade, String description,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
 		super();
 		this.id = id;
 		this.dateAndTime = dateAndTime;
@@ -46,8 +47,16 @@ public class ComposterDailyModelCompost
 		this.category = category;
 		this.grade = grade;
 		this.description = description;
+		this.dateString = dateString;
 	}
 
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
 
 	public Long getId() {
 		return id;

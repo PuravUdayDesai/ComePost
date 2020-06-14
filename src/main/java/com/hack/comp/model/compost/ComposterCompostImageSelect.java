@@ -19,6 +19,8 @@ public class ComposterCompostImageSelect
 	private Timestamp timeOfEntry;
     @NotNull(message = "ImageURL cannot be NULL")
 	private String imageURL;
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
     
     public ComposterCompostImageSelect()
     {
@@ -30,13 +32,23 @@ public class ComposterCompostImageSelect
 			@NotNull(message = "ComposterInit_id cannot be NULL") Long composterInit_id,
 			@NotNull(message = "ComposterId cannot be NULL") Long composterId,
 			@NotNull(message = "TimeOfEntry cannot be NULL") Timestamp timeOfEntry,
-			@NotNull(message = "ImageURL cannot be NULL") String imageURL) {
+			@NotNull(message = "ImageURL cannot be NULL") String imageURL,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
 		super();
 		this.composterCompostImageId = composterCompostImageId;
 		this.composterInit_id = composterInit_id;
 		this.composterId = composterId;
 		this.timeOfEntry = timeOfEntry;
 		this.imageURL = imageURL;
+		this.dateString = dateString;
+	}
+
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
 	}
 
 	public Long getComposterCompostImageId() {

@@ -22,29 +22,39 @@ public class SupplierModelDailyWaste
     @Max(value=25)
     private Double wetWaste;
     private String description;
-
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
+	
     public SupplierModelDailyWaste()
     {
 
     }
 
-    
 
-    public SupplierModelDailyWaste(
-    		@NotNull(message = "Id cannot be NULL") Long id,
+
+	public SupplierModelDailyWaste(@NotNull(message = "Id cannot be NULL") Long id,
 			@NotNull(message = "Date cannot be NULL") Timestamp date,
 			@NotNull(message = "Dry Waste cannot be NULL") @Max(25) Double dryWaste,
-			@NotNull(message = "Wet Waste cannot be NULL") @Max(25) Double wetWaste, 
-			String description) {
+			@NotNull(message = "Wet Waste cannot be NULL") @Max(25) Double wetWaste, String description,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
 		super();
 		this.id = id;
 		this.date = date;
 		this.dryWaste = dryWaste;
 		this.wetWaste = wetWaste;
 		this.description = description;
+		this.dateString = dateString;
 	}
 
 
+
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
 
 	public Long getId()
     {

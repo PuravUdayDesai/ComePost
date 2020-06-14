@@ -26,17 +26,20 @@ public class SupplierModelDailyWasteNew
     @NotNull(message = "Add/Substrract cannot be NULL")
     private Boolean addOrSub;
     private String description;
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
     
     public SupplierModelDailyWasteNew()
     {
     	
     }
-    
+	
 	public SupplierModelDailyWasteNew(@NotNull(message = "InitId cannot be NULL") Long initId,
 			@NotNull(message = "Id cannot be NULL") Long id, @NotNull(message = "Date cannot be NULL") Timestamp date,
 			@NotNull(message = "Dry Waste cannot be NULL") @Max(25) Double dryWaste,
 			@NotNull(message = "Wet Waste cannot be NULL") @Max(25) Double wetWaste,
-			@NotNull(message = "Add/Substrract cannot be NULL") Boolean addOrSub, String description) {
+			@NotNull(message = "Add/Substrract cannot be NULL") Boolean addOrSub, String description,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
 		super();
 		this.initId = initId;
 		this.id = id;
@@ -45,9 +48,17 @@ public class SupplierModelDailyWasteNew
 		this.wetWaste = wetWaste;
 		this.addOrSub = addOrSub;
 		this.description = description;
+		this.dateString = dateString;
 	}
-	
-	
+
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
+
 	public Long getInitId() {
 		return initId;
 	}

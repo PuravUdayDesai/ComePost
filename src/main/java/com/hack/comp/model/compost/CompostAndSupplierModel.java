@@ -20,20 +20,39 @@ public class CompostAndSupplierModel
     private Double dry_waste;
     @NotNull(message = "Wet waste cannot be NULL")
     private Double wet_waste;
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
 
     public CompostAndSupplierModel()
     {
     }
 
-    public CompostAndSupplierModel(Long supplier_id, Date date, Double dry_waste, Double wet_waste)
-    {
-        this.supplier_id = supplier_id;
-        this.date = date;
-        this.dry_waste = dry_waste;
-        this.wet_waste = wet_waste;
-    }
+   
 
-    public Long getSupplier_id()
+    public CompostAndSupplierModel(@NotNull(message = "Supplier id cannot be NULL") Long supplier_id,
+			@NotNull(message = "Compost id cannot be NULL") Long composter_id,
+			@NotNull(message = "Date cannot be NULL") Date date,
+			@NotNull(message = "Dry waste cannot be NULL") Double dry_waste,
+			@NotNull(message = "Wet waste cannot be NULL") Double wet_waste,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
+		super();
+		this.supplier_id = supplier_id;
+		this.composter_id = composter_id;
+		this.date = date;
+		this.dry_waste = dry_waste;
+		this.wet_waste = wet_waste;
+		this.dateString = dateString;
+	}
+
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
+
+	public Long getSupplier_id()
     {
         return supplier_id;
     }

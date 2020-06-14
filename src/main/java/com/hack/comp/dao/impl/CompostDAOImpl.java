@@ -13,10 +13,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +39,20 @@ import com.hack.comp.model.exception.FileStorageException;
 @Service
 public class CompostDAOImpl implements CompostDAO
 {
+	private final static String month[] = {
+			"January", 
+			"February", 
+			"March", 
+			"April", 
+			"May", 
+			"June", 
+			"July", 
+			"August", 
+			"September", 
+			"October", 
+			"November",
+			"December" 
+		  }; 
 
 	@Override
 	public ComposterLoginModel validateComposter(String username, String password) throws SQLException, ClassNotFoundException 
@@ -169,8 +187,26 @@ public class CompostDAOImpl implements CompostDAO
         ResultSet rs = stmt.executeQuery();
         while (rs.next())
         {
+        	DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+			String dateString=formatDate.format(
+					rs.getTimestamp("date_time").getTime())+
+					" "+
+					dt.getDayOfMonth()+
+					" "+
+					month[gCal.get(Calendar.MONTH)-1]+
+					" "+
+					dt.getYear()+
+					" "+
+					dt.getHourOfDay()+
+					":"+
+					dt.getMinuteOfHour()+
+					":"+
+					dt.getSecondOfMinute();
             sms.add(
             		new ComposterDailyModelCompostNew( 
+            				rs.getLong("inc_id"),
             				rs.getLong( "init_id" ),
             				rs.getTimestamp( "date_time" ),
             				rs.getDouble( "price" ),
@@ -178,7 +214,8 @@ public class CompostDAOImpl implements CompostDAO
             				rs.getBoolean( "add_or_sub" ) ,
             				rs.getString("category"),
             				rs.getString("grade"),
-            				rs.getString("description")) 
+            				rs.getString("description"),
+            				dateString) 
             		);
         }
         rs.close();
@@ -230,7 +267,6 @@ public class CompostDAOImpl implements CompostDAO
         stmt.setString(7, data.getCategory());
         stmt.setString(8, data.getGrade());
         stmt.setString(9, data.getDescription()==null?"":data.getDescription());
-        System.out.println(stmt);
         Integer result = stmt.executeUpdate();
         c.commit();
         stmt.close();
@@ -242,7 +278,7 @@ public class CompostDAOImpl implements CompostDAO
 	public List<ComposterFullSelect> getComposterByDate(Date date) throws SQLException, ClassNotFoundException 
 	{
 		Connection c = Connections.setConnection();
-        PreparedStatement stmt = c.prepareStatement( "SELECT composter.composter_info.name,\n" + 
+        PreparedStatement stmt = c.prepareStatement("SELECT composter.composter_info.name,\n" + 
         											"composter.composter_compost.init_id,\n" + 
         											"composter.composter_info.id,\n" + 
         											"composter.composter_info.contact,\n" + 
@@ -276,14 +312,12 @@ public class CompostDAOImpl implements CompostDAO
         	Boolean rsMain=false;
         	if(i==0)
         	{
-        		System.out.println(rs.getLong("init_id"));
         		li.add(rs.getLong("init_id"));
         		rsMain=false;
         	}
         	while(li.hasNext())
         	{
         		Long init_id=li.next();
-        		System.out.println("Check: "+(init_id==rs.getLong("init_id")));
         		if(init_id==rs.getLong("init_id"))
         		{
         			rsMain=true;
@@ -297,6 +331,23 @@ public class CompostDAOImpl implements CompostDAO
         	}
         	if(!rsMain)
         	{
+            	DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+    			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+    			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+    			String dateString=formatDate.format(
+    					rs.getTimestamp("date_time").getTime())+
+    					" "+
+    					dt.getDayOfMonth()+
+    					" "+
+    					month[gCal.get(Calendar.MONTH)-1]+
+    					" "+
+    					dt.getYear()+
+    					" "+
+    					dt.getHourOfDay()+
+    					":"+
+    					dt.getMinuteOfHour()+
+    					":"+
+    					dt.getSecondOfMinute();
                 lc.add(
                 		new ComposterFullSelect(
                 				rs.getLong( "id" ),
@@ -314,7 +365,8 @@ public class CompostDAOImpl implements CompostDAO
                 				rs.getString( "street" ),
                 				rs.getString( "area" ), 
                 				rs.getString( "city" ),
-                				rs.getString( "state" ) 
+                				rs.getString( "state" ) ,
+                				dateString
                 				) 
                 		);
         	}
@@ -404,12 +456,30 @@ public class CompostDAOImpl implements CompostDAO
 		List<ComposterCompostImageSelect> ll=new ArrayList<ComposterCompostImageSelect>();
 		while(rs.next())
 		{
+			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+			String dateString=formatDate.format(
+					rs.getTimestamp("date_time").getTime())+
+					" "+
+					dt.getDayOfMonth()+
+					" "+
+					month[gCal.get(Calendar.MONTH)-1]+
+					" "+
+					dt.getYear()+
+					" "+
+					dt.getHourOfDay()+
+					":"+
+					dt.getMinuteOfHour()+
+					":"+
+					dt.getSecondOfMinute();
 			ll.add(new  ComposterCompostImageSelect(
 					rs.getLong("composter_compost_image_id"),
 					rs.getLong("composter_init_id"),
 					rs.getLong("composter_id"),
 					rs.getTimestamp("date_time"),
-					rs.getString("image_url")
+					rs.getString("image_url"),
+					dateString
 					));
 		}
 		rs.close();
@@ -492,6 +562,23 @@ public class CompostDAOImpl implements CompostDAO
         	}
         	if(!rsMain)
         	{
+    			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+    			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+    			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+    			String dateString=formatDate.format(
+    					rs.getTimestamp("date_time").getTime())+
+    					" "+
+    					dt.getDayOfMonth()+
+    					" "+
+    					month[gCal.get(Calendar.MONTH)-1]+
+    					" "+
+    					dt.getYear()+
+    					" "+
+    					dt.getHourOfDay()+
+    					":"+
+    					dt.getMinuteOfHour()+
+    					":"+
+    					dt.getSecondOfMinute();
                 lc.add(
                 		new ComposterFullSelect(
                 				rs.getLong( "id" ),
@@ -509,7 +596,8 @@ public class CompostDAOImpl implements CompostDAO
                 				rs.getString( "street" ),
                 				rs.getString( "area" ), 
                 				rs.getString( "city" ),
-                				rs.getString( "state" ) 
+                				rs.getString( "state" ),
+                				dateString
                 				) 
                 		);
         	}
@@ -561,14 +649,12 @@ public class CompostDAOImpl implements CompostDAO
         	Boolean rsMain=false;
         	if(i==0)
         	{
-        		System.out.println(rs.getLong("init_id"));
         		li.add(rs.getLong("init_id"));
         		rsMain=false;
         	}
         	while(li.hasNext())
         	{
         		Long init_id=li.next();
-        		System.out.println("Check: "+(init_id==rs.getLong("init_id")));
         		if(init_id==rs.getLong("init_id"))
         		{
         			rsMain=true;
@@ -582,6 +668,23 @@ public class CompostDAOImpl implements CompostDAO
         	}
         	if(!rsMain)
         	{
+    			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+    			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+    			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+    			String dateString=formatDate.format(
+    					rs.getTimestamp("date_time").getTime())+
+    					" "+
+    					dt.getDayOfMonth()+
+    					" "+
+    					month[gCal.get(Calendar.MONTH)-1]+
+    					" "+
+    					dt.getYear()+
+    					" "+
+    					dt.getHourOfDay()+
+    					":"+
+    					dt.getMinuteOfHour()+
+    					":"+
+    					dt.getSecondOfMinute();
                 lc.add(
                 		new ComposterFullSelect(
                 				rs.getLong( "id" ),
@@ -599,7 +702,8 @@ public class CompostDAOImpl implements CompostDAO
                 				rs.getString( "street" ),
                 				rs.getString( "area" ), 
                 				rs.getString( "city" ),
-                				rs.getString( "state" ) 
+                				rs.getString( "state" ),
+                				dateString
                 				) 
                 		);
         	}

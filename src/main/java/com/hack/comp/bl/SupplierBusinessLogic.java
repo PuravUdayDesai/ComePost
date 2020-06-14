@@ -47,7 +47,6 @@ public class SupplierBusinessLogic
 	
 	private static final String EXTERNAL_FILE_PATH = "C:\\";
 
-	
 	public static String replaceColonToPeriod(Timestamp t)
 	{
 		String str=t.toString();

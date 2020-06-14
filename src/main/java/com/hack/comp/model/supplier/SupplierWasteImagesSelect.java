@@ -17,23 +17,38 @@ public class SupplierWasteImagesSelect
 	private Timestamp dateAndTime;
 	@NotNull(message = "ImageURL cannot be NULL")
 	private String imageURL;
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
 	
 	public SupplierWasteImagesSelect()
 	{
 		
 	}
 
-	public SupplierWasteImagesSelect(
-			@NotNull(message = "SupplierId cannot be NULL") Long supplierId,
+
+	public SupplierWasteImagesSelect(@NotNull(message = "SupplierId cannot be NULL") Long supplierId,
 			@NotNull(message = "SupplierWasteImageId cannot be NULL") Long supplierWasteImageId,
 			@NotNull(message = "DateAndTime cannot be NULL") Timestamp dateAndTime,
-			@NotNull(message = "ImageURL cannot be NULL") String imageURL) {
+			@NotNull(message = "ImageURL cannot be NULL") String imageURL,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
 		super();
 		this.supplierId = supplierId;
 		this.supplierWasteImageId = supplierWasteImageId;
 		this.dateAndTime = dateAndTime;
 		this.imageURL = imageURL;
+		this.dateString = dateString;
 	}
+
+
+	public String getDateString() {
+		return dateString;
+	}
+
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
+
 
 	public Long getSupplierId() {
 		return supplierId;

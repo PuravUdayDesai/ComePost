@@ -13,10 +13,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +39,22 @@ import com.hack.comp.model.supplier.SupplierWasteImagesSelect;
 @Service
 public class SupplierDAOImpl implements SupplierDAO
 {
+	
+	private final static String month[] = {
+			"January", 
+			"February", 
+			"March", 
+			"April", 
+			"May", 
+			"June", 
+			"July", 
+			"August", 
+			"September", 
+			"October", 
+			"November",
+			"December" 
+		  };
+	
 	@Override
 	public Boolean addSupplier(SupplierModelInsert smi) throws SQLException, ClassNotFoundException 
 	{
@@ -204,7 +224,23 @@ public class SupplierDAOImpl implements SupplierDAO
                     aos = false;
                 }
             }
-            System.out.println( aos );
+			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+			String dateString=formatDate.format(
+					rs.getTimestamp("date_time").getTime())+
+					" "+
+					dt.getDayOfMonth()+
+					" "+
+					month[gCal.get(Calendar.MONTH)-1]+
+					" "+
+					dt.getYear()+
+					" "+
+					dt.getHourOfDay()+
+					":"+
+					dt.getMinuteOfHour()+
+					":"+
+					dt.getSecondOfMinute();
             sms.add(
             		new SupplierModelDailyWasteNew( 
             				rs.getLong("init_id"),
@@ -212,7 +248,8 @@ public class SupplierDAOImpl implements SupplierDAO
             				rs.getTimestamp( "date_time" ), 
             				rs.getDouble( "dry_waste" ),
             				rs.getDouble( "wet_waste" ),aos,
-            				rs.getString( "description" )
+            				rs.getString( "description" ),
+            				dateString
             				) );
             prevDW = rs.getDouble( "dry_waste" );
             prevWW = rs.getDouble( "wet_waste" );
@@ -236,6 +273,7 @@ public class SupplierDAOImpl implements SupplierDAO
         SupplierModelSelect sms = null;
         if (rs.next())
         {
+        	
             sms = new SupplierModelSelect( 
             								rs.getLong( "id" ), 
             								rs.getString( "supplier_name" ),
@@ -275,6 +313,23 @@ public class SupplierDAOImpl implements SupplierDAO
             }
             if (!b)
             {
+    			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+    			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+    			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+    			String dateString=formatDate.format(
+    					rs.getTimestamp("date_time").getTime())+
+    					" "+
+    					dt.getDayOfMonth()+
+    					" "+
+    					month[gCal.get(Calendar.MONTH)-1]+
+    					" "+
+    					dt.getYear()+
+    					" "+
+    					dt.getHourOfDay()+
+    					":"+
+    					dt.getMinuteOfHour()+
+    					":"+
+    					dt.getSecondOfMinute();
                 sms.add( 
                 		new SupplierModelFullSelect( 
                 				rs.getLong("init_id"),
@@ -292,7 +347,8 @@ public class SupplierDAOImpl implements SupplierDAO
                 				rs.getDouble( "dry_waste" ), 
                 				rs.getDouble( "wet_waste" ), 
                 				rs.getTimestamp( "date_time" ),
-                				rs.getString( "description" )==null?"":rs.getString("description") ) );
+                				rs.getString( "description" )==null?"":rs.getString("description"),
+                				dateString) );
                 l.add( rs.getInt( "id" ) );
             }
         }
@@ -394,11 +450,29 @@ public class SupplierDAOImpl implements SupplierDAO
 		ResultSet rs=stmt.executeQuery();
 		while(rs.next())
 		{
+			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+			String dateString=formatDate.format(
+					rs.getTimestamp("date_time").getTime())+
+					" "+
+					dt.getDayOfMonth()+
+					" "+
+					month[gCal.get(Calendar.MONTH)-1]+
+					" "+
+					dt.getYear()+
+					" "+
+					dt.getHourOfDay()+
+					":"+
+					dt.getMinuteOfHour()+
+					":"+
+					dt.getSecondOfMinute();
 			ll.add(new SupplierWasteImagesSelect(
 					rs.getLong("supplier_id"),
 					rs.getLong("supplier_waste_image_id"),
 					rs.getTimestamp("date_time"),
-					rs.getString("image_url")) );
+					rs.getString("image_url"),
+					dateString) );
 		}
 		rs.close();
 		stmt.close();
@@ -432,6 +506,23 @@ public class SupplierDAOImpl implements SupplierDAO
             }
             if (!b)
             {
+    			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+    			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+    			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+    			String dateString=formatDate.format(
+    					rs.getTimestamp("date_time").getTime())+
+    					" "+
+    					dt.getDayOfMonth()+
+    					" "+
+    					month[gCal.get(Calendar.MONTH)-1]+
+    					" "+
+    					dt.getYear()+
+    					" "+
+    					dt.getHourOfDay()+
+    					":"+
+    					dt.getMinuteOfHour()+
+    					":"+
+    					dt.getSecondOfMinute();
                 sms.add( 
                 		new SupplierModelFullSelect( 
                 				rs.getLong("init_id"),
@@ -449,7 +540,8 @@ public class SupplierDAOImpl implements SupplierDAO
                 				rs.getDouble( "dry_waste" ), 
                 				rs.getDouble( "wet_waste" ), 
                 				rs.getTimestamp( "date_time" ),
-                				rs.getString( "description" )==null?"":rs.getString("description") ) );
+                				rs.getString( "description" )==null?"":rs.getString("description"),
+                				dateString) );
                 l.add( rs.getInt( "id" ) );
             }
         }
@@ -485,6 +577,23 @@ public class SupplierDAOImpl implements SupplierDAO
             }
             if (!b)
             {
+    			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+    			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+    			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+    			String dateString=formatDate.format(
+    					rs.getTimestamp("date_time").getTime())+
+    					" "+
+    					dt.getDayOfMonth()+
+    					" "+
+    					month[gCal.get(Calendar.MONTH)-1]+
+    					" "+
+    					dt.getYear()+
+    					" "+
+    					dt.getHourOfDay()+
+    					":"+
+    					dt.getMinuteOfHour()+
+    					":"+
+    					dt.getSecondOfMinute();
                 sms.add( 
                 		new SupplierModelFullSelect( 
                 				rs.getLong("init_id"),
@@ -502,7 +611,8 @@ public class SupplierDAOImpl implements SupplierDAO
                 				rs.getDouble( "dry_waste" ), 
                 				rs.getDouble( "wet_waste" ), 
                 				rs.getTimestamp( "date_time" ),
-                				rs.getString( "description" )==null?"":rs.getString("description") ) );
+                				rs.getString( "description" )==null?"":rs.getString("description"),
+                				dateString) );
                 l.add( rs.getInt( "id" ) );
             }
         }

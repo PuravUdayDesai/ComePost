@@ -23,24 +23,24 @@ public class SupplierModelSelect
     {
     	
     }
-    public SupplierModelSelect(
-    		@NotNull(message = "Id cannot be NULL") Long id,
-    		@NotNull(message = "Name cannot be NULL") String name,
-    		@NotNull(message = "Contact Number cannot be NULL") String contactNumber, 
-    		@NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId,
-    		@NotNull(message = "Registration Number cannot be NULL") String registrationNumber, 
-    		@NotNull(message = "No Validation") Boolean valid)
-    {
-        super();
-        this.id = id;
-        this.name = name;
-        this.contactNumber = contactNumber;
-        this.emailId = emailId;
-        this.registrationNumber = registrationNumber;
-        this.valid = valid;
-    }
 
-    public Long getId()
+	public SupplierModelSelect(@NotNull(message = "Id cannot be NULL") Long id,
+			@NotNull(message = "Name cannot be NULL") String name,
+			@NotNull(message = "Contact Number cannot be NULL") String contactNumber,
+			@NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId,
+			@NotNull(message = "Registration Number cannot be NULL") String registrationNumber,
+			@NotNull(message = "No Validation") Boolean valid) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.contactNumber = contactNumber;
+		this.emailId = emailId;
+		this.registrationNumber = registrationNumber;
+		this.valid = valid;
+	}
+
+
+	public Long getId()
     {
         return id;
     }

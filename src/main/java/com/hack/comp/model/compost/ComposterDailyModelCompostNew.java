@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ComposterDailyModelCompostNew
 {
-
+	
+	@NotNull(message = "Inc_Id cannot be NULL")
+	private Long inc_id;
     @NotNull(message = "Id cannot be NULL")
     private Long id;
     @NotNull(message = "Date cannot be NULL")
@@ -26,6 +28,8 @@ public class ComposterDailyModelCompostNew
     private String grade;
     @NotNull(message = "Description cannot be NULL")
     private String description;
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
     
     
     public ComposterDailyModelCompostNew()
@@ -33,15 +37,17 @@ public class ComposterDailyModelCompostNew
 
     }
 
-    public ComposterDailyModelCompostNew(@NotNull(message = "Id cannot be NULL") Long id,
-			@NotNull(message = "Date cannot be NULL") Timestamp date,
+	public ComposterDailyModelCompostNew(@NotNull(message = "Inc_Id cannot be NULL") Long inc_id,
+			@NotNull(message = "Id cannot be NULL") Long id, @NotNull(message = "Date cannot be NULL") Timestamp date,
 			@NotNull(message = "Price cannot be NULL") Double price,
 			@NotNull(message = "CompostWeight cannot be NULL") Double compostWeight,
 			@NotNull(message = "AddOrSub cannot be NULL") Boolean addOrSub,
 			@NotNull(message = "Category cannot be NULL") String category,
 			@NotNull(message = "Grade cannot be NULL") String grade,
-			@NotNull(message = "Description cannot be NULL") String description) {
+			@NotNull(message = "Description cannot be NULL") String description,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
 		super();
+		this.inc_id = inc_id;
 		this.id = id;
 		this.date = date;
 		this.price = price;
@@ -50,6 +56,23 @@ public class ComposterDailyModelCompostNew
 		this.category = category;
 		this.grade = grade;
 		this.description = description;
+		this.dateString = dateString;
+	}
+
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
+
+	public Long getInc_id() {
+		return inc_id;
+	}
+
+	public void setInc_id(Long inc_id) {
+		this.inc_id = inc_id;
 	}
 
 	public Long getId()

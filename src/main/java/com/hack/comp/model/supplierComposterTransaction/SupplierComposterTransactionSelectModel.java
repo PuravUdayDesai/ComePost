@@ -25,21 +25,25 @@ public class SupplierComposterTransactionSelectModel
 	@NotNull(message = "DateAndTime cannot be NULL")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "IST")
 	private Timestamp dateAndTime;
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
 	
 	public SupplierComposterTransactionSelectModel()
 	{
 		
 	}
 
-	public SupplierComposterTransactionSelectModel(
-			@NotNull(message = "IncrementId cannot be NULL") Long incrementId,
+	
+
+	public SupplierComposterTransactionSelectModel(@NotNull(message = "IncrementId cannot be NULL") Long incrementId,
 			@NotNull(message = "SupplierWasteId cannot be NULL") Long supplierWasteId,
 			@NotNull(message = "SupplierId cannot be NULL") Long supplierId,
 			@NotNull(message = "ComposterId cannot be NULL") Long composterId,
 			@NotNull(message = "ComposterName cannot be NULL") String composterName,
 			@NotNull(message = "ComposterEmailId cannot be NULL") String composterEmailId,
 			@NotNull(message = "ComposterContactNumber cannot be NULL") String composterContactNumber,
-			@NotNull(message = "DateAndTime cannot be NULL") Timestamp dateAndTime) {
+			@NotNull(message = "DateAndTime cannot be NULL") Timestamp dateAndTime,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
 		super();
 		this.incrementId = incrementId;
 		this.supplierWasteId = supplierWasteId;
@@ -49,6 +53,7 @@ public class SupplierComposterTransactionSelectModel
 		this.composterEmailId = composterEmailId;
 		this.composterContactNumber = composterContactNumber;
 		this.dateAndTime = dateAndTime;
+		this.dateString = dateString;
 	}
 
 	public Long getIncrementId() {
@@ -113,6 +118,14 @@ public class SupplierComposterTransactionSelectModel
 
 	public void setDateAndTime(Timestamp dateAndTime) {
 		this.dateAndTime = dateAndTime;
+	}
+
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
 	}
 	
 }

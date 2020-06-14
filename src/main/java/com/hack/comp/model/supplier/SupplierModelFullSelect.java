@@ -45,6 +45,8 @@ public class SupplierModelFullSelect
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "IST")
     private Timestamp date_time;
     private String description;
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
 
     public SupplierModelFullSelect()
     {
@@ -52,8 +54,7 @@ public class SupplierModelFullSelect
     }
 
 	public SupplierModelFullSelect(@NotNull(message = "Init_id cannot be NULL") Long init_id,
-			@NotNull(message = "Id cannot be NULL") Long id,
-			@NotNull(message = "Name cannot be NULL") String name,
+			@NotNull(message = "Id cannot be NULL") Long id, @NotNull(message = "Name cannot be NULL") String name,
 			@NotNull(message = "Contact Number cannot be NULL") String contactNumber,
 			@NotNull(message = "EmailId cannot be NULL") @Email(message = "Please Enter a Valid Email ID") String emailId,
 			@NotNull(message = "Registration Number cannot be NULL") String registrationNumber,
@@ -65,7 +66,8 @@ public class SupplierModelFullSelect
 			@NotNull(message = "Longitude cannot be NULL") String longitude,
 			@NotNull(message = "Dry Waste cannot be NULL") @Max(25) Double dryWaste,
 			@NotNull(message = "Wet Waste cannot be NULL") @Max(25) Double wetWaste,
-			@NotNull(message = "Date And Time cannot be NULL") Timestamp date_time, String description) {
+			@NotNull(message = "Date And Time cannot be NULL") Timestamp date_time, String description,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
 		super();
 		this.init_id = init_id;
 		this.id = id;
@@ -83,7 +85,17 @@ public class SupplierModelFullSelect
 		this.wetWaste = wetWaste;
 		this.date_time = date_time;
 		this.description = description;
+		this.dateString = dateString;
 	}
+
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
+	}
+
 
 	public Long getInit_id() {
 		return init_id;

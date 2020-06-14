@@ -5,9 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import com.hack.comp.connection.Connections;
@@ -17,7 +21,21 @@ import com.hack.comp.model.composterFarmerTransaction.ComposterFarmerTransaction
 @Service
 public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransactionDAO
 {
-
+	private final static String month[] = {
+			"January", 
+			"February", 
+			"March", 
+			"April", 
+			"May", 
+			"June", 
+			"July", 
+			"August", 
+			"September", 
+			"October", 
+			"November",
+			"December" 
+		  };
+	
 	@Override
 	public Integer addComposterFarmerTransaction(Long composter_init_id, Long composter_id, Long farmer_id,Timestamp date_time) throws SQLException, ClassNotFoundException 
 	{
@@ -72,6 +90,23 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 		List<ComposterFarmerTransactionModel> cf=new ArrayList<ComposterFarmerTransactionModel>();
 		if(rs.next())
 		{
+			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+			String dateString=formatDate.format(
+					rs.getTimestamp("date_time").getTime())+
+					" "+
+					dt.getDayOfMonth()+
+					" "+
+					month[gCal.get(Calendar.MONTH)-1]+
+					" "+
+					dt.getYear()+
+					" "+
+					dt.getHourOfDay()+
+					":"+
+					dt.getMinuteOfHour()+
+					":"+
+					dt.getSecondOfMinute();
 			cf.add(new ComposterFarmerTransactionModel(
 					rs.getLong("inc_id"),
 					rs.getLong("composter_compost_init_id"),
@@ -79,7 +114,8 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 					rs.getLong("farmer_id"),
 					rs.getString("farmer_name"),
 					rs.getString("farmer_contact"),
-					rs.getTimestamp("date_time")
+					rs.getTimestamp("date_time"),
+					dateString
 					));
 		}
 		rs.close();

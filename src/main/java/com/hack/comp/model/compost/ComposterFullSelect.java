@@ -9,39 +9,41 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class ComposterFullSelect
 {
     @NotNull(message = "Id cannot be NULL")
-    Long id;
+    private Long id;
     @NotNull(message = "InitId cannot be NULL")
-    Long initId;
+    private Long initId;
     @NotNull(message = "name cannot be NULL")
-    String name;
+    private String name;
     @NotNull(message = "contact cannot be NULL")
-    String contact;
+    private String contact;
     @NotNull(message = "email cannot be NULL")
-    String email;
+    private String email;
     @NotNull(message = "reg_no cannot be NULL")
-    String reg_no;
+    private String reg_no;
     @NotNull(message = "compost_add_sub cannot be NULL")
-    Boolean compost_add_sub;
+    private Boolean compost_add_sub;
     @NotNull(message = "price cannot be NULL")
-    Double price;
+    private Double price;
     @NotNull(message = "weight cannot be NULL")
-    Double weight;
+    private Double weight;
     @NotNull(message = "date_time cannot be NULL")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "IST")
-    Timestamp date_time;
+    private Timestamp date_time;
     @NotNull(message = "latitude cannot be NULL")
-    String latitude;
+    private String latitude;
     @NotNull(message = "longitude cannot be NULL")
-    String longitude;
+    private String longitude;
     @NotNull(message = "street cannot be NULL")
-    String street;
+    private String street;
     @NotNull(message = "area cannot be NULL")
-    String area;
+    private String area;
     @NotNull(message = "city cannot be NULL")
-    String city;
+    private String city;
     @NotNull(message = "state cannot be NULL")
-    String state;
-
+    private String state;
+	@NotNull(message = "DateString cannot be NULL")
+	private String dateString;
+    
     public ComposterFullSelect()
     {
 
@@ -62,7 +64,8 @@ public class ComposterFullSelect
 			@NotNull(message = "street cannot be NULL") String street,
 			@NotNull(message = "area cannot be NULL") String area,
 			@NotNull(message = "city cannot be NULL") String city,
-			@NotNull(message = "state cannot be NULL") String state) {
+			@NotNull(message = "state cannot be NULL") String state,
+			@NotNull(message = "DateString cannot be NULL") String dateString) {
 		super();
 		this.id = id;
 		this.initId = initId;
@@ -80,6 +83,15 @@ public class ComposterFullSelect
 		this.area = area;
 		this.city = city;
 		this.state = state;
+		this.dateString = dateString;
+	}
+
+	public String getDateString() {
+		return dateString;
+	}
+
+	public void setDateString(String dateString) {
+		this.dateString = dateString;
 	}
 
 	public Long getId() {
