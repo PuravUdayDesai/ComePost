@@ -20,11 +20,14 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hack.comp.aspect.EmailAspect;
 import com.hack.comp.bl.SupplierBusinessLogic;
 import com.hack.comp.connection.Connections;
 import com.hack.comp.dao.schema.SupplierDAO;
@@ -56,7 +59,7 @@ public class SupplierDAOImpl implements SupplierDAO
 		  };
 	
 	@Override
-	public Boolean addSupplier(SupplierModelInsert smi) throws SQLException, ClassNotFoundException 
+	public Boolean addSupplier(SupplierModelInsert smi) throws SQLException, ClassNotFoundException, MessagingException 
 	{
 		 String query = "SELECT * FROM supplier.\"fn_addSupplier\"(\r\n" + "	?, \r\n" + //<name_in text>
 	                "	?, \r\n" + //<contact_number_in text>
@@ -78,9 +81,9 @@ public class SupplierDAOImpl implements SupplierDAO
 	        stmt.setString( 4, smi.getRegistrationNumber() );
 	        stmt.setString( 5, smi.getLatitude() );
 	        stmt.setString( 6, smi.getLongitude() );
-	        stmt.setString( 7, smi.getState() );
-	        stmt.setString( 8, smi.getCity() );
-	        stmt.setString( 9, smi.getArea() );
+	        stmt.setString( 7, smi.getState());
+	        stmt.setString( 8, smi.getCity());
+	        stmt.setString( 9, smi.getArea());
 	        stmt.setString( 10, smi.getStreet() );
 	        stmt.setString( 11, smi.getPassword() );
 	        Boolean result =false;
@@ -89,6 +92,88 @@ public class SupplierDAOImpl implements SupplierDAO
 	        if(rs.next())
 	        {
 	        	result=rs.getBoolean("fn_addSupplier");
+	        	if(result)
+	        	{
+	        	Connection c2=Connections.setConnection();
+	        	PreparedStatement stmt2=c2.prepareCall(
+	        			"SELECT composter.composter_info.email\r\n" + 
+	        			"FROM composter.composter_info\r\n" + 
+	        			"JOIN composter.composter_loc\r\n" + 
+	        			"ON composter.composter_loc.id=composter.composter_info.id\r\n" + 
+	        			"WHERE LOWER(composter.composter_loc.state)=LOWER(?);");
+	        	stmt2.setString(1, smi.getState());
+	        	ResultSet rs2=stmt2.executeQuery();
+	        	System.out.println(stmt2);
+	        	while(rs2.next())
+	        	{
+	        		System.out.println(rs2.getString("email"));
+		        	EmailAspect.sendEmailWithoutAttachment(
+		        			rs2.getString("email"), 
+		        			"TO", 
+		        			"ComePost: A New Supplier has been added", 
+		        			"    <table style=\"\">\r\n" + 
+		        			"        <tr style=\"background-color:  rgb(138, 211, 138)\">\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"               Name:\r\n" + 
+		        			"            </td>\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"\r\n" + 
+		        			smi.getName()+
+		        			"            </td>\r\n" + 
+		        			"        </tr>\r\n" + 
+		        			"        <tr style=\"background-color: rgb(100, 155, 100)\">\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"                Contact Number:\r\n" + 
+		        			"            </td>\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"\r\n" + 
+		        			smi.getContactNumber()+
+		        			"            </td>\r\n" + 
+		        			"        </tr>\r\n" + 
+		        			"        <tr style=\"background-color:  rgb(138, 211, 138)\">\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"                Email Id:\r\n" + 
+		        			"            </td>\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"\r\n" + 
+		        			smi.getEmailId()+
+		        			"            </td>\r\n" + 
+		        			"        </tr>\r\n" + 
+		        			"        <tr style=\"background-color: rgb(100, 155, 100)\">\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"                City:\r\n" + 
+		        			"            </td>\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"\r\n" + 
+		        			smi.getCity()+
+		        			"            </td>\r\n" + 
+		        			"        </tr>\r\n" + 
+		        			"        <tr style=\"background-color:  rgb(138, 211, 138);\">\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"                Area:\r\n" + 
+		        			"            </td>\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"\r\n" + 
+		        			smi.getArea()+
+		        			"            </td>\r\n" + 
+		        			"        </tr>\r\n" + 
+		        			"        <tr style=\"background-color: rgb(100, 155, 100)\">\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"                Street:\r\n" + 
+		        			"            </td>\r\n" + 
+		        			"            <td style=\"color:black\">\r\n" + 
+		        			"\r\n" + 
+		        			smi.getStreet()+
+		        			"            </td>\r\n" + 
+		        			"        </tr>\r\n" + 
+		        			"    </table>\r\n" ,
+		        			"text/html");
+	        	}
+	        	rs2.close();
+	        	stmt2.close();
+	        	c2.close();
+	        	}
+	        	
 	        }
 	        rs.close();
 	        stmt.close();

@@ -9,10 +9,11 @@ public class SMSAspect
 
     public static void sendSMS(String body, String recepient)
     {
+    	System.out.println(recepient);
         NexmoClient client = NexmoClient.builder().apiKey( "1c6adeec" ).apiSecret( "Q4pJriL0r4XsQVV9" ).build();
 
         SmsSubmissionResponse responses = client.getSmsClient()
-                .submitMessage( new TextMessage( "7304036480", recepient, body ) );
+                .submitMessage( new TextMessage( "7304036480", "+91"+recepient, body ) );
         for (SmsSubmissionResponseMessage response : responses.getMessages())
         {
             System.out.println( response );

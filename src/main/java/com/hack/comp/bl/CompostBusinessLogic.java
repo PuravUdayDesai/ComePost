@@ -101,6 +101,7 @@ public class CompostBusinessLogic
 		} catch (ClassNotFoundException e) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(!rsMain)
@@ -159,8 +160,6 @@ public class CompostBusinessLogic
 	    {
 	    	Double compostWeight=null;
 				compostWeight=cdi.refreshCompostSubProduct(data, init_id);
-				System.out.println("Last Compost Weight: "+compostWeight);
-				System.out.println("Entered Compost Weight: "+data.getCompostWeight());
 	    	data.setCompostWeight( compostWeight - data.getCompostWeight() );
 	        if (compostWeight == 0)
 	        {

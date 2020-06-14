@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hack.comp.aspect.SMSAspect;
 import com.hack.comp.bl.CompostBusinessLogic;
 import com.hack.comp.connection.Connections;
 import com.hack.comp.dao.schema.CompostDAO;
@@ -122,17 +123,43 @@ public class CompostDAOImpl implements CompostDAO
 	     stmt.setString( 4, cmi.getRegistrationNumber() );
 	     stmt.setString( 5, cmi.getLatitude() );
 	     stmt.setString( 6, cmi.getLongitude() );
-	     stmt.setString( 7, cmi.getStreet() );
-	     stmt.setString( 8, cmi.getArea() );
-	     stmt.setString( 9, cmi.getCity() );
-	     stmt.setString( 10, cmi.getState() );
+	     stmt.setString( 7, cmi.getState() );
+	     stmt.setString( 8, cmi.getCity() );
+	     stmt.setString( 9, cmi.getArea() );
+	     stmt.setString( 10, cmi.getStreet() );
 	     stmt.setString( 11, cmi.getPassword() );
 	     ResultSet rs=stmt.executeQuery();
+	     System.out.println(stmt);
 	     c.commit();
 	     Boolean rsMain=false;
 	     if(rs.next())
 	     {
 	    	 rsMain=rs.getBoolean("fn_insertComposter");
+	    	 if(rsMain)
+	    	 {
+	    		 Connection c2=Connections.setConnection();
+	    		 PreparedStatement stmt2=c2.prepareStatement("SELECT\r\n" + 
+	    		 		"	farmer.farmer_info.farmer_contact_number\r\n" + 
+	    		 		"FROM\r\n" + 
+	    		 		"	farmer.farmer_info\r\n" + 
+	    		 		"JOIN\r\n" + 
+	    		 		"	farmer.farmer_location\r\n" + 
+	    		 		"ON\r\n" + 
+	    		 		"	farmer.farmer_location.farmer_id=farmer.farmer_info.id\r\n" + 
+	    		 		"WHERE\r\n" + 
+	    		 		"	LOWER(farmer.farmer_location.state)=LOWER(?)");
+	    		 stmt2.setString(1, cmi.getState());
+	    		 ResultSet rs2=stmt2.executeQuery();
+	    		 while(rs2.next())
+	    		 {
+	    			 System.out.println(rs2.getString("farmer_contact_number"));
+	    			 SMSAspect.sendSMS("A new composter has been added, you can contact him: "+cmi.getContactNumber()+" name: "+cmi.getName(),rs2.getString("farmer_contact_number"));
+	    		 }
+	    		 rs2.close();
+	    		 stmt2.close();
+	    		 c2.close();
+	    		 
+	    	 }
 	     }
 	     rs.close();
 	     stmt.close();

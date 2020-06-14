@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hack.comp.model.supplier.SupplierModelDailyWaste;
@@ -17,7 +19,7 @@ import com.hack.comp.model.supplier.SupplierWasteImagesSelect;
 
 public interface SupplierDAO
 {
-	public Boolean							addSupplier(SupplierModelInsert smi)												throws SQLException,ClassNotFoundException;
+	public Boolean							addSupplier(SupplierModelInsert smi)												throws SQLException, ClassNotFoundException, MessagingException; 
 	public SupplierModelDailyWaste 			refreshSupplierAddProduct(SupplierModelDailyWaste data)								throws SQLException,ClassNotFoundException;
 	public Integer 							addSupplierProduct(SupplierModelDailyWaste data)									throws SQLException,ClassNotFoundException;
 	public SupplierModelDailyWaste 			refreshSupplierSubProduct(SupplierModelDailyWaste data)								throws SQLException,ClassNotFoundException;
