@@ -175,7 +175,10 @@ public class CompostDAOImpl implements CompostDAO
             				rs.getTimestamp( "date_time" ),
             				rs.getDouble( "price" ),
             				rs.getDouble( "compost_weight" ), 
-            				rs.getBoolean( "add_or_sub" ) ) 
+            				rs.getBoolean( "add_or_sub" ) ,
+            				rs.getString("category"),
+            				rs.getString("grade"),
+            				rs.getString("description")) 
             		);
         }
         rs.close();

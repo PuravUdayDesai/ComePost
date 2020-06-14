@@ -20,25 +20,39 @@ public class ComposterDailyModelCompostNew
     private Double compostWeight;
     @NotNull(message = "AddOrSub cannot be NULL")
     private Boolean addOrSub;
-
+    @NotNull(message = "Category cannot be NULL")
+    private String category;
+    @NotNull(message = "Grade cannot be NULL")
+    private String grade;
+    @NotNull(message = "Description cannot be NULL")
+    private String description;
+    
+    
     public ComposterDailyModelCompostNew()
     {
 
     }
 
+    public ComposterDailyModelCompostNew(@NotNull(message = "Id cannot be NULL") Long id,
+			@NotNull(message = "Date cannot be NULL") Timestamp date,
+			@NotNull(message = "Price cannot be NULL") Double price,
+			@NotNull(message = "CompostWeight cannot be NULL") Double compostWeight,
+			@NotNull(message = "AddOrSub cannot be NULL") Boolean addOrSub,
+			@NotNull(message = "Category cannot be NULL") String category,
+			@NotNull(message = "Grade cannot be NULL") String grade,
+			@NotNull(message = "Description cannot be NULL") String description) {
+		super();
+		this.id = id;
+		this.date = date;
+		this.price = price;
+		this.compostWeight = compostWeight;
+		this.addOrSub = addOrSub;
+		this.category = category;
+		this.grade = grade;
+		this.description = description;
+	}
 
-    public ComposterDailyModelCompostNew(@NotNull(message = "Id cannot be NULL") Long id, @NotNull(message = "Date cannot be NULL") Timestamp date, @NotNull(message = "Price cannot be NULL") Double price, @NotNull(message = "CompostWeight cannot be NULL") Double compostWeight, @NotNull(message = "AddOrSub cannot be NULL") Boolean addOrSub)
-    {
-        super();
-        this.id = id;
-        this.date = date;
-        this.price = price;
-        this.compostWeight = compostWeight;
-        this.addOrSub = addOrSub;
-    }
-
-
-    public Long getId()
+	public Long getId()
     {
         return id;
     }
@@ -88,5 +102,28 @@ public class ComposterDailyModelCompostNew
         this.addOrSub = addOrSub;
     }
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 }
