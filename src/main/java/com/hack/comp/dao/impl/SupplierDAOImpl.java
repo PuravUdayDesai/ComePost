@@ -342,7 +342,7 @@ public class SupplierDAOImpl implements SupplierDAO
         if(fileName.contains("..")) {
             throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
         }
-        String path="E:/supplierWasteImages/"+supplierId+"/"+SupplierBusinessLogic.replaceColonToPeriod(timeOfEntry);
+        String path="C:/supplierWasteImages/"+supplierId+"/"+SupplierBusinessLogic.replaceColonToPeriod(timeOfEntry);
         File f=new File(path);
         if(!f.exists())
         {
