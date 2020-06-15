@@ -211,7 +211,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public Integer addSupplierProduct(SupplierModelDailyWaste data) throws SQLException, ClassNotFoundException 
 	{
-		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,description) VALUES (?,?,?,?,?)";
+		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,description,\"addOrSub\") VALUES (?,?,?,?,?)";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, data.getId() );
@@ -219,6 +219,7 @@ public class SupplierDAOImpl implements SupplierDAO
         stmt.setDouble( 3, data.getDryWaste() );
         stmt.setDouble( 4, data.getWetWaste() );
         stmt.setString(5, data.getDescription());
+        stmt.setBoolean(6, true);
         Integer result = stmt.executeUpdate();
         c.commit();
         stmt.close();
@@ -258,13 +259,14 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public Long subSupplierProduct(SupplierModelDailyWaste data) throws SQLException, ClassNotFoundException 
 	{
-		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste) VALUES (?,?,?,?)RETURNING init_id;";
+		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,\"addOrSub\") VALUES (?,?,?,?,?)RETURNING init_id;";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, data.getId() );
         stmt.setTimestamp( 2, data.getDate() );
         stmt.setDouble( 3, data.getDryWaste() );
         stmt.setDouble( 4, data.getWetWaste() );
+        stmt.setBoolean(5, false);
         ResultSet rs=stmt.executeQuery();
         c.commit();
         Long init_id=null;
@@ -332,7 +334,8 @@ public class SupplierDAOImpl implements SupplierDAO
             				rs.getLong( "id" ), 
             				rs.getTimestamp( "date_time" ), 
             				rs.getDouble( "dry_waste" ),
-            				rs.getDouble( "wet_waste" ),aos,
+            				rs.getDouble( "wet_waste" ),
+            				rs.getBoolean("addOrSub"),
             				rs.getString( "description" ),
             				dateString
             				) );
