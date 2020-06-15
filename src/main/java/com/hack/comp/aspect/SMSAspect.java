@@ -1,23 +1,25 @@
 package com.hack.comp.aspect;
-import com.nexmo.client.NexmoClient;
-import com.nexmo.client.sms.SmsSubmissionResponse;
-import com.nexmo.client.sms.SmsSubmissionResponseMessage;
-import com.nexmo.client.sms.messages.TextMessage;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 
 public class SMSAspect
 {
-
+    public static final String ACCOUNT_SID =
+            "AC3d68da5bc41cab3eba2fd5c2372328b5";
+    public static final String AUTH_TOKEN =
+            "64a8ef112bcd412fa408fdb51d369190";
+    
     public static void sendSMS(String body, String recepient)
     {
-    	System.out.println(recepient);
-        NexmoClient client = NexmoClient.builder().apiKey( "1c6adeec" ).apiSecret( "Q4pJriL0r4XsQVV9" ).build();
+        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
 
-        SmsSubmissionResponse responses = client.getSmsClient()
-                .submitMessage( new TextMessage( "7304036480", "+91"+recepient, body ) );
-        for (SmsSubmissionResponseMessage response : responses.getMessages())
-        {
-            System.out.println( response );
-        }
+        Message message = Message
+                .creator(new PhoneNumber(recepient), // to
+                        new PhoneNumber("+12057369687"), // from
+                        body)
+                .create();
+        System.out.println(message.getSid());
     }
 
 }
