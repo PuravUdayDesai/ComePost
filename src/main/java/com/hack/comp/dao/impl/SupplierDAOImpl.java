@@ -290,27 +290,10 @@ public class SupplierDAOImpl implements SupplierDAO
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, id );
         ResultSet rs = stmt.executeQuery();
-        Double prevDW = 0.0;
-        Double prevWW = 0.0;
-        int i = 0;
+
         while (rs.next())
         {
-            Boolean aos = false;
-            if (i == 0)
-            {
-                aos = true;
-            }
-            else
-            {
-                if (prevDW - rs.getDouble( "dry_waste" ) < 0 || prevWW - rs.getDouble( "wet_waste" ) < 0)
-                {
-                    aos = true;
-                }
-                else
-                {
-                    aos = false;
-                }
-            }
+
 			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
 			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
 			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
@@ -339,9 +322,6 @@ public class SupplierDAOImpl implements SupplierDAO
             				rs.getString( "description" ),
             				dateString
             				) );
-            prevDW = rs.getDouble( "dry_waste" );
-            prevWW = rs.getDouble( "wet_waste" );
-            i++;
         }
         rs.close();
         stmt.close();
