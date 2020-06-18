@@ -133,6 +133,7 @@ public class SupplierBusinessLogic
 		} catch (ClassNotFoundException e) {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(rsMain==null)
@@ -191,6 +192,7 @@ public class SupplierBusinessLogic
 	        } catch (ClassNotFoundException e) {
 				return new ResponseEntity<Void>( HttpStatus.NOT_FOUND );
 			} catch (SQLException e) {
+				e.printStackTrace();
 				return new ResponseEntity<Void>( HttpStatus.INTERNAL_SERVER_ERROR );
 			}
 	        

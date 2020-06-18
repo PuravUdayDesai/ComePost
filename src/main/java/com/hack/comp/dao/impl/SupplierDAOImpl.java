@@ -211,7 +211,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public Integer addSupplierProduct(SupplierModelDailyWaste data) throws SQLException, ClassNotFoundException 
 	{
-		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,description,\"addOrSub\") VALUES (?,?,?,?,?)";
+		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,description,\"addOrSub\") VALUES (?,?,?,?,?,?)";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, data.getId() );
