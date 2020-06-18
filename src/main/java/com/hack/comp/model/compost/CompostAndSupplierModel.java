@@ -13,7 +13,7 @@ public class CompostAndSupplierModel
     private Long supplier_id;
     @NotNull(message = "Compost id cannot be NULL")
     private Long composter_id;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "IST")
     @NotNull(message = "Date cannot be NULL")
     private Date date;
     @NotNull(message = "Dry waste cannot be NULL")
