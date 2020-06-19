@@ -211,6 +211,9 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public Integer addSupplierProduct(SupplierModelDailyWaste data) throws SQLException, ClassNotFoundException 
 	{
+		System.out.println("------------------------------------------------------------------------------");
+        System.out.println("INSERT: "+data.getDate());
+        System.out.println("------------------------------------------------------------------------------");
 		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,description,\"addOrSub\") VALUES (?,?,?,?,?,?)";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
@@ -293,7 +296,8 @@ public class SupplierDAOImpl implements SupplierDAO
 
         while (rs.next())
         {
-
+        	System.out.println("------------------------------------------------------------------------------");
+			System.out.println("GET: "+rs.getTimestamp("date_time"));
 			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
 			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
 			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
@@ -311,6 +315,13 @@ public class SupplierDAOImpl implements SupplierDAO
 					dt.getMinuteOfHour()+
 					":"+
 					dt.getSecondOfMinute();
+			System.out.println("YEAR: "+dt.getYear());
+			System.out.println("MONTH: "+dt.getMonthOfYear());
+			System.out.println("DAY: "+dt.getDayOfMonth());
+			System.out.println("HOUR: "+dt.getHourOfDay());
+			System.out.println("MINUTE: "+dt.getMinuteOfHour());
+			System.out.println("SECOND: "+dt.getSecondOfMinute());
+			System.out.println("------------------------------------------------------------------------------");
             sms.add(
             		new SupplierModelDailyWasteNew( 
             				rs.getLong("init_id"),

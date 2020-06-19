@@ -1,5 +1,6 @@
 package com.hack.comp.bl;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,51 @@ public class ComposterFarmerTransactionBusinessLogic
 			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		if(cf==null)
+		if(cf.isEmpty())
+		{
+			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.OK);
+	}
+	
+	public ResponseEntity<List<ComposterFarmerTransactionModel>> selectComposterFarmerTransactionByComposterId(Long composterId)
+	{
+		List<ComposterFarmerTransactionModel> cf=new ArrayList<ComposterFarmerTransactionModel>();
+		if(composterId==null)
+		{
+			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.BAD_REQUEST);
+		}
+		try {
+			cf=cftbl.selectComposterFarmerTransactionByComposterId(composterId);
+		} catch (ClassNotFoundException e) {
+			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.NOT_FOUND);
+		} catch (SQLException e) {
+			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		if(cf.isEmpty())
+		{
+			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.OK);
+	}
+	
+	public ResponseEntity<List<ComposterFarmerTransactionModel>> selectComposterFarmerTransactionByDate(Long composterId,Date dateToSearch)
+	{
+		List<ComposterFarmerTransactionModel> cf=new ArrayList<ComposterFarmerTransactionModel>();
+		if(composterId==null||dateToSearch==null)
+		{
+			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.BAD_REQUEST);
+		}
+		try {
+			cf=cftbl.selectComposterFarmerTransactionByDate(composterId, dateToSearch);
+		} catch (ClassNotFoundException e) {
+			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.NOT_FOUND);
+		} catch (SQLException e) {
+			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		if(cf.isEmpty())
 		{
 			return new ResponseEntity<List<ComposterFarmerTransactionModel>>(cf,HttpStatus.NO_CONTENT);
 		}

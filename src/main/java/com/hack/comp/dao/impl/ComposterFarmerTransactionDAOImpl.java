@@ -1,6 +1,7 @@
 package com.hack.comp.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -123,5 +124,120 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 		c.close();
 		return cf;
 	}
+	
+	public List<ComposterFarmerTransactionModel> selectComposterFarmerTransactionByComposterId(Long composterId)	throws SQLException,ClassNotFoundException
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement(
+				"SELECT\r\n" + 
+				"	public.composter_farmer_transaction.inc_id,\r\n" + 
+				"	public.composter_farmer_transaction.composter_compost_init_id,\r\n" + 
+				"	public.composter_farmer_transaction.composter_id,\r\n" + 
+				"	public.composter_farmer_transaction.farmer_id,\r\n" + 
+				"	public.composter_farmer_transaction.farmer_name,\r\n" + 
+				"	public.composter_farmer_transaction.farmer_contact,\r\n" + 
+				"	public.composter_farmer_transaction.date_time\r\n" + 
+				"FROM\r\n" + 
+				"	public.composter_farmer_transaction\r\n" + 
+				"WHERE \r\n" + 
+				"	public.composter_farmer_transaction.composter_id=?\r\n");
+		stmt.setLong(1, composterId);
+		ResultSet rs=stmt.executeQuery();
+		List<ComposterFarmerTransactionModel> cf=new ArrayList<ComposterFarmerTransactionModel>();
+		if(rs.next())
+		{
+			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+			String dateString=formatDate.format(
+					rs.getTimestamp("date_time").getTime())+
+					" "+
+					dt.getDayOfMonth()+
+					" "+
+					month[gCal.get(Calendar.MONTH)-1]+
+					" "+
+					dt.getYear()+
+					" "+
+					dt.getHourOfDay()+
+					":"+
+					dt.getMinuteOfHour()+
+					":"+
+					dt.getSecondOfMinute();
+			cf.add(new ComposterFarmerTransactionModel(
+					rs.getLong("inc_id"),
+					rs.getLong("composter_compost_init_id"),
+					rs.getLong("composter_id"),
+					rs.getLong("farmer_id"),
+					rs.getString("farmer_name"),
+					rs.getString("farmer_contact"),
+					rs.getTimestamp("date_time"),
+					dateString
+					));
+		}
+		rs.close();
+		stmt.close();
+		c.close();
+		return cf;	
+	}
+	
+	public List<ComposterFarmerTransactionModel> selectComposterFarmerTransactionByDate(Long composterId,Date dateToSearch)	throws SQLException,ClassNotFoundException
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement(
+				"SELECT\r\n" + 
+				"	public.composter_farmer_transaction.inc_id,\r\n" + 
+				"	public.composter_farmer_transaction.composter_compost_init_id,\r\n" + 
+				"	public.composter_farmer_transaction.composter_id,\r\n" + 
+				"	public.composter_farmer_transaction.farmer_id,\r\n" + 
+				"	public.composter_farmer_transaction.farmer_name,\r\n" + 
+				"	public.composter_farmer_transaction.farmer_contact,\r\n" + 
+				"	public.composter_farmer_transaction.date_time\r\n" + 
+				"FROM\r\n" + 
+				"	public.composter_farmer_transaction\r\n" + 
+				"WHERE \r\n" + 
+				"	public.composter_farmer_transaction.composter_id=?\r\n"+
+				"AND \r\n" + 
+				"	DATE(public.composter_farmer_transaction.date_time)=?\r\n");
+		stmt.setLong(1, composterId);
+		stmt.setDate(2, dateToSearch);
+		ResultSet rs=stmt.executeQuery();
+		System.out.println(stmt);
+		List<ComposterFarmerTransactionModel> cf=new ArrayList<ComposterFarmerTransactionModel>();
+		if(rs.next())
+		{
+			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+			String dateString=formatDate.format(
+					rs.getTimestamp("date_time").getTime())+
+					" "+
+					dt.getDayOfMonth()+
+					" "+
+					month[gCal.get(Calendar.MONTH)-1]+
+					" "+
+					dt.getYear()+
+					" "+
+					dt.getHourOfDay()+
+					":"+
+					dt.getMinuteOfHour()+
+					":"+
+					dt.getSecondOfMinute();
+			cf.add(new ComposterFarmerTransactionModel(
+					rs.getLong("inc_id"),
+					rs.getLong("composter_compost_init_id"),
+					rs.getLong("composter_id"),
+					rs.getLong("farmer_id"),
+					rs.getString("farmer_name"),
+					rs.getString("farmer_contact"),
+					rs.getTimestamp("date_time"),
+					dateString
+					));
+		}
+		rs.close();
+		stmt.close();
+		c.close();
+		return cf;	
+	}
+
 
 }

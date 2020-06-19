@@ -149,10 +149,11 @@ public class CompostDAOImpl implements CompostDAO
 	    		 		"WHERE\r\n" + 
 	    		 		"	LOWER(farmer.farmer_location.state)=LOWER(?)");
 	    		 stmt2.setString(1, cmi.getState());
+	    		 System.out.println(stmt2);
 	    		 ResultSet rs2=stmt2.executeQuery();
 	    		 while(rs2.next())
 	    		 {
-	    			 System.out.println(rs2.getString("farmer_contact_number"));
+	    			 System.out.println("FARMER CONTACT NUMBER: "+rs2.getString("farmer_contact_number"));
 	    			 SMSAspect.sendSMS("A new composter has been added, you can contact him: "+cmi.getContactNumber()+" name: "+cmi.getName(),rs2.getString("farmer_contact_number"));
 	    		 }
 	    		 rs2.close();

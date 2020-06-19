@@ -1,13 +1,16 @@
 package com.hack.comp.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
@@ -125,4 +128,116 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 		return sc;
 	}
 
+	public List<SupplierComposterTransactionSelectModel>	selectSupplierComposterTransactionByDate(Long supplierId,Date dateToSearch)throws SQLException,ClassNotFoundException
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement("SELECT \r\n" + 
+				"	inc_id, \r\n" + 
+				"	supplier_waste_init_id, \r\n" + 
+				"	supplier_id,\r\n" + 
+				"	composter_id, \r\n" + 
+				"	composter_name, \r\n" + 
+				"	composter_emailid, \r\n" + 
+				"	composter_contact,\r\n" + 
+				"	date_time\r\n" + 
+				"	FROM public.supplier_composter_transaction\r\n" + 
+				"	WHERE supplier_id=?\r\n"+
+				"	AND DATE(date_time)=?;");
+		stmt.setLong(1, supplierId);
+		stmt.setDate(2, dateToSearch);
+		ResultSet rs=stmt.executeQuery();
+		System.out.println(stmt);
+		List<SupplierComposterTransactionSelectModel> sc=new ArrayList<SupplierComposterTransactionSelectModel>();
+		if(rs.next())
+		{
+			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+			String dateString=formatDate.format(
+					rs.getTimestamp("date_time").getTime())+
+					" "+
+					dt.getDayOfMonth()+
+					" "+
+					month[gCal.get(Calendar.MONTH)-1]+
+					" "+
+					dt.getYear()+
+					" "+
+					dt.getHourOfDay()+
+					":"+
+					dt.getMinuteOfHour()+
+					":"+
+					dt.getSecondOfMinute();
+			sc.add(new SupplierComposterTransactionSelectModel(
+					rs.getLong("inc_id"),
+					rs.getLong("supplier_waste_init_id"),
+					rs.getLong("supplier_id"),
+					rs.getLong("composter_id"),
+					rs.getString("composter_name"),
+					rs.getString("composter_emailid"),
+					rs.getString("composter_contact"),
+					rs.getTimestamp("date_time"),
+					dateString
+					));
+		}
+		rs.close();
+		stmt.close();
+		c.close();
+		return sc;
+	}
+	public List<SupplierComposterTransactionSelectModel> selectSupplierComposterTransactionBySupplierId(Long supplierId)throws SQLException,ClassNotFoundException
+	{
+		Connection c=Connections.setConnection();
+		PreparedStatement stmt=c.prepareStatement("SELECT \r\n" + 
+				"	inc_id, \r\n" + 
+				"	supplier_waste_init_id, \r\n" + 
+				"	supplier_id,\r\n" + 
+				"	composter_id, \r\n" + 
+				"	composter_name, \r\n" + 
+				"	composter_emailid, \r\n" + 
+				"	composter_contact,\r\n" + 
+				"	date_time\r\n" + 
+				"	FROM public.supplier_composter_transaction\r\n" + 
+				"	WHERE supplier_id=?;");
+		stmt.setLong(1, supplierId);
+		ResultSet rs=stmt.executeQuery();
+		System.out.println(stmt);
+		List<SupplierComposterTransactionSelectModel> sc=new ArrayList<SupplierComposterTransactionSelectModel>();
+		if(rs.next())
+		{
+			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
+			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
+			Calendar gCal=new GregorianCalendar(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),dt.getHourOfDay(),dt.getMinuteOfHour(),dt.getSecondOfMinute());
+			String dateString=formatDate.format(
+					rs.getTimestamp("date_time").getTime())+
+					" "+
+					dt.getDayOfMonth()+
+					" "+
+					month[gCal.get(Calendar.MONTH)-1]+
+					" "+
+					dt.getYear()+
+					" "+
+					dt.getHourOfDay()+
+					":"+
+					dt.getMinuteOfHour()+
+					":"+
+					dt.getSecondOfMinute();
+			sc.add(new SupplierComposterTransactionSelectModel(
+					rs.getLong("inc_id"),
+					rs.getLong("supplier_waste_init_id"),
+					rs.getLong("supplier_id"),
+					rs.getLong("composter_id"),
+					rs.getString("composter_name"),
+					rs.getString("composter_emailid"),
+					rs.getString("composter_contact"),
+					rs.getTimestamp("date_time"),
+					dateString
+					));
+		}
+		rs.close();
+		stmt.close();
+		c.close();
+		return sc;
+	}
+
+	
 }
