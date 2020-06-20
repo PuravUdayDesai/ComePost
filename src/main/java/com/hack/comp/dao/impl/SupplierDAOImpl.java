@@ -248,6 +248,10 @@ public class SupplierDAOImpl implements SupplierDAO
             wetWaste = rs.getDouble( "wet_waste" );
 
         }
+        System.out.println("Dry Waste Before Refresh: "+data.getDryWaste());
+        System.out.println("wet Waste Before Refresh: "+data.getWetWaste());
+        System.out.println("Prioir DryWaste: "+dryWaste);
+        System.out.println("Priort WetWaste: "+wetWaste);
         data.setDryWaste( dryWaste - data.getDryWaste() );
         data.setWetWaste( wetWaste - data.getWetWaste() );
         if (data.getDryWaste() < 0.0 || data.getWetWaste() < 0.0)

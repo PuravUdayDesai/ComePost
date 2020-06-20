@@ -72,7 +72,8 @@ public class SupplierController
     @PutMapping(path = "/product/sub", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Void> subSupplierProduct(@Valid @RequestBody SupplierModelDailyWaste data,@RequestParam(name = "composterId") @NotNull Long composterId,@RequestParam(name = "searchDate") @NotNull Date searchDate)
     {
-       return sbl.subSupplierProduct(data,composterId,searchDate);
+    	System.out.println("Hello!! In Controller"); 
+    	return sbl.subSupplierProduct(data,composterId,searchDate);
     }
 
     

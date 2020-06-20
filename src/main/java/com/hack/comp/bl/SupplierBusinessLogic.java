@@ -154,6 +154,7 @@ public class SupplierBusinessLogic
 	
 	public ResponseEntity<Void> subSupplierProduct(SupplierModelDailyWaste data,Long compsoterId,Date searchDate)
 	{
+		System.out.println("Here In the beginning");
 		 if (data == null)
 	        {
 	            return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
@@ -188,8 +189,12 @@ public class SupplierBusinessLogic
 	        	System.out.println("Here3");
 	        	return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	        }
+	        System.out.println("My values have been refreshed");
+	        System.out.println("DryWaste: "+data.getDryWaste());
+	        System.out.println("WetWaste: "+data.getWetWaste());
 			result = sd.subSupplierProduct(data);
 			//HERE
+			
 			Integer rsMain=sctdi.addSupplierComposterTransaction(
 					result, 
 					data.getId(),
