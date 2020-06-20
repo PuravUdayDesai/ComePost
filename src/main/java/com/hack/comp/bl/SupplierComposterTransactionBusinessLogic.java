@@ -54,7 +54,7 @@ public class SupplierComposterTransactionBusinessLogic
 		} catch (SQLException e) {
 			return new ResponseEntity<List<SupplierComposterTransactionSelectModel>>(s,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if(s==null)
+		if(s.isEmpty())
 		{
 			return new ResponseEntity<List<SupplierComposterTransactionSelectModel>>(s,HttpStatus.NO_CONTENT);
 		}
@@ -75,7 +75,7 @@ public class SupplierComposterTransactionBusinessLogic
 		} catch (SQLException e) {
 			return new ResponseEntity<List<SupplierComposterTransactionSelectModel>>(s,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if(s==null)
+		if(s.isEmpty())
 		{
 			return new ResponseEntity<List<SupplierComposterTransactionSelectModel>>(s,HttpStatus.NO_CONTENT);
 		}
