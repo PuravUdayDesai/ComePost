@@ -64,7 +64,7 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 				"		?,\r\n" + 
 				"		?, \r\n" + 
 				"		?,\r\n" + 
-				"		(SELECT farmer.farmer_info.farmer_name FROM farmer.farmer_info WHERE farmer.farmer_info.id=? AND \"deleteIndex\"=FALSE)), \r\n" + 
+				"		(SELECT farmer.farmer_info.farmer_name FROM farmer.farmer_info WHERE farmer.farmer_info.id=? AND \"deleteIndex\"=FALSE), \r\n" + 
 				"		(SELECT farmer.farmer_info.farmer_contact_number FROM farmer.farmer_info WHERE farmer.farmer_info.id=? AND \"deleteIndex\"=FALSE), \r\n" + 
 				"		?, \r\n" + 
 				"		?,\r\n" + 

@@ -21,7 +21,7 @@ public interface CompostDAO
 	 public Boolean 							addCompost(CompostModelInsert cmi)																throws SQLException,ClassNotFoundException;
 	 public Long	 							addCompostProduct(ComposterDailyModelCompost data)												throws SQLException,ClassNotFoundException;
 	 public List<ComposterDailyModelCompostNew>	displayComposters(Long id) 																		throws SQLException,ClassNotFoundException;
-	 public Integer 							subCompostProduct(ComposterDailyModelCompost data,Long init_id)									throws SQLException,ClassNotFoundException;
+	 public Integer 							subCompostProduct(ComposterDailyModelCompost data,Long init_id,Date searchDate)				throws SQLException,ClassNotFoundException;
 	 public List<ComposterFullSelect> 			getComposterByDate(Date date) 																	throws SQLException,ClassNotFoundException;
 	 public Double 								refreshCompostSubProduct(ComposterDailyModelCompost data, Long init_id)							throws SQLException,ClassNotFoundException;
 	 public Integer								addComposterCompostImages(Long composterId,Long init_id,Timestamp date_time,String image_url)	throws SQLException,ClassNotFoundException;

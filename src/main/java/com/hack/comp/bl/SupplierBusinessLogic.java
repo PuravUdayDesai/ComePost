@@ -192,7 +192,7 @@ public class SupplierBusinessLogic
 	        System.out.println("My values have been refreshed");
 	        System.out.println("DryWaste: "+data.getDryWaste());
 	        System.out.println("WetWaste: "+data.getWetWaste());
-			result = sd.subSupplierProduct(data);
+			result = sd.subSupplierProduct(data,searchDate);
 			//HERE
 			
 			Integer rsMain=sctdi.addSupplierComposterTransaction(

@@ -215,7 +215,7 @@ public class SupplierDAOImpl implements SupplierDAO
 		System.out.println("------------------------------------------------------------------------------");
         System.out.println("INSERT: "+data.getDate());
         System.out.println("------------------------------------------------------------------------------");
-		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,description,\"addOrSub\") VALUES (?,?,?,?,?,?)";
+		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,description,\"addOrSub\",entry_date) VALUES (?,?,?,?,?,?,?)";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, data.getId() );
@@ -224,6 +224,8 @@ public class SupplierDAOImpl implements SupplierDAO
         stmt.setDouble( 4, data.getWetWaste() );
         stmt.setString(5, data.getDescription());
         stmt.setBoolean(6, true);
+        Date d=new Date(data.getDate().getTime());
+        stmt.setDate(7, d);
         Integer result = stmt.executeUpdate();
         c.commit();
         stmt.close();
@@ -234,7 +236,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public SupplierModelDailyWaste refreshSupplierSubProduct(SupplierModelDailyWaste data,Date searchDate)throws SQLException, ClassNotFoundException 
 	{
-        String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND date(date_time)=? AND \"deleteIndex\"=false ORDER BY date_time DESC LIMIT 1";
+        String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND date(date_time)=? AND \"deleteIndex\"=false ORDER BY init_id DESC LIMIT 1";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, data.getId() );
@@ -265,9 +267,9 @@ public class SupplierDAOImpl implements SupplierDAO
 	}
 
 	@Override
-	public Long subSupplierProduct(SupplierModelDailyWaste data) throws SQLException, ClassNotFoundException 
+	public Long subSupplierProduct(SupplierModelDailyWaste data,Date entryDate) throws SQLException, ClassNotFoundException 
 	{
-		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,\"addOrSub\") VALUES (?,?,?,?,?)RETURNING init_id;";
+		String query = "INSERT INTO supplier.supplier_waste (id,date_time,dry_waste,wet_waste,\"addOrSub\",entry_date) VALUES (?,?,?,?,?,?)RETURNING init_id;";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, data.getId() );
@@ -275,6 +277,7 @@ public class SupplierDAOImpl implements SupplierDAO
         stmt.setDouble( 3, data.getDryWaste() );
         stmt.setDouble( 4, data.getWetWaste() );
         stmt.setBoolean(5, false);
+        stmt.setDate(6, entryDate);
         ResultSet rs=stmt.executeQuery();
         c.commit();
         Long init_id=null;

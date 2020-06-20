@@ -92,8 +92,9 @@ public class CompostController {
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<Double> subCompostProduct(@Valid @RequestBody ComposterDailyModelCompost data,
 			@PathVariable Long init_id,
-			@RequestParam(name = "farmerId") @NotNull Long farmerId) {
-		return cbl.subCompostProduct(data, init_id,farmerId);
+			@RequestParam(name = "farmerId") @NotNull Long farmerId,
+			@RequestParam(name = "searchDate") @NotNull Date searchDate) {
+		return cbl.subCompostProduct(data, init_id,farmerId,searchDate);
 	}
 
 	/*

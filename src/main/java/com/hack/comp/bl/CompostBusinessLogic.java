@@ -168,7 +168,7 @@ public class CompostBusinessLogic
 	        return data;
 	    }
 	    
-	 public ResponseEntity<Double> subCompostProduct(ComposterDailyModelCompost data, Long init_id,Long farmerId)
+	 public ResponseEntity<Double> subCompostProduct(ComposterDailyModelCompost data, Long init_id,Long farmerId,Date searchDate)
 	 {
 		if (data == null)
 	    {
@@ -177,17 +177,20 @@ public class CompostBusinessLogic
 		Double prevCompostWeight=data.getCompostWeight();
 		try {
 			Double compostWeight=data.getCompostWeight();
+		System.out.println("Weight Before Refresh: "+data.getCompostWeight());
 		if(data.getCompostWeight()<0)
 		{
 			  return new ResponseEntity<Double>( 0.0, HttpStatus.BAD_REQUEST );
 		}
 		data = cbl.refreshCompostSubProduct( data, init_id );
+		System.out.println("Weight After Refresh: "+data.getCompostWeight());
 	    if (data.getCompostWeight() < 0)
 	    {
+	    	System.out.println("Here is BAD_REQUEST");
 	        return new ResponseEntity<Double>( 0.0, HttpStatus.BAD_REQUEST );
 	    }
 	    
-	    Integer result=cdi.subCompostProduct(data, init_id);
+	    Integer result=cdi.subCompostProduct(data, init_id,searchDate);
 	    Integer rs=cftdi.addComposterFarmerTransaction(
 	    												init_id, 
 	    												data.getId(),
