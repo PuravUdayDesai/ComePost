@@ -38,23 +38,38 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 		  };
 	
 	@Override
-	public Integer addComposterFarmerTransaction(Long composter_init_id, Long composter_id, Long farmer_id,Timestamp date_time) throws SQLException, ClassNotFoundException 
+	public Integer addComposterFarmerTransaction(
+												Long composter_init_id,
+												Long composter_id, 
+												Long farmer_id,
+												Timestamp date_time,
+												String category,
+												String grade,
+												Double price,
+												Double compostWeight) throws SQLException, ClassNotFoundException 
 	{
 		Connection c=Connections.setConnection();
-		PreparedStatement stmt=c.prepareCall(
-				"INSERT INTO public.composter_farmer_transaction(\r\n" + 
-				"										composter_compost_init_id,\r\n" + 
-				"										composter_id, \r\n" + 
-				"										farmer_id, \r\n" + 
-				"										farmer_name, \r\n" + 
-				"										farmer_contact,\r\n" + 
-				"										date_time)\r\n" + 
+		PreparedStatement stmt=c.prepareCall("INSERT INTO public.composter_farmer_transaction(\r\n" + 
+				"	composter_compost_init_id, \r\n" + 
+				"	composter_id, \r\n" + 
+				"	farmer_id, \r\n" + 
+				"	farmer_name,\r\n" + 
+				"	farmer_contact, \r\n" + 
+				"	date_time,\r\n" + 
+				"	category,\r\n" + 
+				"	grade, \r\n" + 
+				"	price, \r\n" + 
+				"	compost_weight)\r\n" + 
 				"	VALUES (\r\n" + 
-				"		?, \r\n" + 
+				"		?,\r\n" + 
 				"		?, \r\n" + 
 				"		?,\r\n" + 
-				"		(SELECT farmer.farmer_info.farmer_name FROM farmer.farmer_info WHERE farmer.farmer_info.id=? AND \"deleteIndex\"=FALSE), \r\n" + 
-				"		(SELECT farmer.farmer_info.farmer_contact_number FROM farmer.farmer_info WHERE farmer.farmer_info.id=? AND \"deleteIndex\"=FALSE),\r\n" + 
+				"		(SELECT farmer.farmer_info.farmer_name FROM farmer.farmer_info WHERE farmer.farmer_info.id=? AND \"deleteIndex\"=FALSE)), \r\n" + 
+				"		(SELECT farmer.farmer_info.farmer_contact_number FROM farmer.farmer_info WHERE farmer.farmer_info.id=? AND \"deleteIndex\"=FALSE), \r\n" + 
+				"		?, \r\n" + 
+				"		?,\r\n" + 
+				"		?, \r\n" + 
+				"		?, \r\n" + 
 				"		?);");
 		stmt.setLong(1, composter_init_id);
 		stmt.setLong(2, composter_id);
@@ -62,6 +77,10 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 		stmt.setLong(4, farmer_id);
 		stmt.setLong(5, farmer_id);
 		stmt.setTimestamp(6, date_time);
+		stmt.setString(7, category);
+		stmt.setString(8, grade);
+		stmt.setDouble(9, price);
+		stmt.setDouble(10, compostWeight);
 		Integer rs=stmt.executeUpdate();
 		c.commit();
 		stmt.close();
@@ -81,7 +100,11 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 				"	public.composter_farmer_transaction.farmer_id,\r\n" + 
 				"	public.composter_farmer_transaction.farmer_name,\r\n" + 
 				"	public.composter_farmer_transaction.farmer_contact,\r\n" + 
-				"	public.composter_farmer_transaction.date_time\r\n" + 
+				"	public.composter_farmer_transaction.date_time,\r\n" + 
+				"	public.composter_farmer_transaction.category,\r\n" + 
+				"	public.composter_farmer_transaction.grade,\r\n" + 
+				"	public.composter_farmer_transaction.price,\r\n" + 
+				"	public.composter_farmer_transaction.compost_weight\r\n" + 
 				"FROM\r\n" + 
 				"	public.composter_farmer_transaction\r\n" + 
 				"WHERE \r\n" + 
@@ -116,7 +139,12 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 					rs.getString("farmer_name"),
 					rs.getString("farmer_contact"),
 					rs.getTimestamp("date_time"),
-					dateString
+					dateString,
+					rs.getString("category"),
+					rs.getString("grade"),
+					rs.getDouble("price"),
+					rs.getDouble("compost_weight"),
+					(rs.getDouble("price")*rs.getDouble("compost_weight"))
 					));
 		}
 		rs.close();
@@ -136,7 +164,11 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 				"	public.composter_farmer_transaction.farmer_id,\r\n" + 
 				"	public.composter_farmer_transaction.farmer_name,\r\n" + 
 				"	public.composter_farmer_transaction.farmer_contact,\r\n" + 
-				"	public.composter_farmer_transaction.date_time\r\n" + 
+				"	public.composter_farmer_transaction.date_time,\r\n" + 
+				"	public.composter_farmer_transaction.category,\r\n" + 
+				"	public.composter_farmer_transaction.grade,\r\n" + 
+				"	public.composter_farmer_transaction.price,\r\n" + 
+				"	public.composter_farmer_transaction.compost_weight\r\n" + 
 				"FROM\r\n" + 
 				"	public.composter_farmer_transaction\r\n" + 
 				"WHERE \r\n" + 
@@ -171,7 +203,12 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 					rs.getString("farmer_name"),
 					rs.getString("farmer_contact"),
 					rs.getTimestamp("date_time"),
-					dateString
+					dateString,
+					rs.getString("category"),
+					rs.getString("grade"),
+					rs.getDouble("price"),
+					rs.getDouble("compost_weight"),
+					(rs.getDouble("price")*rs.getDouble("compost_weight"))
 					));
 		}
 		rs.close();
@@ -191,7 +228,11 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 				"	public.composter_farmer_transaction.farmer_id,\r\n" + 
 				"	public.composter_farmer_transaction.farmer_name,\r\n" + 
 				"	public.composter_farmer_transaction.farmer_contact,\r\n" + 
-				"	public.composter_farmer_transaction.date_time\r\n" + 
+				"	public.composter_farmer_transaction.date_time,\r\n" + 
+				"	public.composter_farmer_transaction.category,\r\n" + 
+				"	public.composter_farmer_transaction.grade,\r\n" + 
+				"	public.composter_farmer_transaction.price,\r\n" + 
+				"	public.composter_farmer_transaction.compost_weight\r\n" + 
 				"FROM\r\n" + 
 				"	public.composter_farmer_transaction\r\n" + 
 				"WHERE \r\n" + 
@@ -230,7 +271,12 @@ public class ComposterFarmerTransactionDAOImpl implements ComposterFarmerTransac
 					rs.getString("farmer_name"),
 					rs.getString("farmer_contact"),
 					rs.getTimestamp("date_time"),
-					dateString
+					dateString,
+					rs.getString("category"),
+					rs.getString("grade"),
+					rs.getDouble("price"),
+					rs.getDouble("compost_weight"),
+					(rs.getDouble("price")*rs.getDouble("compost_weight"))
 					));
 		}
 		rs.close();

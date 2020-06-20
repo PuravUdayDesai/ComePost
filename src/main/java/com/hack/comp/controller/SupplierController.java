@@ -70,9 +70,9 @@ public class SupplierController
      * composter
      */
     @PutMapping(path = "/product/sub", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Void> subSupplierProduct(@Valid @RequestBody SupplierModelDailyWaste data,@RequestParam(name = "composterId") @NotNull Long composterId)
+    public ResponseEntity<Void> subSupplierProduct(@Valid @RequestBody SupplierModelDailyWaste data,@RequestParam(name = "composterId") @NotNull Long composterId,@RequestParam(name = "searchDate") @NotNull Date searchDate)
     {
-       return sbl.subSupplierProduct(data,composterId);
+       return sbl.subSupplierProduct(data,composterId,searchDate);
     }
 
     

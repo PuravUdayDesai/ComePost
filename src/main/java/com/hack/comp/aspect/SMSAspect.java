@@ -12,14 +12,17 @@ public class SMSAspect
     
     public static void sendSMS(String body, String recepient)
     {
-		/*
-		 * System.out.println("IN Message to: "+recepient); Twilio.init(ACCOUNT_SID,
-		 * AUTH_TOKEN);
-		 * 
-		 * Message message = Message .creator(new PhoneNumber("+91"+recepient), // to
-		 * new PhoneNumber("+12057369687"), // from body) .create();
-		 * System.out.println(message.getSid());
-		 */
+		
+		  System.out.println("IN Message to: "+recepient);
+		  Twilio.init(ACCOUNT_SID,AUTH_TOKEN);
+		 
+		Message message = Message .creator(
+				new PhoneNumber("+91"+recepient), // to
+				new PhoneNumber("+12057369687"),// from 
+				body //body
+		 ) .create();
+		 System.out.println(message.getSid());
+		 
     }
 
 }

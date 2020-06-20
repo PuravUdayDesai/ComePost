@@ -25,13 +25,21 @@ public class ComposterFarmerTransactionModel
 	private Timestamp dateAndTime;
 	@NotNull(message = "DateString cannot be NULL")
 	private String dateString;
+	@NotNull(message = "Category cannot be NULL")
+	private String category;
+	@NotNull(message = "Grade cannot be NULL")
+	private String grade;
+	@NotNull(message = "Price cannot be NULL")
+	private Double price;
+	@NotNull(message = "CompostWeigth cannot be NULL")
+	private Double compostWeigth;
+	@NotNull(message = "TotalPrice cannot be NULL")
+	private Double totalPrice;
 	
 	public ComposterFarmerTransactionModel()
 	{
 		
 	}
-
-
 
 	public ComposterFarmerTransactionModel(@NotNull(message = "SupplierId cannot be NULL") Long incrementId,
 			@NotNull(message = "SupplierId cannot be NULL") Long composterCompostInitId,
@@ -40,7 +48,12 @@ public class ComposterFarmerTransactionModel
 			@NotNull(message = "SupplierId cannot be NULL") String farmerName,
 			@NotNull(message = "SupplierId cannot be NULL") String farmerContact,
 			@NotNull(message = "SupplierId cannot be NULL") Timestamp dateAndTime,
-			@NotNull(message = "DateString cannot be NULL") String dateString) {
+			@NotNull(message = "DateString cannot be NULL") String dateString,
+			@NotNull(message = "Category cannot be NULL") String category,
+			@NotNull(message = "Grade cannot be NULL") String grade,
+			@NotNull(message = "Price cannot be NULL") Double price,
+			@NotNull(message = "CompostWeigth cannot be NULL") Double compostWeigth,
+			@NotNull(message = "TotalPrice cannot be NULL") Double totalPrice) {
 		super();
 		this.incrementId = incrementId;
 		this.composterCompostInitId = composterCompostInitId;
@@ -50,6 +63,11 @@ public class ComposterFarmerTransactionModel
 		this.farmerContact = farmerContact;
 		this.dateAndTime = dateAndTime;
 		this.dateString = dateString;
+		this.category = category;
+		this.grade = grade;
+		this.price = price;
+		this.compostWeigth = compostWeigth;
+		this.totalPrice = totalPrice;
 	}
 
 
@@ -117,5 +135,45 @@ public class ComposterFarmerTransactionModel
 	public void setDateAndTime(Timestamp dateAndTime) {
 		this.dateAndTime = dateAndTime;
 	}
-	
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Double getCompostWeigth() {
+		return compostWeigth;
+	}
+
+	public void setCompostWeigth(Double compostWeigth) {
+		this.compostWeigth = compostWeigth;
+	}
+
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
 }

@@ -176,6 +176,7 @@ public class CompostBusinessLogic
 	    }
 		Double prevCompostWeight=data.getCompostWeight();
 		try {
+			Double compostWeight=data.getCompostWeight();
 		if(data.getCompostWeight()<0)
 		{
 			  return new ResponseEntity<Double>( 0.0, HttpStatus.BAD_REQUEST );
@@ -187,7 +188,15 @@ public class CompostBusinessLogic
 	    }
 	    
 	    Integer result=cdi.subCompostProduct(data, init_id);
-	    Integer rs=cftdi.addComposterFarmerTransaction(init_id, data.getId(), farmerId, data.getDateAndTime());
+	    Integer rs=cftdi.addComposterFarmerTransaction(
+	    												init_id, 
+	    												data.getId(),
+	    												farmerId, 
+	    												data.getDateAndTime(),
+	    												data.getCategory(),
+	    												data.getGrade(),
+	    												data.getPrice(),
+	    												compostWeight);
 	    if(rs==0)
 	    {
 	    	return new ResponseEntity<Double>( 0.0, HttpStatus.BAD_REQUEST );

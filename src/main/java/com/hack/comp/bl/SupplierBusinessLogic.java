@@ -147,12 +147,12 @@ public class SupplierBusinessLogic
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
-	private SupplierModelDailyWaste refreshSupplierSubProduct(SupplierModelDailyWaste data)throws SQLException, ClassNotFoundException 
+	private SupplierModelDailyWaste refreshSupplierSubProduct(SupplierModelDailyWaste data,Date searchDate)throws SQLException, ClassNotFoundException 
 	{
-		return sd.refreshSupplierSubProduct(data);
+		return sd.refreshSupplierSubProduct(data,searchDate);
 	}
 	
-	public ResponseEntity<Void> subSupplierProduct(SupplierModelDailyWaste data,Long compsoterId)
+	public ResponseEntity<Void> subSupplierProduct(SupplierModelDailyWaste data,Long compsoterId,Date searchDate)
 	{
 		 if (data == null)
 	        {
@@ -162,30 +162,44 @@ public class SupplierBusinessLogic
 	        ResponseEntity<Void> res = null;
 	        Long result=null;
 	        try {
+	        	Double dryWaste=data.getDryWaste();
+	        	Double wetWaste=data.getWetWaste();
+	        	
 	        	DateTime currentDate=new DateTime(System.currentTimeMillis());
 	   		 	Timestamp time=data.getDate();
 	   		 	DateTime responseDate=new DateTime(time.getTime());
 	   		 if(currentDate.getYear()!=responseDate.getYear()&&currentDate.getMonthOfYear()!=responseDate.getMonthOfYear())
 	   		 {
+	   			 System.out.println("Here");
 	   			 return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	   		 }
 	   		 else
 	   		 {
 	   			 if(currentDate.getDayOfMonth()-5>responseDate.getDayOfMonth())
 	   			 {
+	   				System.out.println("Here2");
 	   				 return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	   			 }
 	   		 }
-	        data = sbl.refreshSupplierSubProduct( data );
+
+	        data = sbl.refreshSupplierSubProduct( data , searchDate );
 	        if(data==null)
 	        {
+	        	System.out.println("Here3");
 	        	return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 	        }
 			result = sd.subSupplierProduct(data);
 			//HERE
-			Integer rsMain=sctdi.addSupplierComposterTransaction(result, data.getId(), compsoterId, data.getDate());
+			Integer rsMain=sctdi.addSupplierComposterTransaction(
+					result, 
+					data.getId(),
+					compsoterId, 
+					data.getDate(),
+					dryWaste,
+					wetWaste);
 			if(rsMain==0)
 			{
+				System.out.println("Here4");
 				return new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
 			}
 	        
@@ -202,6 +216,7 @@ public class SupplierBusinessLogic
 	        }
 	        else
 	        {
+	        	System.out.println("Here5");
 	            res = new ResponseEntity<Void>( HttpStatus.BAD_REQUEST );
 	        }
 	        return res;

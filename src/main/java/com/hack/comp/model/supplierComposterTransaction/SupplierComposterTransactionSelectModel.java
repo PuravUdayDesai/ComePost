@@ -27,13 +27,15 @@ public class SupplierComposterTransactionSelectModel
 	private Timestamp dateAndTime;
 	@NotNull(message = "DateString cannot be NULL")
 	private String dateString;
+	@NotNull(message = "DryWaste cannot be NULL")
+	private Double dryWaste;
+	@NotNull(message = "WetWaste cannot be NULL")
+	private Double wetWaste;
 	
 	public SupplierComposterTransactionSelectModel()
 	{
 		
 	}
-
-	
 
 	public SupplierComposterTransactionSelectModel(@NotNull(message = "IncrementId cannot be NULL") Long incrementId,
 			@NotNull(message = "SupplierWasteId cannot be NULL") Long supplierWasteId,
@@ -43,7 +45,9 @@ public class SupplierComposterTransactionSelectModel
 			@NotNull(message = "ComposterEmailId cannot be NULL") String composterEmailId,
 			@NotNull(message = "ComposterContactNumber cannot be NULL") String composterContactNumber,
 			@NotNull(message = "DateAndTime cannot be NULL") Timestamp dateAndTime,
-			@NotNull(message = "DateString cannot be NULL") String dateString) {
+			@NotNull(message = "DateString cannot be NULL") String dateString,
+			@NotNull(message = "DryWaste cannot be NULL") Double dryWaste,
+			@NotNull(message = "WetWaste cannot be NULL") Double wetWaste) {
 		super();
 		this.incrementId = incrementId;
 		this.supplierWasteId = supplierWasteId;
@@ -54,7 +58,10 @@ public class SupplierComposterTransactionSelectModel
 		this.composterContactNumber = composterContactNumber;
 		this.dateAndTime = dateAndTime;
 		this.dateString = dateString;
+		this.dryWaste = dryWaste;
+		this.wetWaste = wetWaste;
 	}
+
 
 	public Long getIncrementId() {
 		return incrementId;
@@ -127,5 +134,21 @@ public class SupplierComposterTransactionSelectModel
 	public void setDateString(String dateString) {
 		this.dateString = dateString;
 	}
-	
+
+	public Double getDryWaste() {
+		return dryWaste;
+	}
+
+	public void setDryWaste(Double dryWaste) {
+		this.dryWaste = dryWaste;
+	}
+
+	public Double getWetWaste() {
+		return wetWaste;
+	}
+
+	public void setWetWaste(Double wetWaste) {
+		this.wetWaste = wetWaste;
+	}
+
 }

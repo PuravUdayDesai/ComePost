@@ -38,7 +38,13 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 		  };
 	
 	@Override
-	public Integer addSupplierComposterTransaction(Long supplier_waste_id, Long supplier_id, Long composter_id,Timestamp date_time) throws SQLException, ClassNotFoundException 
+	public Integer addSupplierComposterTransaction(
+													Long supplier_waste_id, 
+													Long supplier_id,
+													Long composter_id,
+													Timestamp date_time,
+													Double dryWaste,
+													Double wetWaste) throws SQLException, ClassNotFoundException 
 	{
 		Connection c=Connections.setConnection();
 		PreparedStatement stmt=c.prepareCall(
@@ -49,7 +55,9 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 				"												composter_name,\r\n" + 
 				"												composter_emailid, \r\n" + 
 				"												composter_contact,\r\n" + 
-				"												date_time)\r\n" + 
+				"												date_time,\r\n" + 
+				"												dry_waste,\r\n" + 
+				"												wet_waste)\r\n"+
 				"	VALUES (\r\n" + 
 				"		?, \r\n" + 
 				"		?, \r\n" + 
@@ -57,6 +65,8 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 				"		(SELECT composter.composter_info.name FROM composter.composter_info WHERE composter.composter_info.id=?),\r\n" + 
 				"		(SELECT composter.composter_info.email FROM composter.composter_info WHERE composter.composter_info.id=?),\r\n" + 
 				"		(SELECT composter.composter_info.contact FROM composter.composter_info WHERE composter.composter_info.id=?),\r\n" + 
+				"		?, \r\n"+
+				"		?, \r\n"+
 				"		?);");
 		stmt.setLong(1, supplier_waste_id);
 		stmt.setLong(2, supplier_id);
@@ -65,6 +75,8 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 		stmt.setLong(5, composter_id);
 		stmt.setLong(6, composter_id);
 		stmt.setTimestamp(7, date_time);
+		stmt.setDouble(8, dryWaste);
+		stmt.setDouble(9, wetWaste);
 		Integer rs=stmt.executeUpdate();
 		c.commit();
 		
@@ -85,7 +97,9 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 				"	composter_name, \r\n" + 
 				"	composter_emailid, \r\n" + 
 				"	composter_contact,\r\n" + 
-				"	date_time\r\n" + 
+				"	date_time,\r\n" + 
+				"	dry_waste,\r\n" + 
+				"	wet_waste\r\n" + 
 				"	FROM public.supplier_composter_transaction\r\n" + 
 				"	WHERE supplier_waste_init_id=?;");
 		stmt.setLong(1, init_id);
@@ -119,7 +133,9 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 					rs.getString("composter_emailid"),
 					rs.getString("composter_contact"),
 					rs.getTimestamp("date_time"),
-					dateString
+					dateString,
+					rs.getDouble("dry_waste"),
+					rs.getDouble("wet_waste")
 					);
 		}
 		rs.close();
@@ -139,7 +155,9 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 				"	composter_name, \r\n" + 
 				"	composter_emailid, \r\n" + 
 				"	composter_contact,\r\n" + 
-				"	date_time\r\n" + 
+				"	date_time,\r\n" + 
+				"	dry_waste,\r\n" + 
+				"	wet_waste\r\n" + 
 				"	FROM public.supplier_composter_transaction\r\n" + 
 				"	WHERE supplier_id=?\r\n"+
 				"	AND DATE(date_time)=?;");
@@ -148,7 +166,7 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 		ResultSet rs=stmt.executeQuery();
 		System.out.println(stmt);
 		List<SupplierComposterTransactionSelectModel> sc=new ArrayList<SupplierComposterTransactionSelectModel>();
-		if(rs.next())
+		while(rs.next())
 		{
 			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
 			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
@@ -176,7 +194,9 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 					rs.getString("composter_emailid"),
 					rs.getString("composter_contact"),
 					rs.getTimestamp("date_time"),
-					dateString
+					dateString,
+					rs.getDouble("dry_waste"),
+					rs.getDouble("wet_waste")
 					));
 		}
 		rs.close();
@@ -195,14 +215,16 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 				"	composter_name, \r\n" + 
 				"	composter_emailid, \r\n" + 
 				"	composter_contact,\r\n" + 
-				"	date_time\r\n" + 
+				"	date_time,\r\n" + 
+				"	dry_waste,\r\n" + 
+				"	wet_waste\r\n" + 
 				"	FROM public.supplier_composter_transaction\r\n" + 
 				"	WHERE supplier_id=?;");
 		stmt.setLong(1, supplierId);
 		ResultSet rs=stmt.executeQuery();
 		System.out.println(stmt);
 		List<SupplierComposterTransactionSelectModel> sc=new ArrayList<SupplierComposterTransactionSelectModel>();
-		if(rs.next())
+		while(rs.next())
 		{
 			DateTime dt = new DateTime(rs.getTimestamp("date_time").getTime());
 			SimpleDateFormat formatDate=new SimpleDateFormat("EEEE");
@@ -230,7 +252,9 @@ public class SupplierComposterTransactionDAOImpl implements SupplierComposterTra
 					rs.getString("composter_emailid"),
 					rs.getString("composter_contact"),
 					rs.getTimestamp("date_time"),
-					dateString
+					dateString,
+					rs.getDouble("dry_waste"),
+					rs.getDouble("wet_waste")
 					));
 		}
 		rs.close();

@@ -184,6 +184,7 @@ public class SupplierDAOImpl implements SupplierDAO
 	@Override
 	public SupplierModelDailyWaste refreshSupplierAddProduct(SupplierModelDailyWaste data)throws SQLException, ClassNotFoundException 
 	{
+		
 		String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND date(date_time)=?  AND \"deleteIndex\"=false ORDER BY date_time DESC LIMIT 1";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
@@ -192,7 +193,7 @@ public class SupplierDAOImpl implements SupplierDAO
         Double dryWaste = 0.0;
         Double wetWaste = 0.0;
         ResultSet rs = stmt.executeQuery();
-        
+        System.out.println(stmt);
         while (rs.next())
         {
             dryWaste = rs.getDouble( "dry_waste" );
@@ -231,13 +232,13 @@ public class SupplierDAOImpl implements SupplierDAO
 	}
 
 	@Override
-	public SupplierModelDailyWaste refreshSupplierSubProduct(SupplierModelDailyWaste data)throws SQLException, ClassNotFoundException 
+	public SupplierModelDailyWaste refreshSupplierSubProduct(SupplierModelDailyWaste data,Date searchDate)throws SQLException, ClassNotFoundException 
 	{
         String query = "SELECT * FROM supplier.supplier_waste WHERE id=? AND date(date_time)=? AND \"deleteIndex\"=false ORDER BY date_time DESC LIMIT 1";
         Connection c = Connections.setConnection();
         CallableStatement stmt = c.prepareCall( query );
         stmt.setLong( 1, data.getId() );
-        stmt.setTimestamp( 2, data.getDate() );
+        stmt.setDate( 2, searchDate );
         Double dryWaste = 0.0;
         Double wetWaste = 0.0;
         ResultSet rs = stmt.executeQuery();
