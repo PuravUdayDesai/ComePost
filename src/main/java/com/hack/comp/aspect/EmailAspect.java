@@ -19,8 +19,8 @@ public class EmailAspect {
 													String bodyContentType) throws MessagingException 
 	{
 		String host="smtp.gmail.com";  
-	 	final String user="experiments.2ndit@gmail.com";//change accordingly  
- 		final String password="Experiments.2ndIT";//change accordingly  
+	 	final String user="<SEND FROM EMAILID>";//change accordingly  
+ 		final String password="<SEND FROM EMAILID PASSWORD>";//change accordingly  
 	 	Properties props = new Properties();  
  		props.put("mail.smtp.host",host);  
  		props.put("mail.smtp.starttls.enable","true");
