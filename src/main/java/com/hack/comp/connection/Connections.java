@@ -16,7 +16,7 @@ public class Connections
         {
             Class.forName( "org.postgresql.Driver" );
 
-            c = DriverManager.getConnection("jdbc:postgresql://comepost-org.postgres.database.azure.com:5432/comepost?user=anonymous@comepost-org&password=AllAreOneIfWeSay1");
+            c = DriverManager.getConnection("<DATABASE CONNECTION STRING>");
             c.setAutoCommit( false );
         }
         catch (ClassNotFoundException | SQLException e)
