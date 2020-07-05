@@ -1,0 +1,140 @@
+{
+	"welcomeMessage": "કોમપોસ્ટમાં આપનું સ્વાગત છે",
+	"title": "કોમપોસ્ટ",
+	"loginBut": "પ્રવેશ કરો",
+	"registerBut": "અત્યારે નોંધાવો",
+	"headerOne": "કોમ ",
+	"headerTwo": "પોસ્ટ",
+	
+	"loginPgButOne": "પુરવઠોકર્તા",
+	"loginPgButTwo": "ખાતર બનાવનાર",
+	"loginPgButThree": "ખેડૂત",
+	"loginPgHeadOne": "પ્રવેશ ",
+	"loginPgHeadTwo": "કરો ",
+	"loginPgHeadThree": "જેમ",
+	"signUpPgHeadOne": "સાઇન ",
+	"signUpPgHeadTwo": "અપ ",
+	"signUpPgHeadThree": "જેમ ",
+
+	"backIcon": "પાછળ",
+	"emailSubHeader": "ઇમેઇલ આઈડી",
+	"passwordSubHeader": "ખાનગી શબ્દ",
+	"surveyIdSubHeader": "સર્વે આઈડી",
+	"loginFooter": "ખાતું નથી?",
+
+	"popUpHeader": "ભૂલ",
+	"popUpMsg": "ઈમેઈલ અથવા પાસવર્ડ ખોટો છે!",
+	"popUpMsgForF": "અમાન્ય સર્વે આઈડી અથવા પાસવર્ડ!",
+	"popUpFooter": "બરાબર"	, 
+
+	"signUpSupHeader": "પુરવઠોકર્તા તરીકે સાઇન અપ કરો",
+	"signUpComHeader": "કમ્પોસ્ટ ઉત્પાદક તરીકે સાઇન અપ કરો",
+	"signUpFarHeader": "ખેડૂત તરીકે સાઇન અપ કરો",
+
+	"signUpF1": "નામ",
+	"signUpF2": "ખાનગી શબ્દ",
+	"signUpF3": "સંપર્ક નંબર",
+	"signUpF4": "ઇમેઇલ",
+	"signUpF5": "નોંધણી નંબર",
+	"signUpF6": "રાજ્યનું નામ",
+	"signUpF7": "શહેરનું નામ",
+	"signUpF8": "ક્ષેત્રનું નામ",
+	"signUpF9": "શેરીનું નામ",
+	"signUpF10": "સર્વે આઈડી",
+	"submitBut": "સબમિટ કરો",
+
+	"signUpHintF1": "પ્રથમ અને છેલ્લું નામ દાખલ કરો",
+	"signUpHintF2": "તમારો પાસવર્ડ નાખો",
+	"signUpHintF3": "તમારો સંપર્ક નંબર દાખલ કરો",
+	"signUpHintF4": "તમારી ઇમેઇલ આઈડી દાખલ કરો",
+	"signUpHintF5": "નોંધણી નંબર દાખલ કરો",
+	"signUpHintF6": "રાજ્યનું નામ દાખલ કરો",
+	"signUpHintF7": "શહેરનું નામ દાખલ કરો",
+	"signUpHintF8": "ક્ષેત્રનું નામ દાખલ કરો",
+	"signUpHintF9": "શેરીનું નામ દાખલ કરો",
+	"signUpHintF10": "સર્વે આઈડી દાખલ કરો",
+
+	"signUpErrF1": "નામ આવશ્યક છે",
+	"signUpErrF2": "પાસવર્ડ અનિવાર્ય છે",
+	"signUpErrF3": "સંપર્ક નંબર 10 અંકનો હોવો આવશ્યક છે",
+	"signUpErr1F4": "ઇમેઇલ માં @ અને . હોવું આવશ્યક છે",
+	"signUpErr2F4": "કૃપા કરીને માન્ય ઇમેઇલ આઈડી દાખલ કરો",
+	"signUpErrF5": "નોંધણી નંબર આવશ્યક છે",
+	"signUpErrF6": "રાજ્યનું નામ આવશ્યક છે",
+	"signUpErrF7": "શહેરનું નામ આવશ્યક છે",
+	"signUpErrF8": "ક્ષેત્રનું નામ આવશ્યક છે",
+	"signUpErrF9": "શેરીનું નામ આવશ્યક છે",
+	"signUpErrF10": "સર્વે આઈડી આવશ્યક છે",
+
+	"signPopUpHead": "સફળતા!",
+	"signPopUpSupMsg": "પુરવઠોકર્તા સપ્લાયર તરીકેની તમારી માહિતી સફળતાપૂર્વક ઉમેરવામાં આવી છે.",
+	"signPopUpComMsg": "ખાતર ઉત્પાદક તરીકેની તમારી માહિતી સફળતાપૂર્વક ઉમેરવામાં આવી છે.",
+	"signPopUpFarMsg": "ખેડૂત તરીકેની તમારી માહિતી સફળતાપૂર્વક ઉમેરવામાં આવી છે.",
+
+	"supHeading": "હોમ",
+	"comHeading": "પુરવઠોકર્તા વિગતો",
+	"comPopUpHead": "કચરો માલ મેળવો",
+
+	"addPopUp": "વિગતો દાખલ કરો",
+	"addPopUpWCol" : "ભીનો કચરો",
+	"addPopUpDCol" : "સુકા કચરો",
+	"addPopUpLast" : "વર્ણન",
+	"addPopUpBut": "કચરો ઉમેરો",
+	"addPopUpMsg": "તમારો ડેટા સફળતાપૂર્વક ઉમેરવામાં આવ્યો છે",
+	"addPopUpWHint": "ભીના કચરાનો જથ્થો દાખલ કરો",
+	"addPopUpDHint": "સુકા કચરાનો જથ્થો દાખલ કરો",
+	"addPopUpLHint": "કચરો વર્ણવો",
+	"addPopUpExecMsg": "કૃપા કરીને ફક્ત આંકડાકીય મૂલ્ય પ્રદાન કરો (25 કેજીથી નીચે).",
+	"addPopUpExecD": "કૃપા કરી વર્ણન દાખલ કરો",
+
+	"cameraIcon": "કૅમેરા",
+	"addIcon": "ઉમેરો",
+	"cancelIcon": "રદ કરો",
+	"dateIconSel": "તારીખ પસંદ કરો",
+
+	"lastAddDate": "છેલ્લે ઉમેર્યું",
+	"mapDisp": "સ્થિત કરવા માટે ટેપ કરો",
+
+	"errMsg": "કૃપા કરીને ફક્ત આંકડાકીય કિંમત પ્રદાન કરો.",
+
+	"cardTxtOne": "સુકા",
+	"cardTxtTwo": "ભીનો",
+
+	"uploadHead": "છબી અપલોડ કરો",
+	"uploadBut": "અપલોડ કરો",
+	"uploadMsg": "છબી સફળતાપૂર્વક અપલોડ થઈ !!!",
+	"floatButSuj": "ખાતર ઉમેરો",
+
+	"categoryLab": "વર્ગ",
+	"categoryHint": "વર્ગ દાખલ કરો",
+	"categoryVal": "કૃપા કરી વર્ગ દાખલ કરો",
+	
+	"gradeLab": "શ્રેણી",
+	"gradeHint": "શ્રેણી દાખલ કરો",
+	"gradeVal": "કૃપા કરીને શ્રેણી દાખલ કરો",
+
+	"priceLab": "કિંમત",
+	"priceHint": "ભાવ દાખલ કરો",
+
+	"weightLab": "વજન",
+	"weightHint": "વજન દાખલ કરો",
+
+	"descHint": "વર્ણન દાખલ કરો",
+
+	"emptyMsg": "કોઈ ડેટા અસ્તિત્વમાં નથી, તારીખ બદલવાનો પ્રયાસ કરો.",
+	"mtMsg": "કોઈ ડેટા અસ્તિત્વમાં નથી",
+	"quanLab": "જથ્થો",
+	"farmHead": "ખરીદો", 
+	"bookBut": "ખાતર ખરીદો",
+	"galleryHead": "ખાતરનાં ફોટા",
+
+	"optionsT1": "શોધો",
+	"optionsT2": "બધા વ્યવહારો જુઓ",
+	"transcHead": "ખાતર ઉત્પાદક સાથે વ્યવહાર",
+	"transcHeadC": "ખેડૂત સાથે વ્યવહાર",
+
+	"tileP1": "કુલ રકમ",
+	"tileP2": "કૂલ વજન",
+
+	"picsHead": "ફોટા"
+}

@@ -1,0 +1,140 @@
+{
+	"welcomeMessage": "Welcome In ComePost",
+	"title": "ComePost",
+	"loginBut": "Login",
+	"registerBut": "Register now",
+	"headerOne": "Come ",
+	"headerTwo": "Post",
+	
+	"loginPgButOne": "Supplier",
+	"loginPgButTwo": "Composter",
+	"loginPgButThree": "Farmer",
+	"loginPgHeadOne": "Log ",
+	"loginPgHeadTwo": "In ",
+	"loginPgHeadThree": "As",
+	"signUpPgHeadOne": "Sign ",
+	"signUpPgHeadTwo": "Up ",
+	"signUpPgHeadThree": "As ",
+
+	"backIcon": "Back",
+	"emailSubHeader": "Email Id",
+	"passwordSubHeader": "Password",
+	"surveyIdSubHeader": "Survey ID",
+	"loginFooter": "Don't have an account ?",
+
+	"popUpHeader": "ERROR",
+	"popUpMsg": "Invalid email or password!",
+	"popUpMsgForF": "Invalid survey id or password!",
+	"popUpFooter": "OK"	, 
+
+	"signUpSupHeader": "Sign Up as Supplier",
+	"signUpComHeader": "Sign Up as Composter",
+	"signUpFarHeader": "Sign Up as Farmer",
+
+	"signUpF1": "Name",
+	"signUpF2": "Password",
+	"signUpF3": "Contact Number",
+	"signUpF4": "Email",
+	"signUpF5": "Registration number",
+	"signUpF6": "State name",
+	"signUpF7": "City name",
+	"signUpF8": "Area name",
+	"signUpF9": "Street name",
+	"signUpF10": "Survey ID",
+	"submitBut": "Submit",
+
+	"signUpHintF1": "Enter first and last name",
+	"signUpHintF2": "Enter your password",
+	"signUpHintF3": "Enter your contact number",
+	"signUpHintF4": "Enter your email id",
+	"signUpHintF5": "Enter registration number",
+	"signUpHintF6": "Enter state name",
+	"signUpHintF7": "Enter city name",
+	"signUpHintF8": "Enter area name",
+	"signUpHintF9": "Enter street name",
+	"signUpHintF10": "Enter Survey Id",
+
+	"signUpErrF1": "Name is required",
+	"signUpErrF2": "Password is required",
+	"signUpErrF3": "Contact number must be of 10 digits",
+	"signUpErr1F4": "Email must contain @ and .",
+	"signUpErr2F4": "Please enter a valid email id",
+	"signUpErrF5": "Registration number is required",
+	"signUpErrF6": "State name is required",
+	"signUpErrF7": "City name is required",
+	"signUpErrF8": "Area name is required",
+	"signUpErrF9": "Street name is required",
+	"signUpErrF10": "Survey Id is required",
+
+	"signPopUpHead": "Success!",
+	"signPopUpSupMsg": "Your information as supplier is added successfully.",
+	"signPopUpComMsg": "Your information as composter is added successfully.",
+	"signPopUpFarMsg": "Your information as farmer is added successfully.",
+
+	"supHeading": "Home",
+	"comHeading": "Supplier's details",
+	"comPopUpHead": "Get waste material",
+
+	"addPopUp": "Enter details",
+	"addPopUpWCol" : "Wet waste",
+	"addPopUpDCol" : "Dry waste",
+	"addPopUpLast" : "Description",
+	"addPopUpBut": "Add waste",
+	"addPopUpMsg": "Your data is added successfully",
+	"addPopUpWHint": "Enter quantity of wet waste",
+	"addPopUpDHint": "Enter quantity of dry waste",
+	"addPopUpLHint": "Describe the waste",
+	"addPopUpExecMsg": "Please provide numeric value only(below 25 KG).",
+	"addPopUpExecD": "Please enter the description",
+
+	"cameraIcon": "Camera",
+	"addIcon": "Add",
+	"cancelIcon": "Cancel",
+	"dateIconSel": "Choose a date",
+
+	"lastAddDate": "Last added",
+	"mapDisp": "Tap to locate",
+
+	"errMsg": "Please provide numeric value only.",
+
+	"cardTxtOne": "dry",
+	"cardTxtTwo": "wet",
+
+	"uploadHead": "Upload image",
+	"uploadBut": "Upload",
+	"uploadMsg": "Image Uploaded Successfully!!!",
+	"floatButSuj": "Add compost",
+
+	"categoryLab": "Category",
+	"categoryHint": "Enter Category",
+	"categoryVal": "Please Enter Category",
+	
+	"gradeLab": "Grade",
+	"gradeHint": "Enter Grade",
+	"gradeVal": "Please Enter Grade",
+
+	"priceLab": "Price",
+	"priceHint": "Enter Price",
+
+	"weightLab": "Weight",
+	"weightHint": "Enter Weight",
+
+	"descHint": "Enter description",
+
+	"emptyMsg": "No Data Exists, try changing date.",
+	"mtMsg": "No Data Exists",
+	"quanLab": "Quantity",
+	"farmHead": "Buy", 
+	"bookBut": "Buy compost",
+	"galleryHead": "Photos of compost",
+
+	"optionsT1": "Search",
+	"optionsT2": "View all Transactions",
+	"transcHead": "Transactions with composter",
+	"transcHeadC": "Transactions with farmer",
+
+	"tileP1": "Total amount",
+	"tileP2": "Total weight",
+
+	"picsHead": "Photos"
+}
