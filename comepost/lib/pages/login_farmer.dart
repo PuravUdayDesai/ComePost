@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../Widget/bezierContainer.dart';
 import "../Api_Services/ApiCall.dart";
-import "../Api_Services/Uri.dart";
+import "../Api_Services/Uri.dart" as UriService;
 import "dart:async";
 import "package:http/http.dart" as http;
 import "dart:convert";
@@ -157,12 +157,13 @@ class _LoginFarmerPageState extends State<LoginFarmerPage> {
     passwordtxt = passwordController.text;
     print(usernametxt + " " + passwordtxt);
     //print(baseURI);
-    String uri = "http://13.68.186.134:8080/farmer?username=" +
+    String uri = "${UriService.Uri.baseUri}/farmer?username=" +
         usernametxt +
         "&password=" +
         passwordtxt;
     print(uri);
-    var response = await http.get(uri, headers: {"Accept": "application/json"});
+    var response =
+        await http.get(Uri.parse(uri), headers: {"Accept": "application/json"});
     var response1 = jsonDecode(response.body);
     //print(response1["composter_id"]);
     print(response1);

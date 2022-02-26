@@ -1,12 +1,10 @@
 
+import 'package:ComePost/pages/router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
 import '../Widget/bezierContainer.dart';
-import "../Api_Services/ApiCall.dart";
-import "../Api_Services/Uri.dart";
-import "dart:async";
 import "package:http/http.dart" as http;
 import "dart:convert";
 //import "dart:async";
@@ -15,18 +13,9 @@ import 'home_composter.dart';
 
 import '../app_localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:page_transition/page_transition.dart';
+import '../Api_Services/Uri.dart' as UriService;
 
-import 'welcome_page.dart';
 import 'selection_screen_login.dart';
-import 'selection_screen_signup.dart';
-import 'login.dart';
-import 'login_composter.dart';
-import 'login_farmer.dart';
-import 'signup_supplier.dart';
-import 'signup_composter.dart';
-import 'signup_farmer.dart';
-import 'DisplayMap.dart';
 
 class MyLoginComposterPage extends StatelessWidget {
   @override
@@ -45,37 +34,7 @@ class MyLoginComposterPage extends StatelessWidget {
       title : "Come Post",
       debugShowCheckedModeBanner: false,      
       home: SelectionScreenLogIn(),
-      onGenerateRoute : (s){
-        switch(s.name){
-          case '/selection_screen_login' : 
-            return PageTransition(child : MySelectionScreenLogin(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/selection_screen_signup' : 
-            return PageTransition(child : SelectionScreenSignUp(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/login' : 
-            return PageTransition(child : LoginPage(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/login_composter' : 
-            return PageTransition(child : LoginComposterPage(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/login_farmer' : 
-            return PageTransition(child : LoginFarmerPage(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/signup_supplier' : 
-            return PageTransition(child : SignUpSupplier(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/signup_composter' : 
-            return PageTransition(child : SignUpComposter(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/signup_farmer' : 
-            return PageTransition(child : SignUpFarmer(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/maps' : 
-            return PageTransition(child : DisplayMap(),type : PageTransitionType.rightToLeft);
-            break;
-        }
-      }
+      onGenerateRoute : MyRouter().routeSettings
     );
   }
 }
@@ -148,10 +107,10 @@ class _LoginComposterPageState extends State<LoginComposterPage> {
         passwordtxt = passwordController.text;
         print(usernametxt+" "+passwordtxt); 
         //print(baseURI); 
-        String uri = "http://13.68.186.134:8080/compost?username="+usernametxt+"&password="+passwordtxt;
+        String uri = "${UriService.Uri.baseUri}/compost?username="+usernametxt+"&password="+passwordtxt;
         print(uri);
           var response = await http.get(
-            uri,
+            Uri.parse(uri),
             headers : {
               "Accept" : "application/json"
             }

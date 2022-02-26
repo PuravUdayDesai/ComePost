@@ -812,7 +812,7 @@ class _HomeComposterState extends State<HomeComposter>
                       IconButton(
                         icon : Icon(Icons.photo_camera),
                         onPressed : () async{
-                          tmpFile = await ImagePicker.pickImage(source: ImageSource.camera);  
+                          // tmpFile = await ImagePicker.pickImage(source: ImageSource.camera);  
                           if (tmpFile == null){
                             print("choose file");
                           }                          
@@ -837,7 +837,7 @@ class _HomeComposterState extends State<HomeComposter>
                       IconButton(
                         icon : Icon(Icons.photo_library),
                         onPressed : () async{
-                          tmpFile = await ImagePicker.pickImage(source: ImageSource.gallery);  
+                          // tmpFile = await ImagePicker.pickImage(source: ImageSource.gallery);  
                           if (tmpFile == null){
                             print("choose file");
                           }                          

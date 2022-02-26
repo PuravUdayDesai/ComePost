@@ -1,4 +1,3 @@
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -78,10 +77,6 @@ class _DisplayMapState extends State<DisplayMap> {
         markerId: MarkerId('sourcePin'),
         position: SOURCE_LOCATION,
       ));
-      /*_markers.add(Marker(
-           markerId: MarkerId('destPin'),
-           position: END_LOCATION,
-        ));  */
     });
   }
 }

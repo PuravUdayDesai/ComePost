@@ -1,10 +1,10 @@
-class Uri
-{
-	static const GET_COMPOSTER = "http://13.68.186.134:8080/compost";
-  	static const GET_SUPPLIER = "http://13.68.186.134:8080/supplier";
-  	static const GET_FARMER = "http://13.68.186.134:8080/farmer";
-  	static const GET_SUPPLIER_COMPOSTER_TRANSACTION = 'http://13.68.186.134:8080/supplierComposterTransaction/supplier';
-  	static const GET_COMPOSTER_FARMER_TRANSACTION = 'http://13.68.186.134:8080/composterFarmerTransaction/composter';
-  
+class Uri {
+  static const String baseUri = "https://28bb-59-88-171-91.ngrok.io";
+  static const String GET_COMPOSTER = "$baseUri/compost";
+  static const String GET_SUPPLIER = "$baseUri/supplier";
+  static const String GET_FARMER = "$baseUri/farmer";
+  static const String GET_SUPPLIER_COMPOSTER_TRANSACTION =
+      '$baseUri/supplierComposterTransaction/supplier';
+  static const GET_COMPOSTER_FARMER_TRANSACTION =
+      '$baseUri/composterFarmerTransaction/composter';
 }
-

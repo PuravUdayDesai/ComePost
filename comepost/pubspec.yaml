@@ -8,21 +8,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^0.1.2
-  http :
-  rflutter_alert: ^1.0.2
-  intl:
-  dio :
+  cupertino_icons: ^1.0.4
+  http: ^0.13.4
+  rflutter_alert: ^2.0.4
+  intl: ^0.17.0
+  dio : ^4.0.4
   toast :
   google_maps_flutter : ^0.5.11+1
-  flutter_polyline_points :
-  geolocator :
-  page_transition: ^1.1.5
-  google_fonts: 
-  image_picker: ^0.6.7+1
-  shared_preferences:
-  provider:
-  splashscreen : 1.2.0
+  flutter_polyline_points : ^1.0.0
+  geolocator : ^8.0.5
+  page_transition: ^2.0.5
+  google_fonts: 2.2.0 
+  image_picker: ^0.8.4+10
+  shared_preferences: ^2.0.13
+  provider: ^6.0.2
+  splashscreen: ^1.3.5
   flutter_localizations:
     sdk: flutter
 
@@ -43,6 +43,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/
     - lang/en.json
     - lang/hi.json
     - lang/gu.json
