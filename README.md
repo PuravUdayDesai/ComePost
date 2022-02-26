@@ -1,3 +1,2 @@
 # ComePost
-Food wastage management solution
-Code of app
+Food wastage management solution.
