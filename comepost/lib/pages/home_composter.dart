@@ -1,7 +1,9 @@
+import 'package:ComePost/pages/more_supp_details.dart';
 import 'package:ComePost/pages/router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:toast/toast.dart';
 //import 'package:flutter_form_builder/flutter_form_builder.dart';
 //import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import "../Api_Services/ApiCall.dart";
@@ -570,9 +572,8 @@ class _HomeComposterState extends State<HomeComposter> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => DisplayMap(),
-                                settings: RouteSettings(arguments: obj)
-                              ),
+                                  builder: (_) => DisplayMap(),
+                                  settings: RouteSettings(arguments: obj)),
                             );
                             // Navigator.pushNamed(context, '/maps',
                             //     arguments: obj);
@@ -753,6 +754,7 @@ class _HomeComposterState extends State<HomeComposter> {
                           onTap: () {
                             if (_fbKey.currentState.validate()) {
                               addCompost();
+                              Toast.show('Compost information added successfully', context);
                               Navigator.of(c).pop();
                               _autovalidate = false;
                             } else {
@@ -815,7 +817,7 @@ class _HomeComposterState extends State<HomeComposter> {
     data['grade'] = obj.grades;
     data['description'] = obj.descriptions;
     data['dateString'] = obj.dateString;
-    var r = await addCompostRecord(data);
+    var r = await addCompostRecord(data);    
   }
 
   addCompostRecord(data) async {
@@ -936,8 +938,14 @@ class _HomeComposterState extends State<HomeComposter> {
                   _chooseDate(context);
                 } else if (s == 2) {
                   showSearch(context: context, delegate: DataSearch());
-                } else {
+                } else if (s == 3) {
                   Navigator.pushNamed(context, '/composter_farmer_transaction');
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              MoreSupInfoScreen()));
                 }
               },
               itemBuilder: (c) => <PopupMenuItem<int>>[
@@ -955,6 +963,11 @@ class _HomeComposterState extends State<HomeComposter> {
                       value: 3,
                       child: Text(
                           AppLocalizations.of(context).translate('optionsT2')),
+                    ),
+                    PopupMenuItem<int>(
+                      value: 4,
+                      child: Text(AppLocalizations.of(context)
+                          .translate('moreInfoLab')),
                     ),
                   ]),
         ],
@@ -1151,9 +1164,8 @@ class DataSearch extends SearchDelegate<String> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => DisplayMap(),
-                                settings: RouteSettings(arguments: obj)
-                              ),
+                                  builder: (_) => DisplayMap(),
+                                  settings: RouteSettings(arguments: obj)),
                             );
                             // Navigator.pushNamed(context, '/maps',
                             //     arguments: obj);
