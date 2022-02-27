@@ -1,3 +1,4 @@
+import 'package:ComePost/pages/more_info.dart';
 import 'package:ComePost/pages/router.dart';
 import 'package:flutter/material.dart';
 
@@ -242,7 +243,7 @@ class _HomeFarmerState extends State<HomeFarmer> {
               setState((){});
   }*/
 
-  Widget makeCard(var obj) {
+  Widget makeCard(var obj) {    
     return Column(
       children: [
         Card(
@@ -383,10 +384,11 @@ class _HomeFarmerState extends State<HomeFarmer> {
     _autovalidate = false;
     price = TextEditingController();
     weight = TextEditingController();
-    category = TextEditingController();
+    category = TextEditingController(text: (obj as FarmerClass).categorys);
     grade = TextEditingController();
     description = TextEditingController();
     price.text = obj.price.toString();
+    print((obj as FarmerClass).grades);
     price.text = price.text + ' /Kg.';
     return showDialog(
         context: context,
@@ -607,7 +609,9 @@ class _HomeFarmerState extends State<HomeFarmer> {
                 } else if (s == 2) {
                   showSearch(context: context, delegate: DataSearch());
                 } else {
-                  print('In more info');
+                  Navigator.push(context, MaterialPageRoute(
+                                builder: (_) => MoreInfoScreen()
+                              ));
                 }
               },
               itemBuilder: (c) => <PopupMenuItem<int>>[
