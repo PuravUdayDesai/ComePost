@@ -22,7 +22,7 @@ void main() {
       GlobalWidgetsLocalizations.delegate,
     ],
     debugShowCheckedModeBanner: false,
-    home: MySplashScreen(),
+    home: CustomSplashScreen(),
     theme: Util.theme,
     title: "Come Post",
   ));

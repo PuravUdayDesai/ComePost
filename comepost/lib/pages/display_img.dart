@@ -1,6 +1,8 @@
+import 'package:ComePost/pages/router.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:core';
@@ -38,53 +40,12 @@ class MyDisplayImage extends StatelessWidget {
         title: "Come Post",
         debugShowCheckedModeBanner: false,
         home: SelectionScreenLogIn(),
-        onGenerateRoute: (s) {
-          switch (s.name) {
-            case '/selection_screen_login':
-              return PageTransition(
-                  child: MySelectionScreenLogin(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/selection_screen_signup':
-              return PageTransition(
-                  child: SelectionScreenSignUp(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/login':
-              return PageTransition(
-                  child: LoginPage(), type: PageTransitionType.rightToLeft);
-              break;
-            case '/login_composter':
-              return PageTransition(
-                  child: LoginComposterPage(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/login_farmer':
-              return PageTransition(
-                  child: LoginFarmerPage(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/signup_supplier':
-              return PageTransition(
-                  child: SignUpSupplier(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/signup_composter':
-              return PageTransition(
-                  child: SignUpComposter(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/signup_farmer':
-              return PageTransition(
-                  child: SignUpFarmer(), type: PageTransitionType.rightToLeft);
-              break;
-          }
-        });
+        onGenerateRoute: MyRouter().routeSettings);
   }
 }
 
 class DisplayImage extends StatefulWidget {
-  final File imageFile;
+  final XFile imageFile;
   final String user;
   DisplayImage({Key key, this.imageFile, this.user}) : super(key: key);
 
@@ -128,7 +89,7 @@ class _DisplayImage extends State<DisplayImage> {
     Map<String, MultipartFile> fileMap = {};
     Map<String, File> files = Map<String, File>();
     Map<String, dynamic> data = Map<String, dynamic>();
-    files['file'] = widget.imageFile;
+    files['file'] = File(widget.imageFile.path);
     setState(() {
       isLoading = true;
     });
@@ -161,9 +122,10 @@ class _DisplayImage extends State<DisplayImage> {
           data: formData, options: Options(contentType: 'multipart/form-data'));
       print(r1);
       print(r1.statusCode);
-      if (r1.statusCode == 201) {
+      if (r1.statusCode == 200) {
         Toast.show(AppLocalizations.of(context).translate('uploadMsg'), context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        Navigator.pop(context);
       }
     } else {
       var r1 = await dio.post(
@@ -174,9 +136,10 @@ class _DisplayImage extends State<DisplayImage> {
           data: formData,
           options: Options(contentType: 'multipart/form-data'));
       print(r1.statusCode);
-      if (r1.statusCode == 201) {
+      if (r1.statusCode == 200) {
         Toast.show(AppLocalizations.of(context).translate('uploadMsg'), context,
             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        Navigator.pop(context);
       }
     }
     setState(() {
@@ -203,7 +166,7 @@ class _DisplayImage extends State<DisplayImage> {
           child: Stack(children: <Widget>[
             Column(children: <Widget>[
               Image.file(
-                widget.imageFile,
+                File(widget.imageFile.path),
                 fit: BoxFit.fill,
                 height: 470.0,
                 alignment: Alignment.topCenter,

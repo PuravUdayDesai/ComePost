@@ -1,3 +1,4 @@
+import 'package:ComePost/pages/DisplayMap.dart';
 import 'package:ComePost/pages/login.dart';
 import 'package:ComePost/pages/login_composter.dart';
 import 'package:ComePost/pages/login_farmer.dart';
@@ -46,6 +47,10 @@ class MyRouter {
       case '/signup_farmer':
         return PageTransition(
             child: SignUpFarmer(), type: PageTransitionType.rightToLeft);
+
+      case '/maps':
+            return PageTransition(
+                child: DisplayMap(), type: PageTransitionType.rightToLeft);
 
       case '/supplier_composter_transaction':
         return PageTransition(

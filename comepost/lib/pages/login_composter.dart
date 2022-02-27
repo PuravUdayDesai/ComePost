@@ -1,4 +1,3 @@
-
 import 'package:ComePost/pages/router.dart';
 import 'package:flutter/material.dart';
 
@@ -21,35 +20,32 @@ class MyLoginComposterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      supportedLocales: [
+        supportedLocales: [
           Locale('en', ''),
           Locale('hi', ''),
           Locale('gu', ''),
-      ],
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      title : "Come Post",
-      debugShowCheckedModeBanner: false,      
-      home: SelectionScreenLogIn(),
-      onGenerateRoute : MyRouter().routeSettings
-    );
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        title: "Come Post",
+        debugShowCheckedModeBanner: false,
+        home: SelectionScreenLogIn(),
+        onGenerateRoute: MyRouter().routeSettings);
   }
 }
 
-
 class LoginComposterPage extends StatefulWidget {
-
   @override
   _LoginComposterPageState createState() => _LoginComposterPageState();
 }
 
 class _LoginComposterPageState extends State<LoginComposterPage> {
-  TextEditingController emailController = new TextEditingController() ;
+  TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
-  bool isLoading = false;
+  bool isLoading = false, _obscureText = true;
 
   Widget _backButton() {
     return InkWell(
@@ -72,7 +68,8 @@ class _LoginComposterPageState extends State<LoginComposterPage> {
     );
   }
 
-  Widget _entryField(String title,TextEditingController controllerName, {bool isPassword = false}) {
+  Widget _entryField(String title, TextEditingController controllerName,
+      {bool isPassword = false}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -86,7 +83,7 @@ class _LoginComposterPageState extends State<LoginComposterPage> {
             height: 10,
           ),
           TextField(
-              controller : controllerName,
+              controller: controllerName,
               obscureText: isPassword,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -97,132 +94,125 @@ class _LoginComposterPageState extends State<LoginComposterPage> {
     );
   }
 
-  void checkCredentials() async
-  {
+  void checkCredentials() async {
     print("Inn");
     FocusScope.of(context).unfocus();
-    setState((){isLoading = true;});
-    String usernametxt,passwordtxt;
-        usernametxt = emailController.text;
-        passwordtxt = passwordController.text;
-        print(usernametxt+" "+passwordtxt); 
-        //print(baseURI); 
-        String uri = "${UriService.Uri.baseUri}/compost?username="+usernametxt+"&password="+passwordtxt;
-        print(uri);
-          var response = await http.get(
-            Uri.parse(uri),
-            headers : {
-              "Accept" : "application/json"
-            }
-            );
-          var response1 = jsonDecode(response.body);
-          print(response1);
-          //print(response1["composter_id"]);
-          //print(response1["check"].runtimeType);
-        if(response1["check"].toString()=="true")
-        {
-          setState((){isLoading = false;});
-          print(usernametxt+" in "+passwordtxt);
-          CurrentUser.id = response1['id'];
-          CurrentUser.name = response1['name'];
-          CurrentUser.phone = response1['contact'];
-          CurrentUser.regdno = response1['reg_no'];
-          CurrentUser.email = response1['email'];
-          CurrentUser.street = response1['street'];
-          CurrentUser.area = response1['area'];
-          CurrentUser.city = response1['city'];
-          CurrentUser.state = response1['state'];
-          Navigator.of(context).push(_createRoute());
-      
-        }
-        else 
-        {
-          setState((){isLoading = false;});
-          showError();
-        }
+    setState(() {
+      isLoading = true;
+    });
+    String usernametxt, passwordtxt;
+    usernametxt = emailController.text;
+    passwordtxt = passwordController.text;
+    print(usernametxt + " " + passwordtxt);
+    //print(baseURI);
+    String uri = "${UriService.Uri.baseUri}/compost?username=" +
+        usernametxt +
+        "&password=" +
+        passwordtxt;
+    print(uri);
+    var response =
+        await http.get(Uri.parse(uri), headers: {"Accept": "application/json"});
+    var response1 = jsonDecode(response.body);
+    print(response1);
+    //print(response1["composter_id"]);
+    //print(response1["check"].runtimeType);
+    if (response1["check"].toString() == "true") {
+      setState(() {
+        isLoading = false;
+      });
+      print(usernametxt + " in " + passwordtxt);
+      CurrentUser.id = response1['id'];
+      CurrentUser.name = response1['name'];
+      CurrentUser.phone = response1['contact'];
+      CurrentUser.regdno = response1['reg_no'];
+      CurrentUser.email = response1['email'];
+      CurrentUser.street = response1['street'];
+      CurrentUser.area = response1['area'];
+      CurrentUser.city = response1['city'];
+      CurrentUser.state = response1['state'];
+      Navigator.of(context).push(_createRoute());
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      showError();
+    }
   }
 
-  Route _createRoute() 
-  {
-      return PageRouteBuilder(
-        transitionDuration: Duration(milliseconds: 900),
+  Route _createRoute() {
+    return PageRouteBuilder(
+      transitionDuration: Duration(milliseconds: 900),
       pageBuilder: (context, animation, secondaryAnimation) => HomeComposter(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1.0, 0.0);
-      var end = Offset.zero;
-      var curve = Curves.easeOut;
+        var begin = Offset(1.0, 0.0);
+        var end = Offset.zero;
+        var curve = Curves.easeOut;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
+          position: animation.drive(tween),
+          child: child,
         );
       },
-      );
+    );
   }
 
-  void showError()
-  {
+  void showError() {
     showDialog(
         context: context,
-        builder: (BuildContext context1){
-            return AlertDialog(
-              title: Text(
-                AppLocalizations.of(context).translate('popUpHeader'),
-                style : TextStyle(
-                  color : Colors.red,
-                  )
-                ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              content: Text(AppLocalizations.of(context).translate('popUpMsg')),
-              actions : <Widget>[
-                FlatButton(
-                  child : Text(
-                    AppLocalizations.of(context).translate('popUpFooter'),
-                    
-                    style : TextStyle(
-                        fontSize : 15.0,
-                      )
-                    ),
+        builder: (BuildContext context1) {
+          return AlertDialog(
+            title: Text(AppLocalizations.of(context).translate('popUpHeader'),
+                style: TextStyle(
+                  color: Colors.red,
+                )),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            content: Text(AppLocalizations.of(context).translate('popUpMsg')),
+            actions: <Widget>[
+              FlatButton(
+                child:
+                    Text(AppLocalizations.of(context).translate('popUpFooter'),
+                        style: TextStyle(
+                          fontSize: 15.0,
+                        )),
                 onPressed: () {
-              Navigator.of(context1).pop();
-            },
-                )
-              ],
-            );
-        }
-      );
+                  Navigator.of(context1).pop();
+                },
+              )
+            ],
+          );
+        });
   }
-
 
   Widget _submitButton() {
     return MaterialButton(
-      onPressed : checkCredentials,
-    child : Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 15),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.grey.shade200,
-                offset: Offset(2, 4),
-                blurRadius: 5,
-                spreadRadius: 2)
-          ],
-          gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [Color(0xff12871b), Color(0xff36ba40)])),
-      child: Text(
-        AppLocalizations.of(context).translate('loginBut'),
-        style: TextStyle(fontSize: 20, color: Colors.white),
-      ),
-    ));
+        onPressed: checkCredentials,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.symmetric(vertical: 15),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.grey.shade200,
+                    offset: Offset(2, 4),
+                    blurRadius: 5,
+                    spreadRadius: 2)
+              ],
+              gradient: LinearGradient(
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  colors: [Color(0xff12871b), Color(0xff36ba40)])),
+          child: Text(
+            AppLocalizations.of(context).translate('loginBut'),
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ));
   }
 
   Widget _divider() {
@@ -321,7 +311,8 @@ class _LoginComposterPageState extends State<LoginComposterPage> {
           ),
           InkWell(
             onTap: () {
-              Navigator.of(context).pushNamedAndRemoveUntil('/selection_screen_signup', ModalRoute.withName('/'));
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/selection_screen_signup', ModalRoute.withName('/'));
             },
             child: Text(
               AppLocalizations.of(context).translate('registerBut'),
@@ -364,49 +355,58 @@ class _LoginComposterPageState extends State<LoginComposterPage> {
     return Column(
       children: <Widget>[
         Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            AppLocalizations.of(context).translate('emailSubHeader'),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                AppLocalizations.of(context).translate('emailSubHeader'),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                  controller: emailController,
+                  //obscureText: isPassword,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      fillColor: Color(0xfff3f3f4),
+                      filled: true))
+            ],
           ),
-          SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-              controller : emailController,
-              //obscureText: isPassword,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
-      ),
-    ),
+        ),
         Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            AppLocalizations.of(context).translate('passwordSubHeader'),
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                AppLocalizations.of(context).translate('passwordSubHeader'),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                  controller: passwordController,
+                  obscureText: _obscureText,
+                  decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                          icon: Icon(_obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility)),
+                      border: InputBorder.none,
+                      fillColor: Color(0xfff3f3f4),
+                      filled: true))
+            ],
           ),
-          SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-              controller : passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
-      ),
-    ),
+        ),
 
         /*_entryField("Email id","emailController"),
         _entryField("Password","passwordController", isPassword: true),*/
@@ -416,61 +416,55 @@ class _LoginComposterPageState extends State<LoginComposterPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      // resizeToAvoidBottomPadding: false,
       body: IgnorePointer(
-      ignoring : isLoading,
-      child : Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  flex: 3,
-                  child: SizedBox(),
-                ),
-                _title(),
-                SizedBox(
-                  height: 50,
-                ),
-                _emailPasswordWidget(),
-                SizedBox(
-                  height: 20,
-                ),
-                _submitButton(),
-                /*Container(
+          ignoring: isLoading,
+          child: Stack(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ListView(
+                  children: <Widget>[
+                    SizedBox(
+                      height: height * 0.2,
+                    ),
+                    _title(),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    _emailPasswordWidget(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _submitButton(),
+                    /*Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   alignment: Alignment.centerRight,
                   child: Text('Forgot Password ?',
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
                 ),*/
-                //_divider(),
-                //_facebookButton(),
-                Expanded(
-                  flex: 2,
-                  child: SizedBox(),
+                    //_divider(),
+                    //_facebookButton(),
+                    SizedBox(
+                      height: height * 0.07,
+                    ),
+                    _createAccountLabel(),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _createAccountLabel(),
-          ),
-          Positioned(top: 40, left: 0, child: _backButton()),
-          Positioned(
-              top: -MediaQuery.of(context).size.height * .10,
-              right: -MediaQuery.of(context).size.width * .7,
-              child: BezierContainer()
-          ),
-          isLoading ? Center(child : CircularProgressIndicator()) : Center(child : Container()),
-        ],
-      )),
+              ),
+              Positioned(top: 40, left: 0, child: _backButton()),
+              Positioned(
+                  top: -MediaQuery.of(context).size.height * .10,
+                  right: -MediaQuery.of(context).size.width * .7,
+                  child: BezierContainer()),
+              isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : Center(child: Container()),
+            ],
+          )),
     );
   }
 }

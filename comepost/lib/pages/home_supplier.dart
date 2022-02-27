@@ -13,7 +13,7 @@ import '../Utils/util.dart';
 
 //import 'SignUpSupplier.dart';
 import "../Api_Services/ApiCall.dart";
-import "../Api_Services/Uri.dart";
+import "../Api_Services/Uri.dart" as UriService;
 //import 'package:flutter_form_builder/flutter_form_builder.dart';
 import '../User/current_user.dart';
 
@@ -99,12 +99,12 @@ class _HomeSupplierState extends State<HomeSupplier> {
   Future<File> file;
   String status = '';
   String base64Image;
-  File tmpFile;
+  XFile tmpFile;
   String errMessage = 'Error Uploading Image';
 
   Future<SupplierClass> updateRecord(dataa) async {
-    var response1 =
-        await ApiCall.updateRecord(Uri.GET_SUPPLIER + "/product/add", dataa);
+    var response1 = await ApiCall.updateRecord(
+        UriService.Uri.GET_SUPPLIER + "/product/add", dataa);
     //return SupplierClass.fromJson(response1);
   }
 
@@ -139,15 +139,18 @@ class _HomeSupplierState extends State<HomeSupplier> {
           );
         } else {
           //pringetDatat("Trying.........");
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return makeCard(
-                  snapshot.data[index].date,
-                  snapshot.data[index].dryWaste.toString(),
-                  snapshot.data[index].wetWaste.toString(),
-                  snapshot.data[index].index);
-            },
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return makeCard(
+                    snapshot.data[index].date,
+                    snapshot.data[index].dryWaste.toString(),
+                    snapshot.data[index].wetWaste.toString(),
+                    snapshot.data[index].index);
+              },
+            ),
           );
         }
       },
@@ -156,7 +159,7 @@ class _HomeSupplierState extends State<HomeSupplier> {
 
   getData() async {
     var response1 = await ApiCall.getDataFromApi(
-        Uri.GET_SUPPLIER + "/" + CurrentUser.id.toString());
+        UriService.Uri.GET_SUPPLIER + "/" + CurrentUser.id.toString());
     //print("data arrived   ${response1.length}");
     //print(response1.length);
     if (suppliers.length != 0) {
@@ -227,38 +230,44 @@ class _HomeSupplierState extends State<HomeSupplier> {
   Widget makeCard(String title, String subtitle, String sub2, bool index) {
     return Column(
       children: [
-        Card(
-            elevation: 7,
-            child: ListTile(
-              dense: false,
-              isThreeLine: true,
-              contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
-              title: Text(title,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.indigo)),
-              subtitle: Text(
-                  "\n\t\t\t\t" +
-                      AppLocalizations.of(context).translate('cardTxtOne') +
-                      " = " +
-                      subtitle +
-                      " Kg.\t\t\t\t" +
-                      AppLocalizations.of(context).translate('cardTxtTwo') +
-                      " = " +
-                      sub2 +
-                      " Kg.",
-                  style: TextStyle(
-                    color: Colors.brown,
-                    fontSize: 13,
-                    //background : paint,
-                  )),
-              trailing: IconButton(
-                icon: index
-                    ? Icon(Icons.arrow_upward, color: Colors.greenAccent[400])
-                    : Icon(Icons.arrow_downward, color: Colors.red),
-                iconSize: 20.0,
-                onPressed: () {},
-              ),
-            )),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Card(
+              elevation: 7,
+              child: ListTile(
+                dense: false,
+                isThreeLine: true,
+                // contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
+                title: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Text(title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.indigo)),
+                ),
+                subtitle: Text(
+                    "\n\t\t\t" +
+                        AppLocalizations.of(context).translate('cardTxtOne') +
+                        " = " +
+                        subtitle +
+                        " Kg\t\t\t" +
+                        AppLocalizations.of(context).translate('cardTxtTwo') +
+                        " = " +
+                        sub2 +
+                        " Kg",
+                    style: TextStyle(
+                      color: Colors.brown,
+                      fontSize: 16,
+                      //background : paint,
+                    )),
+                trailing: IconButton(
+                  icon: index
+                      ? Icon(Icons.arrow_upward, color: Colors.greenAccent[400])
+                      : Icon(Icons.arrow_downward, color: Colors.red),
+                  iconSize: 20.0,
+                  onPressed: () {},
+                ),
+              )),
+        ),
         Divider(),
       ],
     );
@@ -430,8 +439,8 @@ class _HomeSupplierState extends State<HomeSupplier> {
                             IconButton(
                               icon: Icon(Icons.photo_camera),
                               onPressed: () async {
-                                // tmpFile = await ImagePicker.pickImage(
-                                //     source: ImageSource.camera);
+                                tmpFile = await ImagePicker()
+                                    .pickImage(source: ImageSource.camera);
                                 if (tmpFile == null) {
                                   print("choose file");
                                 } else {
@@ -456,8 +465,8 @@ class _HomeSupplierState extends State<HomeSupplier> {
                             IconButton(
                               icon: Icon(Icons.photo_library),
                               onPressed: () async {
-                                // tmpFile = await ImagePicker.pickImage(
-                                //     source: ImageSource.gallery);
+                                tmpFile = await ImagePicker()
+                                    .pickImage(source: ImageSource.gallery);
                                 if (tmpFile == null) {
                                   print("choose file");
                                 } else {

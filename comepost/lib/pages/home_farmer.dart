@@ -1,3 +1,4 @@
+import 'package:ComePost/pages/router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -6,7 +7,6 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 //import 'SignUpSupplier.dart';
 import "../Api_Services/ApiCall.dart";
 import "../Api_Services/Uri.dart";
-
 
 import '../app_localization.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,65 +27,33 @@ import 'package:toast/toast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'image_gallery.dart';
 
-
 class MyHomeFarmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      supportedLocales: [
+        supportedLocales: [
           Locale('en', ''),
           Locale('hi', ''),
           Locale('gu', ''),
-      ],
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      title : "Come Post",
-      debugShowCheckedModeBanner: false,      
-      home: SelectionScreenLogIn(),
-      onGenerateRoute : (s){
-        switch(s.name){
-          case '/selection_screen_login' : 
-            return PageTransition(child : MySelectionScreenLogin(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/selection_screen_signup' : 
-            return PageTransition(child : SelectionScreenSignUp(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/login' : 
-            return PageTransition(child : LoginPage(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/login_composter' : 
-            return PageTransition(child : LoginComposterPage(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/login_farmer' : 
-            return PageTransition(child : LoginFarmerPage(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/signup_supplier' : 
-            return PageTransition(child : SignUpSupplier(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/signup_composter' : 
-            return PageTransition(child : SignUpComposter(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/signup_farmer' : 
-            return PageTransition(child : SignUpFarmer(),type : PageTransitionType.rightToLeft);
-            break;
-        }
-      }
-    );
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        title: "Come Post",
+        debugShowCheckedModeBanner: false,
+        home: SelectionScreenLogIn(),
+        onGenerateRoute: MyRouter().routeSettings);
   }
 }
 
-
-class HomeFarmer extends StatefulWidget
-{
-	@override
+class HomeFarmer extends StatefulWidget {
+  @override
   _HomeFarmerState createState() => _HomeFarmerState();
 }
 
-class FarmerClass
-{
+class FarmerClass {
   int id;
   int initId;
   String name;
@@ -104,8 +72,8 @@ class FarmerClass
   String state;
   String dateString;
 
-  dynamic prices,weights;
-  String descriptions,grades,categorys;
+  dynamic prices, weights;
+  String descriptions, grades, categorys;
   FarmerClass(
       this.id,
       this.initId,
@@ -123,36 +91,29 @@ class FarmerClass
       this.area,
       this.city,
       this.state,
-      this.dateString
-    );
+      this.dateString);
 
-  FarmerClass.bookCompost(
-    this.prices,
-    this.weights,
-    this.descriptions,
-    this.grades,
-    this.categorys
-  );
-
+  FarmerClass.bookCompost(this.prices, this.weights, this.descriptions,
+      this.grades, this.categorys);
 }
 
 List<FarmerClass> suppliers = [];
-class _HomeFarmerState extends State<HomeFarmer>
-{
-	TextEditingController wetController = new TextEditingController();
+
+class _HomeFarmerState extends State<HomeFarmer> {
+  TextEditingController wetController = new TextEditingController();
   TextEditingController dryController = new TextEditingController();
   bool _autovalidate = false;
   GlobalKey<FormState> _fbKey;
   GlobalKey<ScaffoldState> _scaffoldKey;
-  String mainDate=DateTime.now().toString().substring(0,10);
+  String mainDate = DateTime.now().toString().substring(0, 10);
 
-  TextEditingController price,weight,category,grade,description;
-
+  TextEditingController price, weight, category, grade, description;
 
   Future<FarmerClass> updateRecord(dataa) async {
-    var response1 = await ApiCall.updateRecord(Uri.GET_SUPPLIER+"/product/add", dataa);
+    var response1 =
+        await ApiCall.updateRecord(Uri.GET_SUPPLIER + "/product/add", dataa);
     //return SupplierClass.fromJson(response1);
-}
+  }
 
   refresh(context) {
     print("andar to aaya");
@@ -170,37 +131,37 @@ class _HomeFarmerState extends State<HomeFarmer>
               ),
             ),
           );
-        }
-        else if(snapshot.data.length==0)
-        {
+        } else if (snapshot.data.length == 0) {
           return Center(
-            child : Text(AppLocalizations.of(context).translate('emptyMsg'),textScaleFactor:1.7,textAlign: TextAlign.center),
-            );
-        }
-         else {
+            child: Text(AppLocalizations.of(context).translate('emptyMsg'),
+                textScaleFactor: 1.7, textAlign: TextAlign.center),
+          );
+        } else {
           print("Trying.........");
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return makeCard(snapshot.data[index]);
-            },
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            child: ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return makeCard(snapshot.data[index]);
+              },
+            ),
           );
         }
       },
     );
   }
 
-
-   getData() async {   
-    var json = await ApiCall.getDataFromApi(Uri.GET_COMPOSTER+"/display?date=$mainDate");
+  getData() async {
+    var json = await ApiCall.getDataFromApi(
+        Uri.GET_COMPOSTER + "/display?date=$mainDate");
 
     print(json);
-    
-    if(suppliers.length!=0){
+
+    if (suppliers.length != 0) {
       suppliers.clear();
     }
-    if(json == 'nothing')
-    {
+    if (json == 'nothing') {
       print("Nooo");
       return suppliers;
     }
@@ -223,28 +184,25 @@ class _HomeFarmerState extends State<HomeFarmer>
       String _state = json[i]['state'];
       String _dateString = json[i]['dateString'];
 
-      
-
-       FarmerClass obj =FarmerClass(
-        _id,
-        _initId,
-        _name,
-        _contact,
-        _email,
-        _regNo,
-        _compostAddSub,
-        _price,
-        _weight,
-        _dateTime,
-        _latitude,
-        _longitude,
-        _street,
-        _area,
-        _city,
-        _state,
-        _dateString
-        );
-       print('fhieh');
+      FarmerClass obj = FarmerClass(
+          _id,
+          _initId,
+          _name,
+          _contact,
+          _email,
+          _regNo,
+          _compostAddSub,
+          _price,
+          _weight,
+          _dateTime,
+          _latitude,
+          _longitude,
+          _street,
+          _area,
+          _city,
+          _state,
+          _dateString);
+      print('fhieh');
       suppliers.add(obj);
     }
     return suppliers;
@@ -263,10 +221,10 @@ class _HomeFarmerState extends State<HomeFarmer>
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
           //onPressed: () => Navigator.pushNamed(context, '/`(main_id)'),
-          onPressed : () {
-            setState((){});
+          onPressed: () {
+            setState(() {});
             Navigator.of(context, rootNavigator: true).pop();
-            } ,
+          },
           width: 120,
         )
       ],
@@ -290,34 +248,44 @@ class _HomeFarmerState extends State<HomeFarmer>
         Card(
             elevation: 7,
             child: ListTile(
-              onTap : ()
-                {
-                  bookCompostPopup(obj);
-                },
-                dense: false,
-                isThreeLine: true,
-                contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
-                title: Text(""+obj.name,style: TextStyle(fontWeight : FontWeight.bold,
-                  color : Colors.indigo)),
-                subtitle: Text("\n\t\t\t"+AppLocalizations.of(context).translate('priceLab')+" = "+obj.price.toString()+"/Kg.\t "+AppLocalizations.of(context).translate('quanLab')+" = "+
-                  obj.weight.toString()+" Kg.",
-                  style : TextStyle(
-                    color : Colors.brown,
+              onTap: () {
+                bookCompostPopup(obj);
+              },
+              dense: false,
+              isThreeLine: true,
+              contentPadding: EdgeInsets.only(left: 10.0, top: 10.0),
+              title: Text("" + obj.name,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.indigo)),
+              subtitle: Text(
+                  "\n" +
+                      AppLocalizations.of(context).translate('priceLab') +
+                      " = " +
+                      obj.price.toString() +
+                      "/Kg\t\t " +
+                      AppLocalizations.of(context).translate('quanLab') +
+                      " = " +
+                      obj.weight.toString() +
+                      " Kg",
+                  style: TextStyle(
+                    color: Colors.brown,
                     //background : paint,
-                    )),
-                trailing : IconButton(
-                      icon : Icon(Icons.photo_library),
-                      iconSize : 30.0,
-                      onPressed :(){  
-                        print("Images will be shown");
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => ImageGallery(obj.id,DateTime.now().toString().substring(0,19),"farmer"),
-                          ),
-                        );
-                      }
-                    ),
-                )),
+                  )),
+              trailing: IconButton(
+                  icon: Icon(Icons.photo_library),
+                  iconSize: 30.0,
+                  onPressed: () {
+                    print("Images will be shown");
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ImageGallery(
+                            obj.id,
+                            DateTime.now().toString().substring(0, 19),
+                            "farmer"),
+                      ),
+                    );
+                  }),
+            )),
         Divider(),
       ],
     );
@@ -329,11 +297,9 @@ class _HomeFarmerState extends State<HomeFarmer>
     //_cityController = new TextEditingController();
     _fbKey = GlobalKey<FormState>();
     _scaffoldKey = new GlobalKey<ScaffoldState>();
-    
   }
 
-  func(var obj)
-  {
+  func(var obj) {
     //wetController.text = subtitle;
     //dryController.text = sub2;
     String maxWeight = obj.weight.toString();
@@ -342,22 +308,20 @@ class _HomeFarmerState extends State<HomeFarmer>
     Alert(
         context: context,
         title: AppLocalizations.of(context).translate('farmHead'),
-        content:Form(
-        key: _fbKey,
-          autovalidate: _autovalidate, 
-        child : Column(
-          children: <Widget>[
-            TextFormField(
-              keyboardType: TextInputType.phone,
-              controller : wetController, 
-              decoration: InputDecoration(
-                icon: Icon(Icons.add_shopping_cart),
-                labelText: 'Compost Needed',
-                hintText : ' Max $maxWeight (in Kg)'
-              ),
-              
-            ),
-            /*FormBuilderTextField(
+        content: Form(
+            key: _fbKey,
+            autovalidate: _autovalidate,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  keyboardType: TextInputType.phone,
+                  controller: wetController,
+                  decoration: InputDecoration(
+                      icon: Icon(Icons.add_shopping_cart),
+                      labelText: 'Compost Needed',
+                      hintText: ' Max $maxWeight (in Kg)'),
+                ),
+                /*FormBuilderTextField(
               keyboardType: TextInputType.phone,
               controller : dryController,
               decoration: InputDecoration(
@@ -367,13 +331,11 @@ class _HomeFarmerState extends State<HomeFarmer>
               ),
               validators: [FormBuilderValidators.required()],
             ),*/
-          ],
-        )),
+              ],
+            )),
         buttons: [
           DialogButton(
             onPressed: () {
-              
-              
               //  try
               // {
               //   double a=double.parse(wetController.text);
@@ -408,10 +370,7 @@ class _HomeFarmerState extends State<HomeFarmer>
               //   //_autovalidate = true;
               //   callError(context,"Please Enter all fields or (numeric only) ..");
               // }
-              
-
-              
-              },
+            },
             child: Text(
               "Buy now",
               style: TextStyle(color: Colors.white, fontSize: 20),
@@ -420,7 +379,7 @@ class _HomeFarmerState extends State<HomeFarmer>
         ]).show();
   }
 
-   Future<bool> bookCompostPopup(obj){
+  Future<bool> bookCompostPopup(obj) {
     _autovalidate = false;
     price = TextEditingController();
     weight = TextEditingController();
@@ -430,164 +389,186 @@ class _HomeFarmerState extends State<HomeFarmer>
     price.text = obj.price.toString();
     price.text = price.text + ' /Kg.';
     return showDialog(
-      context : context,
-      builder : (c){
-        return StatefulBuilder(
-          builder : (c1,st){
+        context: context,
+        builder: (c) {
+          return StatefulBuilder(builder: (c1, st) {
             return Dialog(
-              shape : RoundedRectangleBorder(
-                borderRadius : BorderRadius.all(Radius.circular(16.0)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
               ),
-              child : Container(
-                padding : const EdgeInsets.all(16.0),
-                height : 300.0,
-                width : 200.0,
-                decoration : BoxDecoration(
-                  borderRadius : BorderRadius.circular(20.0),
-                ), 
-                child : Stack(
-                  children : <Widget>[
-                    ListView(
-                      children : <Widget>[
-                        Padding(
-                          padding : const EdgeInsets.only(top : 16.0),
-                          child : Center(child : Text(AppLocalizations.of(context).translate('addIcon'),style : TextStyle(fontWeight : FontWeight.bold,fontSize : 30.0,color: Colors.green[700]))),
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                height: 300.0,
+                width: 200.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Stack(children: <Widget>[
+                  ListView(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Center(
+                          child: Text(
+                              AppLocalizations.of(context).translate('addIcon'),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 30.0,
+                                  color: Colors.green[700]))),
+                    ),
+                    Form(
+                      key: _fbKey,
+                      autovalidate: _autovalidate,
+                      child: Column(children: <Widget>[
+                        TextFormField(
+                          controller: category,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)
+                                .translate('categoryLab'),
+                            hintText: AppLocalizations.of(context)
+                                .translate('categoryHint'),
+                          ),
+                          validator: (v) => v.isEmpty
+                              ? AppLocalizations.of(context)
+                                  .translate('categoryVal')
+                              : null,
                         ),
-                        Form(
-                          key : _fbKey,
-                          autovalidate :_autovalidate,
-                          child : Column(
-                            children : <Widget>[
-                              TextFormField(
-                                controller : category,
-                                decoration : InputDecoration(
-                                  labelText : AppLocalizations.of(context).translate('categoryLab'),
-                                  hintText : AppLocalizations.of(context).translate('categoryHint'),
-                                ),
-                                validator : (v) => v.isEmpty ? AppLocalizations.of(context).translate('categoryVal') : null,
-                              ),
-                              TextFormField(
-                                controller : grade,
-                                decoration : InputDecoration(
-                                  labelText : AppLocalizations.of(context).translate('gradeLab'),
-                                  hintText : AppLocalizations.of(context).translate('gradeHint'),
-                                ),
-                                validator : (v) => v.isEmpty ? AppLocalizations.of(context).translate('gradeVal') : null,
-                              ),
-                              TextFormField(
-                                enabled : false,
-                                controller : price,
-                                decoration : InputDecoration(
-                                  labelText : AppLocalizations.of(context).translate('priceLab'),
-                                  hintText : AppLocalizations.of(context).translate('priceHint'),
-                                ),
-                              ),
-                              TextFormField(
-                                controller : weight,
-                                decoration : InputDecoration(
-                                  labelText : AppLocalizations.of(context).translate('weightLab'),
-                                  hintText : AppLocalizations.of(context).translate('weightHint')+'(Max ${obj.weight} Kg).',
-                                ),
-                                validator : (v){
-                                  try{
-                                    double w = double.parse(v);
-                                    if(w<=obj.weight){
-                                      return null;
-                                    }
-                                    else{
-                                      return 'Max ${obj.weight} Kg.';
-                                    }
-                                  }
-                                  catch(e){
-                                    return AppLocalizations.of(context).translate('errMsg');
-                                  }
-                                },
-                              ),
-                              TextFormField(
-                                controller : description,
-                                decoration : InputDecoration(
-                                  labelText : AppLocalizations.of(context).translate('addPopUpLast'),
-                                  hintText : AppLocalizations.of(context).translate('descHint'),
-                                ),
-                                validator : (v) => v.isEmpty ? AppLocalizations.of(context).translate('addPopUpExecD') : null,
-                              ),
-                              SizedBox(height : 30.0),
-                              InkWell(
-                                onTap : (){
-                                  if(_fbKey.currentState.validate()){
-                                    bookCompost(obj);
-                                    Navigator.of(c).pop();
-                                    _autovalidate=false;
-                                  }
-                                  else{
-                                    st((){
-                                      _autovalidate = true;
-                                    });
-                                  }
-                                },
-                                child : Container(
-                                  width : 175.0,
-                                  height : 50.0,
-                                  decoration : BoxDecoration(
-                                    color : Color(0xfff5544c),
-                                    borderRadius : BorderRadius.circular(10.0),
-                                  ),
-                                  child : Center(child : Text(AppLocalizations.of(context).translate('bookBut'),style : TextStyle(color : Colors.white,fontSize : 20.0,)))
-                                ),
-                              ),
-                            ]
+                        TextFormField(
+                          controller: grade,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)
+                                .translate('gradeLab'),
+                            hintText: AppLocalizations.of(context)
+                                .translate('gradeHint'),
+                          ),
+                          validator: (v) => v.isEmpty
+                              ? AppLocalizations.of(context)
+                                  .translate('gradeVal')
+                              : null,
+                        ),
+                        TextFormField(
+                          enabled: false,
+                          controller: price,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)
+                                .translate('priceLab'),
+                            hintText: AppLocalizations.of(context)
+                                .translate('priceHint'),
                           ),
                         ),
-                      ]
+                        TextFormField(
+                          controller: weight,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)
+                                .translate('weightLab'),
+                            hintText: AppLocalizations.of(context)
+                                    .translate('weightHint') +
+                                '(Max ${obj.weight} Kg).',
+                          ),
+                          validator: (v) {
+                            try {
+                              double w = double.parse(v);
+                              if (w <= obj.weight) {
+                                return null;
+                              } else {
+                                return 'Max ${obj.weight} Kg.';
+                              }
+                            } catch (e) {
+                              return AppLocalizations.of(context)
+                                  .translate('errMsg');
+                            }
+                          },
+                        ),
+                        TextFormField(
+                          controller: description,
+                          decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)
+                                .translate('addPopUpLast'),
+                            hintText: AppLocalizations.of(context)
+                                .translate('descHint'),
+                          ),
+                          validator: (v) => v.isEmpty
+                              ? AppLocalizations.of(context)
+                                  .translate('addPopUpExecD')
+                              : null,
+                        ),
+                        SizedBox(height: 30.0),
+                        InkWell(
+                          onTap: () {
+                            if (_fbKey.currentState.validate()) {
+                              bookCompost(obj);
+                              Navigator.of(c).pop();
+                              _autovalidate = false;
+                            } else {
+                              st(() {
+                                _autovalidate = true;
+                              });
+                            }
+                          },
+                          child: Container(
+                              width: 175.0,
+                              height: 50.0,
+                              decoration: BoxDecoration(
+                                color: Color(0xfff5544c),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                      AppLocalizations.of(context)
+                                          .translate('bookBut'),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                      )))),
+                        ),
+                      ]),
                     ),
-                    Positioned(
-                      right : 0.1,
-                      //top : 5.0,
-                      child : IconButton(
-                        icon : Icon(Icons.clear,color : Colors.grey),
-                        onPressed : (){
-                          Navigator.of(c).pop();
-                        },
-                      ),
+                  ]),
+                  Positioned(
+                    right: 0.1,
+                    //top : 5.0,
+                    child: IconButton(
+                      icon: Icon(Icons.clear, color: Colors.grey),
+                      onPressed: () {
+                        Navigator.of(c).pop();
+                      },
                     ),
-                  ]
-                ),
+                  ),
+                ]),
               ),
             );
-          }
-        );
-      }
-    );
+          });
+        });
   }
 
-  bookCompost(obj) async{
-
-    var data = Map<String,dynamic>();
+  bookCompost(obj) async {
+    var data = Map<String, dynamic>();
     data['id'] = obj.id;
-    data['dateAndTime'] = DateTime.now().toString().substring(0,19);
+    data['dateAndTime'] = DateTime.now().toString().substring(0, 19);
     data['price'] = obj.price;
     data['compostWeight'] = weight.text;
     data['category'] = category.text;
     data['grade'] = grade.text;
     data['description'] = description.text;
     data['dateString'] = "";
-    var r = await bookCompostRecord(data,obj.initId);
+    var r = await bookCompostRecord(data, obj.initId);
   }
 
-  bookCompostRecord(data,id) async{
+  bookCompostRecord(data, id) async {
     print("Data");
     print(data);
-    var bill = await ApiCall.updateRecord(Uri.GET_COMPOSTER+'/compost/sub/${id}?farmerId=${CurrentUser.id}&searchDate=${mainDate}',data);
+    var bill = await ApiCall.updateRecord(
+        Uri.GET_COMPOSTER +
+            '/compost/sub/${id}?farmerId=${CurrentUser.id}&searchDate=${mainDate}',
+        data);
     print("Bill");
     print(bill);
-    Toast.show("Your bill is "+bill.toString(), context,
-          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
-      setState((){});
+    Toast.show("Your bill is " + bill.toString(), context,
+        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+    setState(() {});
   }
   //
 
-  Future _chooseDate(BuildContext context) async 
-  {
+  Future _chooseDate(BuildContext context) async {
     var now = new DateTime.now();
     var result = await showDatePicker(
         context: context,
@@ -596,201 +577,214 @@ class _HomeFarmerState extends State<HomeFarmer>
         lastDate: new DateTime.now());
 
     if (result == null) return;
-    String datee=result.toString().substring(0,10);
+    String datee = result.toString().substring(0, 10);
     //refresh(context,datee);
-    setState((){
-      mainDate=datee;
-      });
+    setState(() {
+      mainDate = datee;
+    });
     print(result);
   }
 
-
-    
-	@override
-	Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
 //      key: _scaffoldKey,
-	appBar: AppBar(
-    leading: IconButton(
-        icon : Icon(Icons.power_settings_new),
-        iconSize : 20.0,
-        color : Colors.white,
-        tooltip: 'Log out',
-        onPressed: (() {
-           Navigator.of(context).pop();            
-        }),
-      ),
-    actions : <Widget>[
-      PopupMenuButton<int>(
-        onSelected : (s){
-          if(s==1){
-            _chooseDate(context);
-          }
-          else{
-            showSearch(context : context , delegate : DataSearch());
-          }
-        },
-        itemBuilder : (c)=>
-          <PopupMenuItem<int>>[ 
-            PopupMenuItem<int>(
-              value : 1,
-              child : Text(AppLocalizations.of(context).translate('dateIconSel')),
-            ),
-            PopupMenuItem<int>(
-              value : 2,
-              child : Text(AppLocalizations.of(context).translate('optionsT1')),
-            ),
-          ]
-      ),
-      ],
-      centerTitle: true,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.power_settings_new),
+          iconSize: 20.0,
+          color: Colors.white,
+          tooltip: 'Log out',
+          onPressed: (() {
+            Navigator.of(context).pop();
+          }),
+        ),
+        actions: <Widget>[
+          PopupMenuButton<int>(
+              onSelected: (s) {
+                if (s == 1) {
+                  _chooseDate(context);
+                } else if (s == 2) {
+                  showSearch(context: context, delegate: DataSearch());
+                } else {
+                  print('In more info');
+                }
+              },
+              itemBuilder: (c) => <PopupMenuItem<int>>[
+                    PopupMenuItem<int>(
+                      value: 1,
+                      child: Text(AppLocalizations.of(context)
+                          .translate('dateIconSel')),
+                    ),
+                    PopupMenuItem<int>(
+                      value: 2,
+                      child: Text(
+                          AppLocalizations.of(context).translate('optionsT1')),
+                    ),
+                    PopupMenuItem<int>(
+                      value: 3,
+                      child: Text(AppLocalizations.of(context)
+                          .translate('moreInfoLab')),
+                    ),
+                  ]),
+        ],
+        centerTitle: true,
         title: Text(AppLocalizations.of(context).translate('supHeading')),
         flexibleSpace: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-              Color(0xff43a047),
-              Color(0xff2e7d32)
-            ])          
-         ),        
-     ),      
- ),	
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[Color(0xff43a047), Color(0xff2e7d32)])),
+        ),
+      ),
       body: refresh(context),
-
-      
     );
   }
 }
 
-class DataSearch extends SearchDelegate<String>
-{
- List<Widget> buildActions(BuildContext context)
-  {
+class DataSearch extends SearchDelegate<String> {
+  List<Widget> buildActions(BuildContext context) {
     return [
-    IconButton(icon : Icon(Icons.clear),onPressed:(){
-      query="";
-      })
+      IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            query = "";
+          })
     ];
   }
 
-  Widget buildLeading(BuildContext context)
-  {
+  Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon : AnimatedIcon(
-          icon : AnimatedIcons.menu_arrow,
-          progress : transitionAnimation,
+        icon: AnimatedIcon(
+          icon: AnimatedIcons.menu_arrow,
+          progress: transitionAnimation,
         ),
-      onPressed : (){
-        close(context,null);
-      }
-      );
+        onPressed: () {
+          close(context, null);
+        });
   }
 
-  Widget buildResults(BuildContext context)
-  {
+  Widget buildResults(BuildContext context) {
     return Center(
-      child : Container(
-        height : 100.0,
-        width : 100.0,
-        child : Card(
-          color : Colors.red,
-          child : Center(
-            child : Text(query),
-          ),
-        )
-      ),
+      child: Container(
+          height: 100.0,
+          width: 100.0,
+          child: Card(
+            color: Colors.red,
+            child: Center(
+              child: Text(query),
+            ),
+          )),
     );
   }
 
-  Widget buildSuggestions(BuildContext context)
-  {
-
+  Widget buildSuggestions(BuildContext context) {
     int id;
-  int initId;
-  String name;
-  String contact;
-  String email;
-  String regNo;
-  bool compostAddSub;
-  dynamic price;
-  dynamic weight;
-  String dateTime;
-  String latitude;
-  String longitude;
-  String street;
-  String area;
-  String city;
-  String state;
-  String dateString;
+    int initId;
+    String name;
+    String contact;
+    String email;
+    String regNo;
+    bool compostAddSub;
+    dynamic price;
+    dynamic weight;
+    String dateTime;
+    String latitude;
+    String longitude;
+    String street;
+    String area;
+    String city;
+    String state;
+    String dateString;
 
-          
-    final List<FarmerClass> suggestionList = query.isEmpty?suppliers:suppliers.where((p)=>p.name.startsWith(query)||
-      p.contact.toString().startsWith(query)||p.dateString.contains(query)||
-      p.price.toString().startsWith(query)||
-      p.weight.toString().startsWith(query)||
-      p.city.startsWith(query)||
-      p.state.startsWith(query)||
-      p.area.startsWith(query)||
-      p.street.startsWith(query)||
-      p.dateString.startsWith(query)).toList();
+    final List<FarmerClass> suggestionList = query.isEmpty
+        ? suppliers
+        : suppliers
+            .where((p) =>
+                p.name.startsWith(query) ||
+                p.contact.toString().startsWith(query) ||
+                p.dateString.contains(query) ||
+                p.price.toString().startsWith(query) ||
+                p.weight.toString().startsWith(query) ||
+                p.city.startsWith(query) ||
+                p.state.startsWith(query) ||
+                p.area.startsWith(query) ||
+                p.street.startsWith(query) ||
+                p.dateString.startsWith(query))
+            .toList();
     return ListView.builder(
-      itemCount : suggestionList.length,
-      itemBuilder : (context,index){
-        return Column(
-      children: [
-        Card(
-            elevation: 7,
-            child: ListTile(
-                dense: false,
-                isThreeLine: true,
-                title : RichText(
-                  text : TextSpan(
-                    text : suggestionList[index].name.substring(
-                      0,
-                      query.length >= suggestionList[index].name.length ? suggestionList[index].name.length : query.length
-                      ),
-                      style : TextStyle(
-                      color : Colors.black,
-                      fontWeight : FontWeight.bold,
-                    ),
-                    children : [
-                      TextSpan(
-                        text : suggestionList[index].name.substring(
-                          query.length >= suggestionList[index].name.length ? suggestionList[index].name.length : query.length
+        itemCount: suggestionList.length,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Card(
+                  elevation: 7,
+                  child: ListTile(
+                      dense: false,
+                      isThreeLine: true,
+                      title: RichText(
+                          text: TextSpan(
+                        text: suggestionList[index].name.substring(
+                            0,
+                            query.length >= suggestionList[index].name.length
+                                ? suggestionList[index].name.length
+                                : query.length),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: suggestionList[index].name.substring(
+                                query.length >=
+                                        suggestionList[index].name.length
+                                    ? suggestionList[index].name.length
+                                    : query.length),
+                            style: TextStyle(
+                                color:
+                                    suggestionList[index].name.startsWith(query)
+                                        ? Colors.grey
+                                        : Colors.black),
                           ),
-                        style : TextStyle(color : suggestionList[index].name.startsWith(query) ? Colors.grey : Colors.black),
-                      ),
-                    ],
-                  )
-                ),
-                subtitle: Text("\n\t\t\t"+AppLocalizations.of(context).translate('priceLab')+" = "+suggestionList[index].price.toString()+"/Kg.\t "+AppLocalizations.of(context).translate('quanLab')+" = "+
-                  suggestionList[index].weight.toString()+" Kg.",
-                  style : TextStyle(
-                    color : Colors.brown,
-                    //background : paint,
-                    )),
-                trailing : IconButton(
-                      icon : Icon(Icons.photo_library),
-                      iconSize : 30.0,
-                      onPressed :(){  
-                        print("Images will be shown");
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => ImageGallery(suggestionList[index].id,DateTime.now().toString().substring(0,19),"farmer"),
-                          ),
-                        );
-                      }
-                    ),
-                onTap: () {
-                  //updateCountry(suggestionList[index],context);
-                })),
-        Divider(),
-      ],
-    );
-      }
-    );
+                        ],
+                      )),
+                      subtitle: Text(
+                          "\n\t\t\t" +
+                              AppLocalizations.of(context)
+                                  .translate('priceLab') +
+                              " = " +
+                              suggestionList[index].price.toString() +
+                              "/Kg.\t " +
+                              AppLocalizations.of(context)
+                                  .translate('quanLab') +
+                              " = " +
+                              suggestionList[index].weight.toString() +
+                              " Kg.",
+                          style: TextStyle(
+                            color: Colors.brown,
+                            //background : paint,
+                          )),
+                      trailing: IconButton(
+                          icon: Icon(Icons.photo_library),
+                          iconSize: 30.0,
+                          onPressed: () {
+                            print("Images will be shown");
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ImageGallery(
+                                    suggestionList[index].id,
+                                    DateTime.now().toString().substring(0, 19),
+                                    "farmer"),
+                              ),
+                            );
+                          }),
+                      onTap: () {
+                        //updateCountry(suggestionList[index],context);
+                      })),
+              Divider(),
+            ],
+          );
+        });
   }
 }
-

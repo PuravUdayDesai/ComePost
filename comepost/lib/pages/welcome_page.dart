@@ -1,3 +1,4 @@
+import 'package:ComePost/pages/router.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../app_localization.dart';
@@ -16,102 +17,24 @@ import 'DisplayMap.dart';
 import '../Utils/util.dart';
 
 class MyWelcomePage extends StatelessWidget {
-
-  // @override
-  // Widget build(BuildContext context) {
-  //       return MaterialApp(
-  //         locale: model.appLocal,
-  //         supportedLocales: [
-  //           Locale('en', ''),
-  //           Locale('hi', ''),
-  //         ],
-  //         localizationsDelegates: [
-  //           AppLocalizations.delegate,
-  //           GlobalMaterialLocalizations.delegate,
-  //           GlobalWidgetsLocalizations.delegate,
-  //         ],
-  //         debugShowCheckedModeBanner: false,
-  //         home: WelcomePage(),
-  //         onGenerateRoute : (s){
-  //           switch(s.name){
-  //             case '/selection_screen_login' : 
-  //               return PageTransition(child : MySelectionScreenLogin(),type : PageTransitionType.rightToLeft);
-  //               break;
-  //             case '/selection_screen_signup' : 
-  //               return PageTransition(child : SelectionScreenSignUp(),type : PageTransitionType.rightToLeft);
-  //               break;
-  //             case '/login' : 
-  //               return PageTransition(child : LoginPage(),type : PageTransitionType.rightToLeft);
-  //               break;
-  //             case '/login_composter' : 
-  //               return PageTransition(child : LoginComposterPage(),type : PageTransitionType.rightToLeft);
-  //               break;
-  //             case '/login_farmer' : 
-  //               return PageTransition(child : LoginFarmerPage(),type : PageTransitionType.rightToLeft);
-  //               break;
-  //             case '/signup_supplier' : 
-  //               return PageTransition(child : SignUpSupplier(),type : PageTransitionType.rightToLeft);
-  //               break;
-  //             case '/signup_composter' : 
-  //               return PageTransition(child : SignUpComposter(),type : PageTransitionType.rightToLeft);
-  //               break;
-  //             case '/signup_farmer' : 
-  //               return PageTransition(child : SignUpFarmer(),type : PageTransitionType.rightToLeft);
-  //               break;
-  //           }
-  //         }
-  //       );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      supportedLocales: [
+        supportedLocales: [
           Locale('en', ''),
           Locale('hi', ''),
           Locale('gu', ''),
-      ],
-      theme: Util.theme,
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      title : "Come Post", 
-      debugShowCheckedModeBanner: false,      
-      home: WelcomePage(),
-      onGenerateRoute : (s){
-        switch(s.name){
-          case '/selection_screen_login' : 
-            return PageTransition(child : MySelectionScreenLogin(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/selection_screen_signup' : 
-            return PageTransition(child : SelectionScreenSignUp(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/login' : 
-            return PageTransition(child : LoginPage(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/login_composter' : 
-            return PageTransition(child : LoginComposterPage(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/login_farmer' : 
-            return PageTransition(child : LoginFarmerPage(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/signup_supplier' : 
-            return PageTransition(child : SignUpSupplier(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/signup_composter' : 
-            return PageTransition(child : SignUpComposter(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/signup_farmer' : 
-            return PageTransition(child : SignUpFarmer(),type : PageTransitionType.rightToLeft);
-            break;
-          case '/maps' : 
-            return PageTransition(child : DisplayMap(),type : PageTransitionType.rightToLeft);
-            break;
-        }
-      }
-    );
+        ],
+        theme: Util.theme,
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        title: "Come Post",
+        debugShowCheckedModeBanner: false,
+        home: WelcomePage(),
+        onGenerateRoute: MyRouter().routeSettings);
   }
 }
 
@@ -121,13 +44,11 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-
   Widget _submitButton() {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, '/selection_screen_login');
-      }
-        ,
+      },
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 13),
@@ -154,8 +75,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, '/selection_screen_signup');
-      }
-        ,
+      },
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 13),
@@ -165,7 +85,7 @@ class _WelcomePageState extends State<WelcomePage> {
           border: Border.all(color: Colors.white, width: 2),
         ),
         child: Text(
-          AppLocalizations.of(context).translate('registerBut'),          
+          AppLocalizations.of(context).translate('registerBut'),
           style: TextStyle(fontSize: 20, color: Colors.red[700]),
         ),
       ),
@@ -214,7 +134,10 @@ class _WelcomePageState extends State<WelcomePage> {
           children: [
             TextSpan(
               text: AppLocalizations.of(context).translate('headerOne'),
-              style: TextStyle(color: Colors.green[600], fontSize: 30,fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Colors.green[600],
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold),
             ),
             TextSpan(
               text: AppLocalizations.of(context).translate('headerTwo'),
@@ -227,7 +150,7 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  Stack(
+      body: Stack(
         children: <Widget>[
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -244,7 +167,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0xfff1f8e9),Color(0xffaed581)])),
+                    colors: [Color(0xfff1f8e9), Color(0xffaed581)])),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -260,16 +183,12 @@ class _WelcomePageState extends State<WelcomePage> {
                 _signUpButton(),
                 SizedBox(
                   height: 20,
-                ),                
+                ),
               ],
             ),
           ),
         ],
-      ),    
-      );    
+      ),
+    );
   }
 }
-
-
-
-

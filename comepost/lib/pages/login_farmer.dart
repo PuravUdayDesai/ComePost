@@ -1,3 +1,4 @@
+import 'package:ComePost/pages/router.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -42,48 +43,7 @@ class MyLoginFarmerPage extends StatelessWidget {
         title: "Come Post",
         debugShowCheckedModeBanner: false,
         home: SelectionScreenLogIn(),
-        onGenerateRoute: (s) {
-          switch (s.name) {
-            case '/selection_screen_login':
-              return PageTransition(
-                  child: MySelectionScreenLogin(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/selection_screen_signup':
-              return PageTransition(
-                  child: SelectionScreenSignUp(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/login':
-              return PageTransition(
-                  child: LoginPage(), type: PageTransitionType.rightToLeft);
-              break;
-            case '/login_composter':
-              return PageTransition(
-                  child: LoginComposterPage(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/login_farmer':
-              return PageTransition(
-                  child: LoginFarmerPage(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/signup_supplier':
-              return PageTransition(
-                  child: SignUpSupplier(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/signup_composter':
-              return PageTransition(
-                  child: SignUpComposter(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/signup_farmer':
-              return PageTransition(
-                  child: SignUpFarmer(), type: PageTransitionType.rightToLeft);
-              break;
-          }
-        });
+        onGenerateRoute: MyRouter().routeSettings);
   }
 }
 
@@ -99,7 +59,7 @@ class LoginFarmerPage extends StatefulWidget {
 class _LoginFarmerPageState extends State<LoginFarmerPage> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
-  bool isLoading = false;
+  bool isLoading = false, _obscureText = true;
 
   Widget _backButton() {
     return InkWell(
@@ -175,7 +135,7 @@ class _LoginFarmerPageState extends State<LoginFarmerPage> {
       CurrentUser.id = response1['id'];
       CurrentUser.name = response1['farmerName'];
       CurrentUser.phone = response1['farmerContact'];
-      CurrentUser.surveyId = response1['surveyId'];
+      CurrentUser.surveyId = int.parse(response1['surveyId']);
       //CurrentUser.email = response1['email'];
       CurrentUser.street = response1['street'];
       CurrentUser.area = response1['area'];
@@ -421,7 +381,7 @@ class _LoginFarmerPageState extends State<LoginFarmerPage> {
               ),
               TextFormField(
                   controller: emailController,
-                  //obscureText: isPassword,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       fillColor: Color(0xfff3f3f4),
@@ -443,8 +403,17 @@ class _LoginFarmerPageState extends State<LoginFarmerPage> {
               ),
               TextFormField(
                   controller: passwordController,
-                  obscureText: true,
+                  obscureText: _obscureText,
                   decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                          icon: Icon(_obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility)),
                       border: InputBorder.none,
                       fillColor: Color(0xfff3f3f4),
                       filled: true))
@@ -460,30 +429,28 @@ class _LoginFarmerPageState extends State<LoginFarmerPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
-      // resizeToAvoidBottomPadding: false,
-      resizeToAvoidBottomInset: false,
       body: IgnorePointer(
           ignoring: isLoading,
           child: Stack(
             children: <Widget>[
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: ListView(
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Expanded(
-                      flex: 3,
-                      child: SizedBox(),
+                    SizedBox(
+                      height: height * 0.2,
                     ),
                     _title(),
                     SizedBox(
-                      height: 50,
+                      height: height * 0.07,
                     ),
                     _emailPasswordWidget(),
                     SizedBox(
-                      height: 20,
+                      height: height * 0.03,
                     ),
                     _submitButton(),
                     /*Container(
@@ -495,16 +462,10 @@ class _LoginFarmerPageState extends State<LoginFarmerPage> {
                 ),*/
                     //_divider(),
                     //_facebookButton(),
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(),
-                    ),
+                    SizedBox(height: height * 0.1),
+                    _createAccountLabel(),
                   ],
                 ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: _createAccountLabel(),
               ),
               Positioned(top: 40, left: 0, child: _backButton()),
               Positioned(

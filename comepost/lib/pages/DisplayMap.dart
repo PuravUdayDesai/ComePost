@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'home_composter.dart';
 
-const double CAMERA_ZOOM = 13;
+const double CAMERA_ZOOM = 10;
 const double CAMERA_TILT = 0;
 const double CAMERA_BEARING = 30;
 
@@ -57,6 +57,8 @@ class _DisplayMapState extends State<DisplayMap> {
         target: SOURCE_LOCATION);
 
     return GoogleMap(
+        indoorViewEnabled: true,
+        mapToolbarEnabled: true,
         myLocationEnabled: true,
         tiltGesturesEnabled: false,
         markers: _markers,
@@ -74,6 +76,9 @@ class _DisplayMapState extends State<DisplayMap> {
   void setMapPins() {
     setState(() {
       _markers.add(Marker(
+        infoWindow: InfoWindow(
+            title: (ModalRoute.of(context).settings.arguments as ComposterClass)
+                .name),
         markerId: MarkerId('sourcePin'),
         position: SOURCE_LOCATION,
       ));

@@ -1,5 +1,8 @@
+import 'package:ComePost/pages/router.dart';
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import 'package:geocoder/geocoder.dart';
+import 'package:geocoder/model.dart';
 
 import "package:intl/intl.dart";
 //import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -44,48 +47,7 @@ class MySignUpFarmer extends StatelessWidget {
         title: "Come Post",
         debugShowCheckedModeBanner: false,
         home: SelectionScreenLogIn(),
-        onGenerateRoute: (s) {
-          switch (s.name) {
-            case '/selection_screen_login':
-              return PageTransition(
-                  child: MySelectionScreenLogin(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/selection_screen_signup':
-              return PageTransition(
-                  child: SelectionScreenSignUp(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/login':
-              return PageTransition(
-                  child: LoginPage(), type: PageTransitionType.rightToLeft);
-              break;
-            case '/login_composter':
-              return PageTransition(
-                  child: LoginComposterPage(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/login_farmer':
-              return PageTransition(
-                  child: LoginFarmerPage(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/signup_supplier':
-              return PageTransition(
-                  child: SignUpSupplier(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/signup_composter':
-              return PageTransition(
-                  child: SignUpComposter(),
-                  type: PageTransitionType.rightToLeft);
-              break;
-            case '/signup_farmer':
-              return PageTransition(
-                  child: SignUpFarmer(), type: PageTransitionType.rightToLeft);
-              break;
-          }
-        });
+        onGenerateRoute: MyRouter().routeSettings);
   }
 }
 
@@ -271,7 +233,15 @@ class _SignUpFarmerState extends State<SignUpFarmer> {
     var currentLocation = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
     _center = LatLng(currentLocation.latitude, currentLocation.longitude);
-    //print(_center.latitude);
+    List<Address> addr = await Geocoder.local.findAddressesFromCoordinates(
+        Coordinates(_center.latitude, _center.longitude));
+    setState(() {
+      _stateController = TextEditingController(text: addr.first.adminArea);
+      _cityController = TextEditingController(text: addr.first.locality);
+      _areaController = TextEditingController(text: addr.first.subLocality);
+      _streetController = TextEditingController(
+          text: '${addr.first.featureName}, ${addr.first.thoroughfare}');
+    });
   }
 
   callSuccess(context) {

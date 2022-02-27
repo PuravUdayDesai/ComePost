@@ -101,6 +101,8 @@ class ImageGallery extends StatefulWidget {
 }
 
 class DisplayImageGallery extends State<ImageGallery> {
+  get itemBuilder => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -133,16 +135,40 @@ class DisplayImageGallery extends State<ImageGallery> {
                     child: Text(AppLocalizations.of(context).translate('mtMsg'),
                         textScaleFactor: 1.7, textAlign: TextAlign.center));
               }
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Image.network(
-                    snapshot.data[index]['imageURL'],
-                    width: double.infinity,
-                    height: 300,
-                  );
-                },
-              );
+              return GridView.builder(
+                  padding: EdgeInsets.all(5),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 5,
+                      childAspectRatio: 1,
+                      mainAxisSpacing: 10),
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GridTile(
+                      child: Card(
+                        elevation: 5,
+                        child: Image.network(
+                          snapshot.data[index]['imageURL']
+                              .toString()
+                              .replaceRange(0, 21, UriService.Uri.baseUri),
+                          width: double.infinity,
+                          height: 300,
+                        ),
+                      ),
+                    );
+                  });
+              // return ListView.builder(
+              //   itemCount: snapshot.data.length,
+              //   itemBuilder: (BuildContext context, int index) {
+              //     return Image.network(
+              //       snapshot.data[index]['imageURL']
+              //           .toString()
+              //           .replaceRange(0, 21, UriService.Uri.baseUri),
+              //       width: double.infinity,
+              //       height: 300,
+              //     );
+              //   },
+              // );
             }
           }),
     );

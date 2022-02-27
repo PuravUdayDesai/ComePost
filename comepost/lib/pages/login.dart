@@ -100,7 +100,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
-  bool isLoading = false;
+  bool isLoading = false, _obscureText = true;
 
   Widget _backButton() {
     return InkWell(
@@ -441,8 +441,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextFormField(
                   controller: passwordController,
-                  obscureText: true,
+                  obscureText: _obscureText,
                   decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                          icon: Icon(_obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility)),
                       border: InputBorder.none,
                       fillColor: Color(0xfff3f3f4),
                       filled: true))
@@ -458,9 +467,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      // resizeToAvoidBottomPadding: false,
-      
       body: IgnorePointer(
           ignoring: isLoading,
           child: Stack(
@@ -470,7 +479,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: ListView(
                   children: <Widget>[
                     SizedBox(
-                      height: 150.0,
+                      height: height * 0.2,
                     ),
                     _title(),
                     SizedBox(
@@ -490,15 +499,17 @@ class _LoginPageState extends State<LoginPage> {
                 ),*/
                     //_divider(),
                     //_facebookButton(),
-
-                    SizedBox(),
+                    SizedBox(
+                      height: height * 0.07,
+                    ),
+                    _createAccountLabel(),
                   ],
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: _createAccountLabel(),
-              ),
+              // Align(
+              //   alignment: Alignment.bottomCenter,
+              //   child:
+              // ),
               Positioned(top: 40, left: 0, child: _backButton()),
               Positioned(
                   top: -MediaQuery.of(context).size.height * .10,

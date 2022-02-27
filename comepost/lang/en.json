@@ -20,7 +20,7 @@
 	"emailSubHeader": "Email Id",
 	"passwordSubHeader": "Password",
 	"surveyIdSubHeader": "Survey ID",
-	"loginFooter": "Don't have an account ?",
+	"loginFooter": "Don't have an account?",
 
 	"popUpHeader": "ERROR",
 	"popUpMsg": "Invalid email or password!",
@@ -97,12 +97,12 @@
 
 	"errMsg": "Please provide numeric value only.",
 
-	"cardTxtOne": "dry",
-	"cardTxtTwo": "wet",
+	"cardTxtOne": "Dry",
+	"cardTxtTwo": "Wet",
 
 	"uploadHead": "Upload image",
 	"uploadBut": "Upload",
-	"uploadMsg": "Image Uploaded Successfully!!!",
+	"uploadMsg": "Image Uploaded Successfully!!",
 	"floatButSuj": "Add compost",
 
 	"categoryLab": "Category",
@@ -132,9 +132,14 @@
 	"optionsT2": "View all Transactions",
 	"transcHead": "Transactions with composter",
 	"transcHeadC": "Transactions with farmer",
+	"moreInfoLab": "More details",
 
 	"tileP1": "Total amount",
 	"tileP2": "Total weight",
 
-	"picsHead": "Photos"
+	"picsHead": "Photos",
+
+	"transactionsTitle": "Transaction details",
+	
+	"splashTitle": "Farmer is the only man in our economy who buys everything at retail, sells everything at wholesale, and pays the freight both ways."
 }

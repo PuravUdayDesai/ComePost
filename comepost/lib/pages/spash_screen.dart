@@ -1,7 +1,33 @@
+import 'package:ComePost/Utils/util.dart';
+import 'package:ComePost/app_localization.dart';
+import 'package:ComePost/pages/router.dart';
 import 'package:ComePost/pages/routing_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:splashscreen/splashscreen.dart';
+
+class CustomSplashScreen extends StatelessWidget {  
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        supportedLocales: [
+          Locale('en', ''),
+          Locale('hi', ''),
+          Locale('gu', ''),
+        ],
+        theme: Util.theme,
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        title: "Come Post",
+        debugShowCheckedModeBanner: false,
+        home: MySplashScreen(),
+        onGenerateRoute: MyRouter().routeSettings);
+  }
+}
 
 class MySplashScreen extends StatefulWidget {
   @override
@@ -15,7 +41,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
         seconds: 5,
         navigateAfterSeconds: RoutingScreen(),        
         title: Text(
-          'Farmer is the only man in our economy who buys everything at retail, sells everything at wholesale, and pays the freight both ways.',
+          AppLocalizations.of(context).translate('splashTitle'),
           textAlign: TextAlign.center,
           style: TextStyle(fontStyle: FontStyle.italic, fontSize: 20.0),
         ),
